@@ -1,0 +1,78 @@
+html, body {
+    height: 100%;
+}
+
+body {
+    padding-top: 70px;
+}
+
+#content {
+    min-height: 100%;
+    overflow:auto;
+    padding-bottom:120px;
+}
+
+.navbar-inverse{
+    -webkit-box-shadow: 0px 4px 23px rgba(50, 50, 50, 0.65);
+    -moz-box-shadow:    0px 4px 23px rgba(50, 50, 50, 0.65);
+    box-shadow:         0px 4px 23px rgba(50, 50, 50, 0.65);
+}
+.btn-success{
+    color:#FFF;
+    transition: all 0.3s ease-in;
+}
+
+.btn-success:hover {
+    -webkit-stroke-width: 5.3px;
+    -webkit-stroke-color: #FFFFFF;
+    -webkit-fill-color: #FFFFFF;
+    text-shadow: 1px 0px 20px white;
+}
+
+a:link{
+    transition: all 0.3s ease-in;
+}
+
+a:hover{
+    -webkit-stroke-width: 5.3px;
+    -webkit-stroke-color: #FFFFFF;
+    -webkit-fill-color: #FFFFFF;
+    text-shadow: 1px 0px 20px white;
+}
+
+/* Custom Navbar */
+
+.navbar-custom {
+    background-color: #428bca;
+    border-color: #357ebd; 
+}
+
+.navbar-custom .navbar-nav > li > a {
+    color:#fff;
+}
+
+.navbar-custom .navbar-nav > li > a {
+    color:#fff;
+}
+.navbar-custom .navbar-nav > .active > a, .navbar-nav > .active > a:hover, .navbar-nav > .active > a:focus {
+    color: #ffffff;
+    background-color:transparent;
+}
+.navbar-custom .navbar-brand {
+    color:#fff;
+    font-weight: bold;
+}
+
+/* Custom Footer */
+
+footer {
+    background-color: #428bca;
+    border-color: #357ebd;
+    color: whitesmoke;
+    position: relative;
+    margin-top: -80px; /* negative value of footer height */
+    height: 80px;
+    padding: 10px;
+    clear:both;
+}
+
