@@ -39,8 +39,6 @@ class MY_Controller extends CI_Controller {
 
         $data['head'] = $this->load->view('templates/head', $data, true);
         $data['nav'] = $this->load->view('templates/nav', $data, true);
-        $data['footer'] = $this->load->view('templates/footer', $data, true);
-        $data['scripts'] = $this->load->view('templates/scripts', $data, true);
 
         $data['content'] = $this->load->view($view, $data, true);
 

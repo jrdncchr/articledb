@@ -1,22 +1,26 @@
-<nav class="navbar navbar-inverse navbar-fixed-top navbar-custom" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="index.php">Article Database</a>
-        </div>
+<!--Header-->
+<div class="header"> 
+    <!--User Profile-->
+    <div class="profile">
+        <div class="avatar"><img src="<?php echo base_url() . IMAGES . 'avatar.jpg'; ?>" alt=""></div>
+        <div class="info-prof">Welcome, <strong>John Mas</strong></div>
+        <div class="profile_link"><a href="#"><span class="setting-icon"></span></a></div>
+    </div>
+    <!--User Profile END-->
 
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse navbar-ex1-collapse">
-            <ul class="nav navbar-nav">
-                <li><a href="#about">About</a></li>
-                <li><a href="#services">Services</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-        </div><!-- /.navbar-collapse -->
-    </div><!-- /.container -->
-</nav>
+    <div class="search">
+        <form>
+            <input type="text" id="testinput" placeholder="Search">
+        </form>   
+    </div>
+
+    <div class="buttons-head">
+
+        <div class="button-profile"><a href="#" data-reveal-id="myModal-new"><span class="new-icon"></span></a></div>
+        <div class="button-profile"><a href="#" data-reveal-id="myModal"><span class="chat-icon" ></span><span class="notice">3</span></a></div>
+        <div class="button-profile"><a href="#"><span class="event-icon"></span><span class="notice">3</span></a></div>
+        <div class="button-profile-2"><a href="/index.html"><span class="exit-icon"></span><span class="desc">Logout</span></a></div>
+    </div>
+
+</div>
+<!--Header END-->
