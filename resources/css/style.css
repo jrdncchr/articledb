@@ -43,8 +43,7 @@ a:hover{
 /* Custom Navbar */
 
 .navbar-custom {
-    background-color: #428bca;
-    border-color: #357ebd; 
+    background-color: #302D30;
 }
 
 .navbar-custom .navbar-nav > li > a {
@@ -64,14 +63,13 @@ a:hover{
 }
 
 /* Custom Footer */
-
 footer {
-    background-color: #428bca;
+    background-color: #302D30;
     border-color: #357ebd;
-    color: whitesmoke;
+    color: #fff;
     position: relative;
-    margin-top: -80px; /* negative value of footer height */
-    height: 80px;
+    margin-top: -50px; /* negative value of footer height */
+    height: 50px;
     padding: 10px;
     clear:both;
 }

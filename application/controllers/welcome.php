@@ -6,7 +6,10 @@ if (!defined('BASEPATH'))
 class Welcome extends MY_Controller {
     
     public function index() {
-        $this->_render("pages/home");
+        $this->title = "Article Database &raquo; Home";
+        $this->load->model('Article_Model');
+        $this->data['articles'] = $this->Article_Model->getArticles();
+        $this->_render('pages/home');
     }
     
 }
