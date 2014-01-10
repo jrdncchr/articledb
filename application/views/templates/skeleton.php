@@ -5,6 +5,11 @@
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
     <?php echo $head ?>
     <body>
-        <?php echo $content ?>
+        <div id="wrap">
+            <?php echo $nav ?>
+            <?php echo $content ?>
+        </div>
+        <?php echo $footer ?>
+        <?php echo $scripts ?>
     </body>
 </html>

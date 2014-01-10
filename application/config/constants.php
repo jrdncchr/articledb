@@ -7,8 +7,9 @@
  * 
  */
 define('CSS', 'resources/css/');
-define('LIB', 'resources/lib/');
+define('JS', 'resources/js/');
 define('IMAGES', 'resources/images/');
+define('FONT', 'resources/font-awesome/');
 
 /*
 |--------------------------------------------------------------------------
