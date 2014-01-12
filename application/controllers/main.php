@@ -5,15 +5,64 @@ if (!defined('BASEPATH'))
 
 class Main extends MY_Controller {
 
-    public function index() {
-        $this->title = "Article Database &raquo; Main";
-        $this->css[] = "custom/main.css";
-        $this->js[] = "custom/main.js";
-        $this->_render('pages/main');
+    public function __construct() {
+        parent::__construct();
+        $this->load->library('session');
+        $user = $this->session->userdata('user');
+        if (null == $user) {
+            redirect(base_url());
+        }
     }
 
-    public function get_articles() {
-        $aColumns = array('id', 'title', 'id', 'author', 'id');
+    public function index() {
+        $this->title = "Article Database &raquo; Main";
+        $this->js[] = "custom/main.js";
+        $this->data['user'] = $this->session->userdata('user');
+        $this->_renderL('pages/main');
+    }
+
+    public function logout() {
+        $this->session->sess_destroy();
+        session_start();
+        if (isset($_SESSION['user']))
+            unset($_SESSION['user']);
+        redirect(base_url());
+    }
+
+    public function profile() {
+        $this->title = "Article Database &raquo; Profile";
+        $this->js[] = "custom/main.js";
+        $this->data['user'] = $this->session->userdata('user');
+        $this->_renderL('pages/profile');
+    }
+
+    public function articles($id = 0) {
+        if ($id > 0) {
+            $this->load->model('Article_Model');
+            $article = $this->Article_Model->getArticles($id);
+            $this->js[] = "custom/articles.js";
+            $this->data['article'] = $article;
+            $this->data['user'] = $this->session->userdata('user');
+            $this->_renderL('pages/articles_info');
+        } else {
+            $this->title = "Article Database &raquo; Articles";
+            $this->js[] = "custom/articles.js";
+            $this->data['user'] = $this->session->userdata('user');
+            $this->_renderL('pages/articles');
+        }
+    }
+    
+    public function addArticle() {
+        $title = $_POST['title'];
+        $category = $_POST['category'];
+        $content = $_POST['content'];
+        
+        $this->load->model('article_model');
+        $this->article_model->addArticle($title, $category, $content);
+    }
+
+    public function getArticles() {
+        $aColumns = array('id', 'title', 'category');
 
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = "id";
@@ -26,6 +75,14 @@ class Main extends MY_Controller {
         $gaSql['password'] = "";
         $gaSql['db'] = "articledb";
         $gaSql['server'] = "localhost";
+        
+//        $gaSql['user'] = "realasia_admin";
+//        $gaSql['password'] = "admin143";
+//        $gaSql['db'] = "realasia_articledb";
+//        $gaSql['server'] = "localhost";
+
+        session_start();
+        $user = $_SESSION['user'];
 
 
         /*         * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -78,7 +135,7 @@ class Main extends MY_Controller {
          * word by word on any field. It's possible to do here, but concerned about efficiency
          * on very large tables, and MySQL's regex functionality is very limited
          */
-        $sWhere = "";
+        $sWhere = "WHERE author = '" . $user->username . "'";
         if ($_GET['sSearch'] != "") {
             $sWhere = "WHERE (";
             for ($i = 0; $i < count($aColumns); $i++) {

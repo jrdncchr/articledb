@@ -25,4 +25,22 @@ class Article_Model extends CI_Model {
         }
     }
 
+    function addArticle($title, $category, $content) {
+        try {
+            $this->load->library('session');
+            $user = $this->session->userdata('user');
+            $article = array(
+                'title' => $title,
+                'category' => $category,
+                'content' => $content,
+                'author' => $user->username,
+                'date' => date('Y-m-d')
+            );
+            $this->db->insert('articles', $article);
+            echo "OK";
+        } catch (Exception $e) {
+            echo "ADD ARTICLE ERROR: " . $e;
+        }
+    }
+
 }

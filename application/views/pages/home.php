@@ -1,4 +1,9 @@
 <div class="container">
+    <?php if ($message != null) { ?>
+        <div class="alert alert-success">
+            <?php echo $message; ?>
+        </div>
+    <?php } ?>
     <!-- Jumbotron -->
     <div class="jumbotron">
         <h1>Article Database!</h1>
@@ -8,7 +13,11 @@
             Get Ready to be Amazed!
         </p>
         <p>
-            <a href="<?php echo base_url() . 'main'; ?>"<button id="loginBtn" class="btn btn-success">Get Started Now!</button></a>
+            <?php if (!isset($user)) { ?>
+                <button class="btn btn-success" data-toggle="modal" data-target="#loginModal">Get Started Now!</button>
+            <?php } else { ?>
+                <a href="<?php echo base_url() . 'main'; ?>"><button class="btn btn-default">Go back to Main</button></a>
+            <?php } ?>
         </p>
     </div>
 
@@ -32,3 +41,36 @@
         </div>
     </div>
 </div> <!-- /container -->
+
+<!-- Modal -->
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel"><i class="fa fa-user"></i> Login</h4>
+            </div>
+            <div class="modal-body">
+                <div class="alert-danger" id="loginMessage"></div>
+                <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <label for="username" class="col-sm-2 control-label">Username</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="loginUsername" placeholder="Username">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="col-sm-2 control-label">Password</label>
+                        <div class="col-sm-10">
+                            <input type="password" class="form-control" id="loginPassword" placeholder="Password">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <a href="<?php echo base_url() . 'register'; ?>"><button type="button" class="btn btn-primary pull-left">Register</button></a>
+                <button type="button" id="loginBtn" class="btn btn-success">Login</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

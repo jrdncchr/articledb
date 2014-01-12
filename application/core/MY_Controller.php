@@ -46,6 +46,26 @@ class MY_Controller extends CI_Controller {
 
         $this->load->view('templates/skeleton', $data);
     }
+    
+    public function _renderL($view) {
+        $data = $this->data;
+        $data['css'] = $this->css;
+        $data['js'] = $this->js;
+
+        $data['title'] = $this->title;
+        $data['description'] = $this->description;
+        $data['keywords'] = $this->keywords;
+        $data['author'] = $this->author;
+
+        $data['head'] = $this->load->view('templates/head', $data, true);
+        $data['nav'] = $this->load->view('templates/logged/nav', $data, true);
+        $data['scripts'] = $this->load->view('templates/scripts', $data, true);
+        $data['footer'] = $this->load->view('templates/footer', $data, true);
+        
+        $data['content'] = $this->load->view($view, $data, true);
+
+        $this->load->view('templates/skeleton', $data);
+    }
 
 }
 
