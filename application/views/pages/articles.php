@@ -1,9 +1,9 @@
 <div id="content">
     <div class="container">
         <div class="row">
-            <div class="col-lg-12 col-md-12">
-                <a href="<?php echo base_url() . 'main' ?>">&DoubleLeftArrow; Return to Dashboard</a>
+            <div class="col-lg-11 col-md-11">
                 <h2>Articles</h2>
+                <hr />
                 <div class="table-responsive">
                     <table cellpadding="0" cellspacing="0" border="0" class="display table table-striped" id="articles">
                         <thead>

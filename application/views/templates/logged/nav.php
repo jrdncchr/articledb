@@ -22,6 +22,9 @@
                     <li><a href="<?php echo base_url() . 'main/articles' ?>"><i class="fa fa-files-o"></i> Articles</a></li>
                     <li><a href="<?php echo base_url() . 'main/profile' ?>"><i class="fa fa-user"></i> Profile</a></li>
                     <li class="divider"></li>
+                    <?php if($user->type == 'admin') { ?>
+                    <li><a href="<?php echo base_url() . 'admin' ?>"><i class="fa fa-gear"></i> Administration</a></li>
+                    <?php } ?>
                     <li><a href="<?php echo base_url() . 'main/logout' ?>"><i class="fa fa-power-off"></i> Log Out</a></li>
                 </ul>
             </li>

@@ -1,84 +1,59 @@
-<div id="content">
-    <div class="row">
-        <div class="col-lg-2 col-md-2">
-            <div class="well">
-                <h4>Quick Links</h4>
-                <hr />
-                <div class="row">
-                    <div class="col-lg-12 col-md-12">
-                        <ul class="list-unstyled">
-                            <li><a href="<?php echo base_url() . 'main' ?>"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-                            <li><a href="<?php echo base_url() . 'main/articles' ?>"><i class="fa fa-files-o"></i> Articles</a></li>
-                            <li><a href="<?php echo base_url() . 'main/profile' ?>"><i class="fa fa-user"></i> Profile</a></li>
-                            <hr />
-                            <li><a href="<?php echo base_url() . 'main/logout' ?>"><i class="fa fa-power-off"></i> Log Out</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div><!-- /well -->
-
+<div class="row">
+    <div class="col-lg-10 col-md-10">
+        <div class="btn-group">
+            <button class="btn btn-success" data-toggle="modal" data-target="#newArticleModal"><i class="fa fa-pencil"></i> <strong>Add Article</strong></button>
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                    <i class="fa fa-flash"></i> <strong>Generate</strong>
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a href="#" data-toggle="modal" data-target="#genTitleModal">Generate Titles</a></li>
+                    <li><a href="#" data-toggle="modal" data-target="#genArticleModal">Generate Articles</a></li>
+                    <li><a href="#" data-toggle="modal" data-target="#genABPModal">Generate Articles By Project</a></li>
+                </ul>
+            </div>
         </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-5 col-md-5">
+        <h2>Projects</h2>
+        <div class="table-responsive">
+            <table cellpadding="0" cellspacing="0" border="0" class="display table table-striped" id="projects">
+                <thead>
+                    <tr>
+                        <th width="20%">ID</th>
+                        <th width="50%">Project Title</th>
+                        <th width="30%">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="3" class="dataTables_empty">Loading data from server</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-        <div class="col-lg-10 col-md-10">
-            <div class="row">
-                <div class="col-lg-10 col-md-10">
-                    <div class="btn-group">
-                        <button class="btn btn-success" data-toggle="modal" data-target="#newArticleModal"><i class="fa fa-pencil"></i> <strong>Add Article</strong></button>
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                                <i class="fa fa-flash"></i> <strong>Generate</strong>
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a href="#" data-toggle="modal" data-target="#genTitleModal">Generate Titles</a></li>
-                                <li><a href="#" data-toggle="modal" data-target="#genArticleModal">Generate Articles</a></li>
-                                <li><a href="#" data-toggle="modal" data-target="#genABPModal">Generate Articles By Project</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-5 col-md-5">
-                    <h2>Projects</h2>
-                    <div class="table-responsive">
-                        <table cellpadding="0" cellspacing="0" border="0" class="display table table-striped" id="projects">
-                            <thead>
-                                <tr>
-                                    <th width="20%">ID</th>
-                                    <th width="50%">Project Title</th>
-                                    <th width="30%">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td colspan="3" class="dataTables_empty">Loading data from server</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div class="col-lg-6 col-md-6">
-                    <h2>Articles</h2>
-                    <div class="table-responsive">
-                        <table cellpadding="0" cellspacing="0" border="0" class="display table table-striped" id="articles">
-                            <thead>
-                                <tr>
-                                    <th width="20%">ID</th>
-                                    <th width="50%">Title</th>
-                                    <th width="30%">Category</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td colspan="3" class="dataTables_empty">Loading data from server</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+    <div class="col-lg-6 col-md-6">
+        <h2>Articles</h2>
+        <div class="table-responsive">
+            <table cellpadding="0" cellspacing="0" border="0" class="display table table-striped" id="articles">
+                <thead>
+                    <tr>
+                        <th width="20%">ID</th>
+                        <th width="50%">Title</th>
+                        <th width="30%">Category</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="3" class="dataTables_empty">Loading data from server</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
