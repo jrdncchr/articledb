@@ -1,4 +1,9 @@
 $(document).ready(function() {
+    activateArticles();
+});
+
+
+function activateArticles() {
     $('#articles').dataTable({
         "bProcessing": true,
         "bServerSide": true,
@@ -12,4 +17,4 @@ $(document).ready(function() {
             }
         ]
     });
-});
+}

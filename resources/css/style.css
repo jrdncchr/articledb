@@ -2,6 +2,10 @@ body {
     padding-top: 100px;
 }
 
+.spacer {
+    margin-top: 40px;
+}
+
 .jumbotron {
     margin-top: -50px;
 }

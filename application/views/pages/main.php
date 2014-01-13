@@ -89,7 +89,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button id="naBtn" type="button" class="btn btn-primary">Save changes</button>
+                <button id="naBtn" type="button" class="btn btn-primary">Add</button>
             </div>
         </div>
     </div>

@@ -36,14 +36,22 @@ class Main extends MY_Controller {
         $this->_renderL('pages/profile');
     }
 
+    //--------------------------------------------------------------------------
+    // ARTICLES
+    //--------------------------------------------------------------------------
     public function articles($id = 0) {
         if ($id > 0) {
             $this->load->model('Article_Model');
             $article = $this->Article_Model->getArticles($id);
-            $this->js[] = "custom/articles.js";
-            $this->data['article'] = $article;
-            $this->data['user'] = $this->session->userdata('user');
-            $this->_renderL('pages/articles_info');
+            if ($article != null) {
+                $this->js[] = "custom/articles_info.js";
+                $this->data['article'] = $article;
+                $this->data['user'] = $this->session->userdata('user');
+                $this->session->set_userdata('selectedArticle', $id);
+                $this->_renderL('pages/articles_info');
+            } else {
+                show_404();
+            }
         } else {
             $this->title = "Article Database &raquo; Articles";
             $this->js[] = "custom/articles.js";
@@ -51,14 +59,36 @@ class Main extends MY_Controller {
             $this->_renderL('pages/articles');
         }
     }
-    
+
     public function addArticle() {
-        $title = $_POST['title'];
-        $category = $_POST['category'];
-        $content = $_POST['content'];
-        
+        $user = $this->session->userdata('user');
+        $article = array(
+            'title' => $_POST['title'],
+            'category' => $_POST['category'],
+            'content' => $_POST['content'],
+            'author' => $user->username,
+            'date' => date('Y-m-d')
+        );
         $this->load->model('article_model');
-        $this->article_model->addArticle($title, $category, $content);
+        $this->article_model->addArticle($article);
+    }
+
+    public function updateArticle() {
+        $id = $this->session->userdata('selectedArticle');
+        $article = array(
+            'title' => $_POST['title'],
+            'category' => $_POST['category'],
+            'content' => $_POST['content']
+        );
+
+        $this->load->model('article_model');
+        $this->article_model->updateArticle($id, $article);
+    }
+
+    public function deleteArticle() {
+        $id = $this->session->userdata('selectedArticle');
+        $this->load->model('article_model');
+        $this->article_model->deleteArticle($id);
     }
 
     public function getArticles() {
@@ -75,7 +105,7 @@ class Main extends MY_Controller {
         $gaSql['password'] = "";
         $gaSql['db'] = "articledb";
         $gaSql['server'] = "localhost";
-        
+
 //        $gaSql['user'] = "realasia_admin";
 //        $gaSql['password'] = "admin143";
 //        $gaSql['db'] = "realasia_articledb";
