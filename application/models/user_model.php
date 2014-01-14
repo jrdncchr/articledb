@@ -13,6 +13,25 @@ class User_Model extends CI_Model {
         $this->db->insert('users', $user);
     }
 
+    public function update($user, $update) {
+        try {
+            $this->db->where('id', $user->id);
+            $this->db->update('users', $update);
+
+            $result = $this->db->get_where('users', array('username' => $user->username));
+            if ($result->num_rows() > 0) {
+                $user = $result->row();
+                $this->load->library('session');
+                $this->session->set_userdata('user', $user);
+                session_start();
+                $_SESSION['user'] = $user;
+            }
+            echo "OK";
+        } catch (Exception $e) {
+            echo $e->message();
+        }
+    }
+
     public function checkUsername($username) {
         $result = $this->db->get_where('users', array('username' => $username));
         if ($result->num_rows() < 1) {

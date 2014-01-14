@@ -12,14 +12,14 @@
                 <hr />
             </div>
             <div class="col-lg-2 col-md-2">
-                <a href="<?php echo base_url() . 'main/articles' ?>">&DoubleLeftArrow; Go to Articles</a>
+                <a href="<?php echo base_url() . 'articles' ?>">&DoubleLeftArrow; Go to Articles</a>
                 <div class="spacer"></div>
                 <button class="btn btn-success btn-block" id="showUpdateBtn" data-toggle="modal" data-target="#updateModal"><i class="fa fa-edit"></i> <strong>Edit</strong></button>
                 <button class="btn btn-danger btn-block" id="deleteBtn"><i class="fa fa-trash-o"></i> <strong>Delete</strong></button>
 
             </div>
         </div>
-        
+
     </div>
 </div>
 
@@ -41,9 +41,9 @@
                     <div class="form-group">
                         <label for="category">Category</label>
                         <select id="category" class="form-control">
-                            <option value="">Select a category</option>
-                            <option value="Variety">Variety</option>
-                            <option value="Fruits">Fruits</option>
+                            <?php foreach ($categories as $category): ?>
+                                <option value="<?php echo $category->name ?>"><?php echo $category->name ?></option>
+                            <?php endforeach; ?>
                         </select>
                     </div>
                     <div class="form-group">

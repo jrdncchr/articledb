@@ -3,51 +3,80 @@
 if (!defined('BASEPATH'))
     exit('No direct access is allowed!');
 
-class Admin extends MY_Controller {
+class Articles extends MY_Controller {
 
-    function __construct() {
+    public function __construct() {
         parent::__construct();
         $this->load->library('session');
         $user = $this->session->userdata('user');
-        if ($user->type != 'admin') {
+        if (null == $user) {
             redirect(base_url());
         }
-        $this->load->database();
-        $this->load->model('categories_model');
+        $this->load->model('article_model');
     }
 
     public function index() {
-        $this->title = "Article Database &raquo; Administration";
-        $user = $this->session->userdata('user');
-        $this->data['user'] = $user;
+        $this->title = "Article Database &raquo; Articles";
+        $this->js[] = "custom/articles.js";
+        $this->data['user'] = $this->session->userdata('user');
+        $this->load->model('categories_model');
         $this->data['categories'] = $this->categories_model->get();
-        $this->js[] = 'custom/admin.js';
-        $this->_renderL('pages/admin');
+        $this->_renderL('pages/articles');
     }
 
-    public function addCategory() {
-        $this->load->model('categories_model');
-        $this->categories_model->add($_POST['name']);
+    public function info($id = 0) {
+        $article = $this->article_model->getArticles($id);
+        if ($article != null) {
+            $this->js[] = "custom/articles_info.js";
+            $this->data['article'] = $article;
+            $this->data['user'] = $this->session->userdata('user');
+            $this->load->model('categories_model');
+            $this->data['categories'] = $this->categories_model->get();
+            $this->session->set_userdata('selectedArticle', $id);
+            $this->_renderL('pages/articles_info');
+        } else {
+            show_404();
+        }
     }
 
-    public function updateCategory() {
-        $this->load->model('categories_model');
-        $this->categories_model->update($_POST['id'], $_POST['name']);
+    public function add() {
+        $user = $this->session->userdata('user');
+        $article = array(
+            'title' => $_POST['title'],
+            'category' => $_POST['category'],
+            'content' => $_POST['content'],
+            'author' => $user->username,
+            'date' => date('Y-m-d')
+        );
+        $this->article_model->addArticle($article);
     }
 
-    public function deleteCategory() {
-        $this->load->model('categories_model');
-        $this->categories_model->delete($_POST['id']);
+    public function update() {
+        $id = $this->session->userdata('selectedArticle');
+        $article = array(
+            'title' => $_POST['title'],
+            'category' => $_POST['category'],
+            'content' => $_POST['content']
+        );
+
+        $this->load->model('article_model');
+        $this->article_model->updateArticle($id, $article);
     }
 
-    public function getCategories() {
-        $aColumns = array('id', 'name', 'id');
+    public function delete() {
+        $id = $this->session->userdata('selectedArticle');
+        $this->load->model('article_model');
+        $this->article_model->deleteArticle($id);
+    }
+
+    public function get() {
+        $aColumns = array('id', 'title', 'category');
 
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = "id";
 
         /* DB table to use */
-        $sTable = "categories";
+        $sTable = "articles";
 
         $gaSql['user'] = "root";
         $gaSql['password'] = "";
@@ -58,6 +87,10 @@ class Admin extends MY_Controller {
 //        $gaSql['password'] = "admin143";
 //        $gaSql['db'] = "realasia_articledb";
 //        $gaSql['server'] = "localhost";
+
+        session_start();
+        $user = $_SESSION['user'];
+
 
         /*         * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
          * If you just want to use the basic configuration for DataTables with PHP server-side, there is
@@ -109,7 +142,7 @@ class Admin extends MY_Controller {
          * word by word on any field. It's possible to do here, but concerned about efficiency
          * on very large tables, and MySQL's regex functionality is very limited
          */
-        $sWhere = "";
+        $sWhere = "WHERE author = '" . $user->username . "'";
         if ($_GET['sSearch'] != "") {
             $sWhere = "WHERE (";
             for ($i = 0; $i < count($aColumns); $i++) {

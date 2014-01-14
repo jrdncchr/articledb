@@ -5,7 +5,7 @@
         <div class="col-lg-12 col-md-12">
             <ul class="list-unstyled">
                 <li><a href="<?php echo base_url() . 'main' ?>"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-                <li><a href="<?php echo base_url() . 'main/articles' ?>"><i class="fa fa-files-o"></i> Articles</a></li>
+                <li><a href="<?php echo base_url() . 'articles' ?>"><i class="fa fa-files-o"></i> Articles</a></li>
                 <li><a href="<?php echo base_url() . 'main/profile' ?>"><i class="fa fa-user"></i> Profile</a></li>
                 <hr />
                 <?php if ($user->type == 'admin') { ?>

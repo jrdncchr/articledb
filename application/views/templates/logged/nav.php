@@ -19,7 +19,7 @@
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> <?php echo $user->name ?> <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                     <li><a href="<?php echo base_url() . 'main' ?>"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-                    <li><a href="<?php echo base_url() . 'main/articles' ?>"><i class="fa fa-files-o"></i> Articles</a></li>
+                    <li><a href="<?php echo base_url() . 'articles' ?>"><i class="fa fa-files-o"></i> Articles</a></li>
                     <li><a href="<?php echo base_url() . 'main/profile' ?>"><i class="fa fa-user"></i> Profile</a></li>
                     <li class="divider"></li>
                     <?php if($user->type == 'admin') { ?>

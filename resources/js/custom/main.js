@@ -8,12 +8,12 @@ function activateArticleTable() {
     $('#articles').dataTable({
         "bProcessing": true,
         "bServerSide": true,
-        "sAjaxSource": base_url + "main/getArticles",
+        "sAjaxSource": base_url + "articles/get",
         "aoColumnDefs": [
             {
                 "aTargets": [1], // Column to target
                 "mRender": function(data, type, full) {
-                    return '<a href="' + base_url + 'main/articles/' + full[0] + '">' + full[1] + '</a>';
+                    return '<a href="' + base_url + 'articles/info/' + full[0] + '">' + full[1] + '</a>';
                 }
             }
         ]
@@ -28,7 +28,7 @@ function activateAddArticle() {
         var content = $("#naContent").val();
         if (validateInput() === true) {
             $.ajax({
-                url: base_url + "main/addArticle",
+                url: base_url + "articles/add",
                 data: {'title': title, 'category': category, 'content': content},
                 cache: false,
                 type: 'post',

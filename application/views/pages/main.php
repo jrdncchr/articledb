@@ -77,8 +77,9 @@
                         <label for="category">Category</label>
                         <select id="naCategory" class="form-control">
                             <option value="">Select a category</option>
-                            <option value="Variety">Variety</option>
-                            <option value="Fruits">Fruits</option>
+                            <?php foreach ($categories as $category): ?>
+                                <option value="<?php echo $category->name ?>"><?php echo $category->name ?></option>
+                            <?php endforeach; ?>
                         </select>
                     </div>
                     <div class="form-group">

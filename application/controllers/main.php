@@ -18,6 +18,8 @@ class Main extends MY_Controller {
         $this->title = "Article Database &raquo; Main";
         $this->js[] = "custom/main.js";
         $this->data['user'] = $this->session->userdata('user');
+        $this->load->model('categories_model');
+        $this->data['categories'] = $this->categories_model->get();
         $this->_renderL('pages/main');
     }
 
@@ -31,219 +33,32 @@ class Main extends MY_Controller {
 
     public function profile() {
         $this->title = "Article Database &raquo; Profile";
-        $this->js[] = "custom/main.js";
+        $this->js[] = "custom/profile.js";
         $this->data['user'] = $this->session->userdata('user');
         $this->_renderL('pages/profile');
     }
 
-    //--------------------------------------------------------------------------
-    // ARTICLES
-    //--------------------------------------------------------------------------
-    public function articles($id = 0) {
-        if ($id > 0) {
-            $this->load->model('Article_Model');
-            $article = $this->Article_Model->getArticles($id);
-            if ($article != null) {
-                $this->js[] = "custom/articles_info.js";
-                $this->data['article'] = $article;
-                $this->data['user'] = $this->session->userdata('user');
-                $this->session->set_userdata('selectedArticle', $id);
-                $this->_renderL('pages/articles_info');
-            } else {
-                show_404();
-            }
-        } else {
-            $this->title = "Article Database &raquo; Articles";
-            $this->js[] = "custom/articles.js";
-            $this->data['user'] = $this->session->userdata('user');
-            $this->_renderL('pages/articles');
-        }
-    }
-
-    public function addArticle() {
+    public function updateProfile() {
+        $this->load->model('user_model');
         $user = $this->session->userdata('user');
-        $article = array(
-            'title' => $_POST['title'],
-            'category' => $_POST['category'],
-            'content' => $_POST['content'],
-            'author' => $user->username,
-            'date' => date('Y-m-d')
+        $update = array(
+            'name' => $_POST['name'],
+            'email' => $_POST['email']
         );
-        $this->load->model('article_model');
-        $this->article_model->addArticle($article);
+        $this->user_model->update($user, $update);
     }
 
-    public function updateArticle() {
-        $id = $this->session->userdata('selectedArticle');
-        $article = array(
-            'title' => $_POST['title'],
-            'category' => $_POST['category'],
-            'content' => $_POST['content']
-        );
-
-        $this->load->model('article_model');
-        $this->article_model->updateArticle($id, $article);
-    }
-
-    public function deleteArticle() {
-        $id = $this->session->userdata('selectedArticle');
-        $this->load->model('article_model');
-        $this->article_model->deleteArticle($id);
-    }
-
-    public function getArticles() {
-        $aColumns = array('id', 'title', 'category');
-
-        /* Indexed column (used for fast and accurate table cardinality) */
-        $sIndexColumn = "id";
-
-        /* DB table to use */
-        $sTable = "articles";
-
-        /* Database connection information */
-        $gaSql['user'] = "root";
-        $gaSql['password'] = "";
-        $gaSql['db'] = "articledb";
-        $gaSql['server'] = "localhost";
-
-//        $gaSql['user'] = "realasia_admin";
-//        $gaSql['password'] = "admin143";
-//        $gaSql['db'] = "realasia_articledb";
-//        $gaSql['server'] = "localhost";
-
-        session_start();
-        $user = $_SESSION['user'];
-
-
-        /*         * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-         * If you just want to use the basic configuration for DataTables with PHP server-side, there is
-         * no need to edit below this line
-         */
-
-        /*
-         * MySQL connection
-         */
-        $gaSql['link'] = mysql_pconnect($gaSql['server'], $gaSql['user'], $gaSql['password']) or
-                die('Could not open connection to server');
-
-        mysql_select_db($gaSql['db'], $gaSql['link']) or
-                die('Could not select database ' . $gaSql['db']);
-
-
-        /*
-         * Paging
-         */
-        $sLimit = "";
-        if (isset($_GET['iDisplayStart']) && $_GET['iDisplayLength'] != '-1') {
-            $sLimit = "LIMIT " . mysql_real_escape_string($_GET['iDisplayStart']) . ", " .
-                    mysql_real_escape_string($_GET['iDisplayLength']);
+    public function changePassword() {
+        $user = $this->session->userdata('user');
+        if ($user->password == $_POST['old']) {
+            $this->load->model('user_model');
+            $update = array(
+                'password' => $_POST['new']
+            );
+            $this->user_model->update($user, $update);
+        } else {
+            echo 'Incorrect Old Password!';
         }
-
-
-        /*
-         * Ordering
-         */
-        if (isset($_GET['iSortCol_0'])) {
-            $sOrder = "ORDER BY  ";
-            for ($i = 0; $i < intval($_GET['iSortingCols']); $i++) {
-                if ($_GET['bSortable_' . intval($_GET['iSortCol_' . $i])] == "true") {
-                    $sOrder .= $aColumns[intval($_GET['iSortCol_' . $i])] . "
-				 	" . mysql_real_escape_string($_GET['sSortDir_' . $i]) . ", ";
-                }
-            }
-
-            $sOrder = substr_replace($sOrder, "", -2);
-            if ($sOrder == "ORDER BY") {
-                $sOrder = "";
-            }
-        }
-
-
-        /*
-         * Filtering
-         * NOTE this does not match the built-in DataTables filtering which does it
-         * word by word on any field. It's possible to do here, but concerned about efficiency
-         * on very large tables, and MySQL's regex functionality is very limited
-         */
-        $sWhere = "WHERE author = '" . $user->username . "'";
-        if ($_GET['sSearch'] != "") {
-            $sWhere = "WHERE (";
-            for ($i = 0; $i < count($aColumns); $i++) {
-                $sWhere .= $aColumns[$i] . " LIKE '%" . mysql_real_escape_string($_GET['sSearch']) . "%' OR ";
-            }
-            $sWhere = substr_replace($sWhere, "", -3);
-            $sWhere .= ')';
-        }
-
-        /* Individual column filtering */
-        for ($i = 0; $i < count($aColumns); $i++) {
-            if ($_GET['bSearchable_' . $i] == "true" && $_GET['sSearch_' . $i] != '') {
-                if ($sWhere == "") {
-                    $sWhere = "WHERE ";
-                } else {
-                    $sWhere .= " AND ";
-                }
-                $sWhere .= $aColumns[$i] . " LIKE '%" . mysql_real_escape_string($_GET['sSearch_' . $i]) . "%' ";
-            }
-        }
-
-
-        /*
-         * SQL queries
-         * Get data to display
-         */
-        $sQuery = "
-		SELECT SQL_CALC_FOUND_ROWS " . str_replace(" , ", " ", implode(", ", $aColumns)) . "
-		FROM   $sTable
-		$sWhere
-		$sOrder
-		$sLimit
-	";
-        $rResult = mysql_query($sQuery, $gaSql['link']) or die(mysql_error());
-
-        /* Data set length after filtering */
-        $sQuery = "
-		SELECT FOUND_ROWS()
-	";
-        $rResultFilterTotal = mysql_query($sQuery, $gaSql['link']) or die(mysql_error());
-        $aResultFilterTotal = mysql_fetch_array($rResultFilterTotal);
-        $iFilteredTotal = $aResultFilterTotal[0];
-
-        /* Total data set length */
-        $sQuery = "
-		SELECT COUNT(" . $sIndexColumn . ")
-		FROM   $sTable
-	";
-        $rResultTotal = mysql_query($sQuery, $gaSql['link']) or die(mysql_error());
-        $aResultTotal = mysql_fetch_array($rResultTotal);
-        $iTotal = $aResultTotal[0];
-
-
-        /*
-         * Output
-         */
-        $output = array(
-            "sEcho" => intval($_GET['sEcho']),
-            "iTotalRecords" => $iTotal,
-            "iTotalDisplayRecords" => $iFilteredTotal,
-            "aaData" => array()
-        );
-
-        while ($aRow = mysql_fetch_array($rResult)) {
-            $row = array();
-            for ($i = 0; $i < count($aColumns); $i++) {
-                if ($aColumns[$i] == "version") {
-                    /* Special output formatting for 'version' column */
-                    $row[] = ($aRow[$aColumns[$i]] == "0") ? '-' : $aRow[$aColumns[$i]];
-                } else if ($aColumns[$i] != ' ') {
-                    /* General output */
-                    $row[] = $aRow[$aColumns[$i]];
-                }
-            }
-            $output['aaData'][] = $row;
-        }
-
-        echo json_encode($output);
     }
 
 }

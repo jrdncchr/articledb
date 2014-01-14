@@ -26,7 +26,7 @@ function activateUpdate() {
     $("#updateBtn").click(function() {
         if (validateInput() === true) {
             $.ajax({
-                url: base_url + 'main/updateArticle',
+                url: base_url + 'articles/update',
                 data: {'title': $("#title").val(), 'category': $("#category").val(),
                     'content': $("#acontent").val()},
                 dataType: 'json',
@@ -85,7 +85,7 @@ function activateDelete() {
         var confirmDelete = confirm("Are you sure to delete this article?");
         if (confirmDelete === true) {
             $.ajax({
-                url: base_url + 'main/deleteArticle',
+                url: base_url + 'articles/delete',
                 success: function(data) {
                     if (data === "OK") {
                         window.location = base_url + 'main';
