@@ -161,7 +161,7 @@
                 <h4 class="modal-title" id="myModalLabel"><i class="fa fa-flash"></i> Generate Article</h4>
             </div>
             <div class="modal-body">
-                <div class="alert-danger" id="gaMessage"></div>
+                <div class="alert alert-info" id="gaMessage"><i class="fa fa-info"></i> Keyword and Category can't have a value at the same time.</div>
                 <form id='genArticleForm' class="form-horizontal" role="form">
                     <div class="form-group">
                         <label for="keyword" class="col-sm-2 control-label">Keyword</label>
@@ -191,7 +191,7 @@
                         </div>
                         <label for="articles" class="col-sm-3 control-label">Articles to Mix</label>
                         <div class="col-sm-3">
-                            <select id="gaNoArticles" class="form-control">
+                            <select id="gaNoArticlesToMix" class="form-control">
                                 <?php for ($i = 2; $i <= 15; $i++) { ?>
                                     <option value="<?php echo $i ?>"><?php echo $i ?></option>
                                 <?php } ?>
@@ -202,7 +202,7 @@
                         <label for="category" class="col-sm-3 control-label">Paragraphs</label>
                         <div class="col-sm-4">
                             <h5><small>Min</small></h5>
-                            <select id="gaMinParagraphs" class="form-control">
+                            <select id="gaPMin" class="form-control">
                                 <?php for ($i = 3; $i <= 5; $i++) { ?>
                                     <option value="<?php echo $i ?>"><?php echo $i ?></option>
                                 <?php } ?>
@@ -210,7 +210,7 @@
                         </div>
                         <div class='col-sm-4'>
                             <h5><small>Max</small></h5>
-                            <select id="gaMaxParagraphs" class="form-control">
+                            <select id="gaPMax" class="form-control">
                                 <?php for ($i = 5; $i <= 10; $i++) { ?>
                                     <option value="<?php echo $i ?>"><?php echo $i ?></option>
                                 <?php } ?>

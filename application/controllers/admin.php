@@ -59,15 +59,15 @@ class Admin extends MY_Controller {
         /* DB table to use */
         $sTable = "categories";
 
-//        $gaSql['user'] = "root";
-//        $gaSql['password'] = "";
-//        $gaSql['db'] = "articledb";
-//        $gaSql['server'] = "localhost";
-
-        $gaSql['user'] = "realasia_admin";
-        $gaSql['password'] = "admin143";
-        $gaSql['db'] = "realasia_articledb";
+        $gaSql['user'] = "root";
+        $gaSql['password'] = "";
+        $gaSql['db'] = "articledb";
         $gaSql['server'] = "localhost";
+
+//        $gaSql['user'] = "realasia_admin";
+//        $gaSql['password'] = "admin143";
+//        $gaSql['db'] = "realasia_articledb";
+//        $gaSql['server'] = "localhost";
 
         /*         * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
          * If you just want to use the basic configuration for DataTables with PHP server-side, there is
@@ -201,7 +201,7 @@ class Admin extends MY_Controller {
     }
     
     public function getUsers() {
-        $aColumns = array('username', 'name', 'email', 'id');
+        $aColumns = array('username', 'name', 'email');
 
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = "id";
@@ -209,15 +209,15 @@ class Admin extends MY_Controller {
         /* DB table to use */
         $sTable = "users";
 
-//        $gaSql['user'] = "root";
-//        $gaSql['password'] = "";
-//        $gaSql['db'] = "articledb";
-//        $gaSql['server'] = "localhost";
-
-        $gaSql['user'] = "realasia_admin";
-        $gaSql['password'] = "admin143";
-        $gaSql['db'] = "realasia_articledb";
+        $gaSql['user'] = "root";
+        $gaSql['password'] = "";
+        $gaSql['db'] = "articledb";
         $gaSql['server'] = "localhost";
+
+//        $gaSql['user'] = "realasia_admin";
+//        $gaSql['password'] = "admin143";
+//        $gaSql['db'] = "realasia_articledb";
+//        $gaSql['server'] = "localhost";
 
         /*         * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
          * If you just want to use the basic configuration for DataTables with PHP server-side, there is

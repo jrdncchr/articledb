@@ -61,28 +61,46 @@ class Main extends MY_Controller {
             echo 'Incorrect Old Password!';
         }
     }
-    
+
     public function generateTitles() {
         $keyword = $_POST['keyword'];
         $category = $_POST['category'];
         $noTitles = $_POST['noTitles'];
         $result = $this->article_model->generateTitles($keyword, $category, $noTitles);
-        if(sizeof($result) > 0) {
-            $titles = "";
+        if (sizeof($result) > 0) {
+            $titles = "{";
             foreach ($result as $title) {
-                $titles .= "$title->title \n";
+                $titles .= "$title->title|";
             }
+            $titles = substr($titles, 0, -1);
+            $titles .= "}";
+
             $data = array(
                 'result' => "OK",
                 'titles' => $titles
             );
-            echo json_encode($data); 
+            echo json_encode($data);
         } else {
             $data = array(
                 'result' => "No title found matching you request."
             );
             echo json_encode($data);
         }
+    }
+
+    public function generateArticles() {
+        $generate = array(
+            'keyword' => $_POST['keyword'],
+            'category' => $_POST['category'],
+            'noTitles' => $_POST['noTitles'],
+            'noArticlesToMix' => $_POST['noArticlesToMix'],
+            'pMin' => $_POST['pMin'],
+            'pMax' => $_POST['pMax'],
+        );
+
+
+        echo $generate['keyword'].$generate['category'].$generate['noTitles'].$generate['noArticlesToMix']
+                .$generate['pMin'].$generate['pMax'];
     }
 
 }

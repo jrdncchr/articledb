@@ -78,15 +78,15 @@ class Articles extends MY_Controller {
         /* DB table to use */
         $sTable = "articles";
 
-//        $gaSql['user'] = "root";
-//        $gaSql['password'] = "";
-//        $gaSql['db'] = "articledb";
-//        $gaSql['server'] = "localhost";
-
-        $gaSql['user'] = "realasia_admin";
-        $gaSql['password'] = "admin143";
-        $gaSql['db'] = "realasia_articledb";
+        $gaSql['user'] = "root";
+        $gaSql['password'] = "";
+        $gaSql['db'] = "articledb";
         $gaSql['server'] = "localhost";
+
+//        $gaSql['user'] = "realasia_admin";
+//        $gaSql['password'] = "admin143";
+//        $gaSql['db'] = "realasia_articledb";
+//        $gaSql['server'] = "localhost";
 
         session_start();
         $user = $_SESSION['user'];

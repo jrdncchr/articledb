@@ -37,8 +37,7 @@
                                     <tr>
                                         <th width="20%">Username</th>
                                         <th width="45%">Name</th>
-                                        <th width="25%">Email</th>
-                                        <th width="10%">Action</th>
+                                        <th width="35%">Email</th>
                                     </tr>
                                 </thead>
                                 <tbody>

@@ -24,12 +24,40 @@ function activateArticleTable() {
 
 function activateGenerateArticles() {
     $("#gaGenerateBtn").click(function() {
-        $("#genArticleForm").slideUp('slow');
-        $("#genArticleFormOutput").slideDown('slow');
-        $("#gaGenerateBtn").hide();
-        $("#gaSaveBtn").show();
+        var keyword = $("#gaKeyword").val();
+        var category = $("#gaCategory").val();
+        if (keyword === "" && category === "") {
+            $("#gaMessage").removeClass().addClass('alert alert-danger')
+                    .html("<i class='fa fa-exclamation-circle'></i> Keyword and Category cannot be both empty.");
+        } else {
+            if (keyword !== "" && category !== "") {
+                $("#gaMessage").removeClass().addClass('alert alert-danger')
+                        .html("<i class='fa fa-exclamation-circle'></i> Keyword and Category can't have value at the same time.");
+            } else {
+                $.ajax({
+                    url: base_url + 'main/generateArticles',
+                    data: {'keyword': $("#gaKeyword").val(), 'category': $("#gaCategory").val(), 'noTitles': $("#gaNoTitles").val(),
+                        'noArticlesToMix': $("#gaNoArticlesToMix").val(), 'pMin': $("#gaPMin").val(), 'pMax': $("#gaPMax").val()},
+                    cache: false,
+                    type: 'post',
+                    success: function(data) {
+                        $("#genArticleForm").slideUp('fast');
+                        $("#genArticleFormOutput").slideDown('slow');
+                        $("#gaGenerateBtn").hide();
+                        $("#gaSaveBtn").show();
+                        $("#gaMessage").removeClass().addClass('alert alert-success')
+                                .html("<i class='fa fa-check'></i> Generating Article Successful!.");
+                    },
+                    error: function(xhr, status, error) {
+                        alert(error);
+                    }
+                });
+            }
+        }
     });
     $("#gaRefreshBtn").click(function() {
+        $("#gaMessage").removeClass().addClass('alert alert-info')
+                                .html("<i class='fa fa-info'></i> Keyword and Category can't have a value at the same time.");
         $("#genArticleForm").slideDown('slow');
         $("#genArticleFormOutput").slideUp('slow');
         $("#gaSaveBtn").hide();

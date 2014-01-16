@@ -28,16 +28,7 @@ function activateUsers() {
         "bPaginate": false,
         "bProcessing": true,
         "bServerSide": true,
-        "sAjaxSource": base_url + "admin/getUsers",
-        "aoColumnDefs": [
-            {
-                "aTargets": [3], // Column to target
-                "mRender": function(data, type, full) {
-                    return '<button class="btn btn-danger btn-xs" onclick=""><i class="fa fa-trash-o"></i></button>\n\
-                            <button class="btn btn-primary btn-xs" onclick=""><i class="fa fa-edit"></i></button>';
-                }
-            }
-        ]
+        "sAjaxSource": base_url + "admin/getUsers"
     });
     activateCategoriesEvents();
 }
