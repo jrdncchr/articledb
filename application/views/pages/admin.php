@@ -8,7 +8,7 @@
                     <div class="col-lg-4 col-md-4" id="categoriesDiv">
                         <h3>
                             Categories 
-                            <button type="button" id="showAddCtgBtn" class="btn btn-success pull-right" data-toggle="modal" data-target="#newCategoryModal"><i class="fa fa-plus"></i></button>
+                            <button type="button" id="showAddCtgBtn" class="btn btn-success pull-right" data-toggle="modal" data-target="#newCategoryModal"><i class="fa fa-plus"></i> Add</button>
                         </h3>
                         <div class="table-responsive">
                             <table cellpadding="0" cellspacing="0" border="0" class="display table table-striped" id="categories">
@@ -17,6 +17,28 @@
                                         <th width="10%">ID</th>
                                         <th width="80%">Name</th>
                                         <th width="20%">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="3" class="dataTables_empty">Loading data from server</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-lg-7 col-md-7" id="usersDiv">
+                        <h3>
+                            Users 
+                        </h3>
+                        <div class="table-responsive">
+                            <table cellpadding="0" cellspacing="0" border="0" class="display table table-striped" id="users">
+                                <thead>
+                                    <tr>
+                                        <th width="20%">Username</th>
+                                        <th width="45%">Name</th>
+                                        <th width="25%">Email</th>
+                                        <th width="10%">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>

@@ -43,7 +43,7 @@ class Article_Model extends CI_Model {
             $data = array('result' => 'OK', 'title' => $article['title'], 'category' => $article['category'], 'content' => $article['content']);
             echo json_encode($data);
         } catch (Exception $e) {
-            echo "UPDATE ARTICLE ERROR: " . $e;
+            echo "UPDATE ARTICLE ERROR: " . $e->message();
         }
     }
 
@@ -53,7 +53,32 @@ class Article_Model extends CI_Model {
             $this->db->delete('articles');
             echo "OK";
         } catch (Exception $e) {
-            echo "DELETING ARTICLE ERROR: " . $e;
+            echo "DELETING ARTICLE ERROR: " . $e->message();
+        }
+    }
+
+    function generateTitles($keyword, $category, $noTitles) {
+        try {
+            if($keyword != "") {
+                $this->db->order_by('id', 'random'); 
+                $this->db->like('title', $keyword, 'both'); 
+                $result = $this->db->get('articles', $noTitles);
+                if($result->num_rows() > 0) {
+                    return $result->result();
+                } else {
+                    return array();
+                }
+            } else {
+                $this->db->order_by('id', 'random'); 
+                $result = $this->db->get_where('articles', array('category' => $category), $noTitles);
+                if($result->num_rows() > 0) {
+                    return $result->result();
+                } else {
+                    return array();
+                }
+            }
+        } catch (Exception $e) {
+            echo "GETTING TITLES ERROR: " . $e->message();
         }
     }
 

@@ -12,6 +12,7 @@ class Main extends MY_Controller {
         if (null == $user) {
             redirect(base_url());
         }
+        $this->load->model('article_model');
     }
 
     public function index() {
@@ -58,6 +59,29 @@ class Main extends MY_Controller {
             $this->user_model->update($user, $update);
         } else {
             echo 'Incorrect Old Password!';
+        }
+    }
+    
+    public function generateTitles() {
+        $keyword = $_POST['keyword'];
+        $category = $_POST['category'];
+        $noTitles = $_POST['noTitles'];
+        $result = $this->article_model->generateTitles($keyword, $category, $noTitles);
+        if(sizeof($result) > 0) {
+            $titles = "";
+            foreach ($result as $title) {
+                $titles .= "$title->title \n";
+            }
+            $data = array(
+                'result' => "OK",
+                'titles' => $titles
+            );
+            echo json_encode($data); 
+        } else {
+            $data = array(
+                'result' => "No title found matching you request."
+            );
+            echo json_encode($data);
         }
     }
 

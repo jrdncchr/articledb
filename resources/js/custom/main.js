@@ -1,6 +1,8 @@
 $(document).ready(function() {
     activateArticleTable();
     activateAddArticle();
+    activateGenerateTitle();
+    activateGenerateArticles();
 });
 
 
@@ -17,6 +19,57 @@ function activateArticleTable() {
                 }
             }
         ]
+    });
+}
+
+function activateGenerateArticles() {
+    $("#gaGenerateBtn").click(function() {
+        $("#genArticleForm").slideUp('slow');
+        $("#genArticleFormOutput").slideDown('slow');
+        $("#gaGenerateBtn").hide();
+        $("#gaSaveBtn").show();
+    });
+    $("#gaRefreshBtn").click(function() {
+        $("#genArticleForm").slideDown('slow');
+        $("#genArticleFormOutput").slideUp('slow');
+        $("#gaSaveBtn").hide();
+        $("#gaGenerateBtn").show();
+    });
+}
+
+function activateGenerateTitle() {
+    $("#gtBtn").click(function() {
+        var keyword = $("#gtKeyword").val();
+        var category = $("#gtCategory").val();
+        var noTitles = $("#gtNoTitles").val();
+
+        if (keyword === "" && category === "") {
+            $("#gtMessage").removeClass().addClass('alert alert-danger')
+                    .html("<i class='fa fa-exclamation-circle'></i> Keyword and Category cannot be both empty.");
+        } else {
+            if (keyword !== "" && category !== "") {
+                $("#gtMessage").removeClass().addClass('alert alert-danger')
+                        .html("<i class='fa fa-exclamation-circle'></i> Keyword and Category can't have value at the same time.");
+            } else {
+                $.ajax({
+                    url: base_url + "main/generateTitles",
+                    data: {'keyword': keyword, 'category': category, 'noTitles': noTitles},
+                    cache: false,
+                    type: 'post',
+                    dataType: 'json',
+                    success: function(data) {
+                        if (data.result === "OK") {
+                            $("#gtMessage").removeClass().addClass('alert alert-success')
+                                    .html("<i class='fa fa-check'></i> Generating Titles Successful!");
+                            $("#gtGeneratedTitles").html(data.titles);
+                            gtAutoHeightContent();
+                        } else {
+                            $("#gtMessage").removeClass().addClass('alert alert-danger').html(data);
+                        }
+                    }
+                });
+            }
+        }
     });
 }
 
@@ -74,6 +127,18 @@ function activateAddArticle() {
         }
         return true;
     }
+}
+
+function gtAutoHeightContent() {
+    $('#gtGeneratedTitles').on('keyup', function(e) {
+        $(this).css('height', 'auto');
+        $(this).height(this.scrollHeight);
+    });
+    $('#gtGeneratedTitles').keyup();
+
+    $("#gtGeneratedTitles").keydown(function(e) {
+        e.preventDefault();
+    });
 }
 
 $.fn.dataTableExt.oApi.fnReloadAjax = function(oSettings, sNewSource, fnCallback, bStandingRedraw)

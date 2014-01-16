@@ -105,7 +105,7 @@
                 <h4 class="modal-title" id="myModalLabel"><i class="fa fa-flash"></i> Generate Title</h4>
             </div>
             <div class="modal-body">
-                <div class="alert-danger" id="gtMessage"></div>
+                <div class="alert alert-info" id="gtMessage"><i class="fa fa-info"></i> Keyword and Category can't have a value at the same time.</div>
                 <form class="form-horizontal" role="form">
                     <div class="form-group">
                         <label for="keyword" class="col-sm-2 control-label">Keyword</label>
@@ -116,19 +116,31 @@
                     <div class="form-group">
                         <label for="category" class="col-sm-2 control-label">Category</label>
                         <div class="col-sm-10">
-                            <select class="form-control">
-                                <option>Category 1</option>
-                                <option>Category 2</option>
+                            <select id="gtCategory" class="form-control">
+                                <option value="">Select a category</option>
+                                <?php foreach ($categories as $category): ?>
+                                    <option value="<?php echo $category->name ?>"><?php echo $category->name ?></option>
+                                <?php endforeach; ?>
                             </select>
                         </div>
                     </div>
-                    <button type="button" class="btn btn-primary pull-right">Generate Title</button>
+                    <div class="form-group">
+                        <label for="category" class="col-sm-2 control-label">No. Titles</label>
+                        <div class="col-sm-2">
+                            <select id="gtNoTitles" class="form-control">
+                                <?php for ($i = 1; $i <= 30; $i++) { ?>
+                                    <option value="<?php echo $i ?>"><?php echo $i ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="button" id="gtBtn" class="btn btn-primary pull-right">Generate Title</button>
                     <div class="clearfix"></div>
                     <hr />
                     <div class="form-group">
-                        <label for="output" class="col-sm-2 control-label">Generated Title</label>
+                        <label for="output" class="col-sm-2 control-label">Generated Title(s)</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="gtGeneratedTitle" placeholder="Output">
+                            <textarea class="form-control" id="gtGeneratedTitles"></textarea>
                         </div>
                     </div>
                 </form>
@@ -150,7 +162,7 @@
             </div>
             <div class="modal-body">
                 <div class="alert-danger" id="gaMessage"></div>
-                <form class="form-horizontal" role="form">
+                <form id='genArticleForm' class="form-horizontal" role="form">
                     <div class="form-group">
                         <label for="keyword" class="col-sm-2 control-label">Keyword</label>
                         <div class="col-sm-10">
@@ -160,37 +172,74 @@
                     <div class="form-group">
                         <label for="category" class="col-sm-2 control-label">Category</label>
                         <div class="col-sm-10">
-                            <select class="form-control">
-                                <option>Category 1</option>
-                                <option>Category 2</option>
+                            <select class="form-control" id='gaCategory'>
+                                <option value="">Select a category</option>
+                                <?php foreach ($categories as $category): ?>
+                                    <option value="<?php echo $category->name ?>"><?php echo $category->name ?></option>
+                                <?php endforeach; ?>
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="category" class="col-sm-3 control-label">Titles to Display</label>
+                        <label for="titles" class="col-sm-3 control-label">Titles to Display</label>
                         <div class="col-sm-3">
-                            <input type="number" class="form-control" id="gaNoTitle">
+                            <select id="gaNoTitles" class="form-control">
+                                <?php for ($i = 1; $i <= 30; $i++) { ?>
+                                    <option value="<?php echo $i ?>"><?php echo $i ?></option>
+                                <?php } ?>
+                            </select>
                         </div>
-                        <label for="category" class="col-sm-3 control-label">Articles to Mix</label>
+                        <label for="articles" class="col-sm-3 control-label">Articles to Mix</label>
                         <div class="col-sm-3">
-                            <input type="number" class="form-control" id="gaArticlesToMix">
+                            <select id="gaNoArticles" class="form-control">
+                                <?php for ($i = 2; $i <= 15; $i++) { ?>
+                                    <option value="<?php echo $i ?>"><?php echo $i ?></option>
+                                <?php } ?>
+                            </select>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="category" class="col-sm-3 control-label">Paragraphs</label>
-                        <div class="col-sm-3">
-                            <input type="number" class="form-control" id="gaNoParagraphs">
+                        <div class="col-sm-4">
+                            <h5><small>Min</small></h5>
+                            <select id="gaMinParagraphs" class="form-control">
+                                <?php for ($i = 3; $i <= 5; $i++) { ?>
+                                    <option value="<?php echo $i ?>"><?php echo $i ?></option>
+                                <?php } ?>
+                            </select>
                         </div>
-                        <label for="category" class="col-sm-3 control-label">Sentence/Paragraph</label>
-                        <div class="col-sm-3">
-                            <input type="number" class="form-control" id="gaNoOfSP">
+                        <div class='col-sm-4'>
+                            <h5><small>Max</small></h5>
+                            <select id="gaMaxParagraphs" class="form-control">
+                                <?php for ($i = 5; $i <= 10; $i++) { ?>
+                                    <option value="<?php echo $i ?>"><?php echo $i ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+                <form id='genArticleFormOutput' style='display:none;' class="form-horizontal" role="form">
+                    <button type="button" id="gaRefreshBtn" class="btn btn-primary pull-right"><i class='fa fa-refresh'></i> Generate Again</button>
+                    <div class="clearfix"></div>
+                    <div class='spacer-sm'></div>
+                    <div class="form-group">
+                        <label for="output" class="col-sm-2 control-label">Generated Title(s)</label>
+                        <div class="col-sm-10">
+                            <textarea class="form-control" id="gaGeneratedTitles"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="output" class="col-sm-2 control-label">Generated Content</label>
+                        <div class="col-sm-10">
+                            <textarea class="form-control" id="gaGeneratedContents"></textarea>
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Generate</button>
+                <button type="button" id='gaGenerateBtn' class="btn btn-primary pull-right">Generate</button>
+                <button type="button" style='display: none;' id='gaSaveBtn' class="btn btn-success pull-right">Save</button>
             </div>
         </div>
     </div>
@@ -223,8 +272,10 @@
                         <label for="category" class="col-sm-3 control-label">Category</label>
                         <div class="col-sm-9">
                             <select class="form-control">
-                                <option>Category 1</option>
-                                <option>Category 2</option>
+                                <option value="">Select a category</option>
+                                <?php foreach ($categories as $category): ?>
+                                    <option value="<?php echo $category->name ?>"><?php echo $category->name ?></option>
+                                <?php endforeach; ?>
                             </select>
                         </div>
                     </div>

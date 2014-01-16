@@ -5,6 +5,9 @@ body {
 .spacer {
     margin-top: 40px;
 }
+.spacer-sm {
+    margin-top: 20px;
+}
 
 .jumbotron {
     margin-top: -50px;
