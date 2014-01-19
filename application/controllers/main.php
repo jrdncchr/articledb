@@ -87,20 +87,46 @@ class Main extends MY_Controller {
             echo json_encode($data);
         }
     }
+    
+    public function countArticlesByKeyword() {
+        $keyword = $_POST['keyword'];
+        $this->article_model->countArticlesByKeyword($keyword);
+    }
 
     public function generateArticles() {
-        $generate = array(
+        $data = array(
             'keyword' => $_POST['keyword'],
             'category' => $_POST['category'],
             'noTitles' => $_POST['noTitles'],
             'noArticlesToMix' => $_POST['noArticlesToMix'],
             'pMin' => $_POST['pMin'],
             'pMax' => $_POST['pMax'],
+            'sMin' => $_POST['sMin'],
+            'sMax' => $_POST['sMax']
         );
+        
+        $result = array();
+        
+        //Generate Titles
+        $generateTitles = $this->article_model->generateTitles($data['keyword'], $data['category'], $data['noTitles']);
+        if (sizeof($generateTitles) > 0) {
+            $titles = "{";
+            foreach ($generateTitles as $title) {
+                $titles .= "$title->title|";
+            }
+            $titles = substr($titles, 0, -1);
+            $titles .= "}";
 
-
-        echo $generate['keyword'].$generate['category'].$generate['noTitles'].$generate['noArticlesToMix']
-                .$generate['pMin'].$generate['pMax'];
+            $result['titles'] = $titles;
+        } else {
+            $result['titles'] = "No titles found.";
+        }
+        
+        //Generate Article
+        $generateArticle = $this->article_model->generateArticles($data);
+        $result['article'] = $generateArticle;
+        
+        echo json_encode($result);
     }
 
 }

@@ -121,12 +121,10 @@ function activateGenerateArticles() {
                     success: function(data) {
                         if (data > 0) {
                             var options = "";
-                            if (data < 15) {
-                                for (var i = 1; i <= data; i++) {
-                                    options += "<option value='" + i + "'>" + i + "</option>";
-                                }
-                                $("#gaNoArticlesToMix").html(options);
+                            for (var i = 1; i <= parseInt(data); i++) {
+                                options += "<option value='" + i + "'>" + i + "</option>";
                             }
+                            $("#gaNoArticlesToMix").html(options);
                             $("#gaMessage").removeClass().addClass('alert alert-success')
                                     .html("<i class='fa fa-smile-o'></i> There are articles found containing the keyword.");
                         } else {

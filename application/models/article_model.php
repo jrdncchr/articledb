@@ -59,19 +59,19 @@ class Article_Model extends CI_Model {
 
     function generateTitles($keyword, $category, $noTitles) {
         try {
-            if($keyword != "") {
-                $this->db->order_by('id', 'random'); 
-                $this->db->like('title', $keyword, 'both'); 
+            if ($keyword != "") {
+                $this->db->order_by('id', 'random');
+                $this->db->like('title', $keyword, 'both');
                 $result = $this->db->get('articles', $noTitles);
-                if($result->num_rows() > 0) {
+                if ($result->num_rows() > 0) {
                     return $result->result();
                 } else {
                     return array();
                 }
             } else {
-                $this->db->order_by('id', 'random'); 
+                $this->db->order_by('id', 'random');
                 $result = $this->db->get_where('articles', array('category' => $category), $noTitles);
-                if($result->num_rows() > 0) {
+                if ($result->num_rows() > 0) {
                     return $result->result();
                 } else {
                     return array();
@@ -79,6 +79,140 @@ class Article_Model extends CI_Model {
             }
         } catch (Exception $e) {
             echo "GETTING TITLES ERROR: " . $e->message();
+        }
+    }
+
+    public function countArticlesByKeyword($keyword) {
+        try {
+            $this->db->like('title', $keyword, 'both');
+            $this->db->from('articles');
+            echo $this->db->count_all_results();
+        } catch (Exception $e) {
+            echo "COUNT ARTICLES BY KEYWORD ERROR: " . $e->message();
+        }
+    }
+
+    public function generateArticles($data) {
+        try {
+            // get all articles depending on key or category on an array
+            $articles = array();
+            if ($data['keyword'] != "") {
+                $this->db->order_by('id', 'random');
+                $this->db->like('title', $data['keyword'], 'both');
+                $result = $this->db->get('articles', $data['noArticlesToMix']);
+                if ($result->num_rows() > 0) {
+                    $articles = $result->result();
+                }
+            } else {
+                $this->db->order_by('id', 'random');
+                $result = $this->db->get_where('articles', array('category' => $data['category']), $data['noArticlesToMix']);
+                if ($result->num_rows() > 0) {
+                    $articles = $result->result();
+                }
+            }
+
+            // loop the articles array and remove unnecessary characters. put them all in one string
+            $articlesStr = "";
+            foreach ($articles as $a) {
+                $articlesStr .= preg_replace('/[^a-zA-Z0-9_ %\[\]\.\(\)%&-]/s', '', $a->content);
+            }
+
+            // split the article string by '.' to sepearate each sentences
+            $articlesSplit = explode(".", $articlesStr);
+
+            $generatedArticle = "";
+
+            // create a paragraph depending on users min and max paragraph count
+            for ($i = 1; $i <= rand($data['pMin'], $data['pMax']); $i++) {
+                $paragraph = "";
+                // in each paragraph randomize also how many sentence/paragraph
+                for ($y = 1; $y <= rand($data['sMin'], $data['sMax']); $y++) {
+                    if (count($articlesSplit) > 0) {
+                        // randomize and index to get a random sentence in the splitted article string
+                        $randomIndex = rand(0, count($articlesSplit) - 1);
+                        $sentence = $articlesSplit[$randomIndex];
+                        // sentence should be atleast 15 characters, else randomize again
+                        while (strlen($sentence) < 15) {
+                            unset($articlesSplit[$randomIndex]);
+                            $articlesSplit = array_values($articlesSplit);
+                            $randomIndex = rand(0, count($articlesSplit) - 1);
+                            $sentence = $articlesSplit[$randomIndex];
+                        }
+                        unset($articlesSplit[$randomIndex]);
+                        $articlesSplit = array_values($articlesSplit);
+                        if (strpos($generatedArticle, $sentence) == false) {
+                            $paragraph .= $sentence . ". ";
+                        }
+                    }
+                }
+                $paragraph .= "\n\n";
+                $generatedArticle .= $paragraph;
+            }
+            return $generatedArticle;
+        } catch (Exception $e) {
+            echo "GENERATE ARTICLE ERROR: " . $e->message();
+        }
+    }
+
+    public function generateArticlesByProject($data) {
+        try {
+            // get all articles depending on key or category on an array
+            $articles = array();
+            if ($data['keyword'] != "") {
+                $this->db->order_by('id', 'random');
+                $this->db->like('title', $data['keyword'], 'both');
+                $result = $this->db->get('articles', $data['noArticlesToMix']);
+                if ($result->num_rows() > 0) {
+                    $articles = $result->result();
+                }
+            } else {
+                $this->db->order_by('id', 'random');
+                $result = $this->db->get_where('articles', array('category' => $data['category']), $data['noArticlesToMix']);
+                if ($result->num_rows() > 0) {
+                    $articles = $result->result();
+                }
+            }
+
+            // loop the articles array and remove unnecessary characters. put them all in one string
+            $articlesStr = "";
+            foreach ($articles as $a) {
+                $articlesStr .= preg_replace('/[^a-zA-Z0-9_ %\[\]\.\(\)%&-]/s', '', $a->content);
+            }
+
+            // split the article string by '.' to sepearate each sentences
+            $articlesSplit = explode(".", $articlesStr);
+
+            $generatedArticle = "";
+
+            // create a paragraph depending on users min and max paragraph count
+            for ($i = 1; $i <= rand($data['pMin'], $data['pMax']); $i++) {
+                $paragraph = "";
+                // in each paragraph randomize also how many sentence/paragraph
+                for ($y = 1; $y <= rand($data['sMin'], $data['sMax']); $y++) {
+                    if (count($articlesSplit) > 0) {
+                        // randomize and index to get a random sentence in the splitted article string
+                        $randomIndex = rand(0, count($articlesSplit) - 1);
+                        $sentence = $articlesSplit[$randomIndex];
+                        // sentence should be atleast 15 characters, else randomize again
+                        while (strlen($sentence) < 15) {
+                            unset($articlesSplit[$randomIndex]);
+                            $articlesSplit = array_values($articlesSplit);
+                            $randomIndex = rand(0, count($articlesSplit) - 1);
+                            $sentence = $articlesSplit[$randomIndex];
+                        }
+                        unset($articlesSplit[$randomIndex]);
+                        $articlesSplit = array_values($articlesSplit);
+                        if (strpos($generatedArticle, $sentence) == false) {
+                            $paragraph .= $sentence . ". ";
+                        }
+                    }
+                }
+                $paragraph .= "\n\n";
+                $generatedArticle .= $paragraph;
+            }
+            return $generatedArticle;
+        } catch (Exception $e) {
+            echo "GENERATE ARTICLE ERROR: " . $e->message();
         }
     }
 

@@ -24,8 +24,7 @@
                 <thead>
                     <tr>
                         <th width="20%">ID</th>
-                        <th width="50%">Project Title</th>
-                        <th width="30%">Action</th>
+                        <th width="80%">Project Title</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -192,7 +191,7 @@
                         <label for="articles" class="col-sm-3 control-label">Articles to Mix</label>
                         <div class="col-sm-3">
                             <select id="gaNoArticlesToMix" class="form-control">
-                                <?php for ($i = 2; $i <= 15; $i++) { ?>
+                                <?php for ($i = 1; $i <= 15; $i++) { ?>
                                     <option value="<?php echo $i ?>"><?php echo $i ?></option>
                                 <?php } ?>
                             </select>
@@ -203,7 +202,7 @@
                         <div class="col-sm-4">
                             <h5><small>Min</small></h5>
                             <select id="gaPMin" class="form-control">
-                                <?php for ($i = 3; $i <= 5; $i++) { ?>
+                                <?php for ($i = 1; $i <= 10; $i++) { ?>
                                     <option value="<?php echo $i ?>"><?php echo $i ?></option>
                                 <?php } ?>
                             </select>
@@ -211,7 +210,26 @@
                         <div class='col-sm-4'>
                             <h5><small>Max</small></h5>
                             <select id="gaPMax" class="form-control">
-                                <?php for ($i = 5; $i <= 10; $i++) { ?>
+                                <?php for ($i = 1; $i <= 10; $i++) { ?>
+                                    <option value="<?php echo $i ?>"><?php echo $i ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="category" class="col-sm-3 control-label">Sentences / Paragraph</label>
+                        <div class="col-sm-4">
+                            <h5><small>Min</small></h5>
+                            <select id="gaSPMin" class="form-control">
+                                <?php for ($i = 1; $i <= 10; $i++) { ?>
+                                    <option value="<?php echo $i ?>"><?php echo $i ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                        <div class='col-sm-4'>
+                            <h5><small>Max</small></h5>
+                            <select id="gaSPMax" class="form-control">
+                                <?php for ($i = 1; $i <= 10; $i++) { ?>
                                     <option value="<?php echo $i ?>"><?php echo $i ?></option>
                                 <?php } ?>
                             </select>

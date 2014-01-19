@@ -3,7 +3,7 @@
 if (!defined('BASEPATH'))
     exit('No direct access is allowed!');
 
-class Articles extends MY_Controller {
+class Projects extends MY_Controller {
 
     public function __construct() {
         parent::__construct();
@@ -12,71 +12,41 @@ class Articles extends MY_Controller {
         if (null == $user) {
             redirect(base_url());
         }
-        $this->load->model('article_model');
+        $this->load->model('projects_model');
     }
-
-    public function index() {
-        $this->title = "Article Database &raquo; Articles";
-        $this->js[] = "custom/articles.js";
-        $this->data['user'] = $this->session->userdata('user');
-        $this->load->model('categories_model');
-        $this->data['categories'] = $this->categories_model->get();
-        $this->_renderL('pages/articles');
-    }
-
-    public function info($id = 0) {
-        $article = $this->article_model->getArticles($id);
-        if ($article != null) {
-            $this->js[] = "custom/articles_info.js";
-            $this->data['article'] = $article;
+    
+    public function info($id) {
+        $project = $this->projects_model->getProject($id);
+        if ($project != null) {
+            $this->js[] = "custom/projects_info.js";
+            $this->data['project'] = $project;
             $this->data['user'] = $this->session->userdata('user');
-            $this->load->model('categories_model');
-            $this->data['categories'] = $this->categories_model->get();
-            $this->session->set_userdata('selectedArticle', $id);
-            $this->_renderL('pages/articles_info');
+            $this->session->set_userdata('selectedProject', $id);
+            $this->_renderL('pages/projects_info');
         } else {
             show_404();
         }
     }
-
+    
     public function add() {
         $user = $this->session->userdata('user');
-        $article = array(
+        $project = array(
             'title' => $_POST['title'],
-            'category' => $_POST['category'],
             'content' => $_POST['content'],
             'author' => $user->username,
             'date' => date('Y-m-d')
         );
-        $this->article_model->addArticle($article);
-    }
-
-    public function update() {
-        $id = $this->session->userdata('selectedArticle');
-        $article = array(
-            'title' => $_POST['title'],
-            'category' => $_POST['category'],
-            'content' => $_POST['content']
-        );
-
-        $this->load->model('article_model');
-        $this->article_model->updateArticle($id, $article);
-    }
-
-    public function delete() {
-        $id = $this->session->userdata('selectedArticle');
-        $this->load->model('article_model');
-        $this->article_model->deleteArticle($id);
+        $this->projects_model->addProject($project);
     }
 
     public function get() {
-        $aColumns = array('id', 'title', 'category');
+        $aColumns = array('id', 'title');
 
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = "id";
 
         /* DB table to use */
-        $sTable = "articles";
+        $sTable = "projects";
 
         $gaSql['user'] = DB_USER;
         $gaSql['password'] = DB_PASSWORD;

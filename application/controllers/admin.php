@@ -59,15 +59,10 @@ class Admin extends MY_Controller {
         /* DB table to use */
         $sTable = "categories";
 
-        $gaSql['user'] = "root";
-        $gaSql['password'] = "";
-        $gaSql['db'] = "articledb";
-        $gaSql['server'] = "localhost";
-
-//        $gaSql['user'] = "realasia_admin";
-//        $gaSql['password'] = "admin143";
-//        $gaSql['db'] = "realasia_articledb";
-//        $gaSql['server'] = "localhost";
+        $gaSql['user'] = DB_USER;
+        $gaSql['password'] = DB_PASSWORD;
+        $gaSql['db'] = DB_DATABASE;
+        $gaSql['server'] = DB_HOSTNAME;
 
         /*         * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
          * If you just want to use the basic configuration for DataTables with PHP server-side, there is
@@ -209,15 +204,10 @@ class Admin extends MY_Controller {
         /* DB table to use */
         $sTable = "users";
 
-        $gaSql['user'] = "root";
-        $gaSql['password'] = "";
-        $gaSql['db'] = "articledb";
-        $gaSql['server'] = "localhost";
-
-//        $gaSql['user'] = "realasia_admin";
-//        $gaSql['password'] = "admin143";
-//        $gaSql['db'] = "realasia_articledb";
-//        $gaSql['server'] = "localhost";
+        $gaSql['user'] = DB_USER;
+        $gaSql['password'] = DB_PASSWORD;
+        $gaSql['db'] = DB_DATABASE;
+        $gaSql['server'] = DB_HOSTNAME;
 
         /*         * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
          * If you just want to use the basic configuration for DataTables with PHP server-side, there is

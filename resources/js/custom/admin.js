@@ -30,7 +30,6 @@ function activateUsers() {
         "bServerSide": true,
         "sAjaxSource": base_url + "admin/getUsers"
     });
-    activateCategoriesEvents();
 }
 
 function activateCategoriesEvents() {

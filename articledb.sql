@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jan 15, 2014 at 04:43 PM
+-- Generation Time: Jan 18, 2014 at 09:49 AM
 -- Server version: 5.6.12-log
 -- PHP Version: 5.4.12
 
@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS `categories` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 --
 -- Dumping data for table `categories`
@@ -76,6 +76,31 @@ CREATE TABLE IF NOT EXISTS `categories` (
 INSERT INTO `categories` (`id`, `name`) VALUES
 (1, 'Gaming'),
 (2, 'Home and Family');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `projects`
+--
+
+CREATE TABLE IF NOT EXISTS `projects` (
+  `id` int(7) NOT NULL AUTO_INCREMENT,
+  `title` varchar(100) NOT NULL,
+  `content` text NOT NULL,
+  `author` varchar(30) NOT NULL,
+  `date` date NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
+
+--
+-- Dumping data for table `projects`
+--
+
+INSERT INTO `projects` (`id`, `title`, `content`, `author`, `date`) VALUES
+(2, '{The Fireplace and Home Fire Safety|How To Save Money When Homeschooling|What Are Some Different Typ', ' Choosing which one that you want will be a personal preference for what you are comfortable installing yourself or if you want a company to come out and give you the expert advice about where to set up the cameras and overall safety inspection of the home to tell you the weakest spots of the home will be.  Once the cell is compromised from that initial contact the damage to the body and the mind is done and cannot be undone.  Moderate alcohol is believed to raise high-density lipoprotein (HDL) cholesterol the good cholesterol.  Also add into the blender 14 cup of fresh cilantro 14 cup of fresh mint 2 cloves of garlic 12 teaspoon of ground coriander and 12 teaspoon of ground cumin. \n\n Use only seasoned hardwood as this will give off the least amount of creosote.  Ashes have a tendency to continue to burn even after you think they are out. Home security options gives you many options that you can choose from for making your home secure.  Moderate alcohol is believed to raise high-density lipoprotein (HDL) cholesterol the good cholesterol. \n\n There are many book dealers online that will deal with home school text books.  Choosing which one that you want will be a personal preference for what you are comfortable installing yourself or if you want a company to come out and give you the expert advice about where to set up the cameras and overall safety inspection of the home to tell you the weakest spots of the home will be. Remember that a fireplace fire requires about 5 times as much air as most houses require for proper ventilation.  Also an EPA report concluded that the toxic chemicals in household cleaners are three times more likely to cause cancer than air pollution.  How much more vulnerable are these children. \n\n Have a professional chimney sweep inspect and clean the fireplace and chimney at least once a year.   Be sure to install both a smoke detector and carbon monoxide detector in your home and make sure the batteries are replaced. Having a home security system gives you the sense of security for you and your family giving you piece of mind for the family home when you are home and away from home.  Keep a fire extinguisher on hand. \n\n', 'admin', '2014-01-18'),
+(3, '{How To Save Money When Homeschooling|Your Home Is Still a Powder Keg|What Are Some Different Types ', ' Always have the spark screen handy so that you can place it in front of the fireplace as soon as the fire has started. When any of these chemicals enter the body they immediately go to the blood stream and begin penetrating cells within the body and the tragic mutation has begun.  Here are some of the best ways that you can save money. \n\n Keep combustible materials such as paper logs and kindling at least 3 feet away from the fireplace. Lets be perfectly clear these diseases are not limited to just the physical body these diseases are manifesting themselves in the mind as well. \n\n Remember blood is pumped throughout our entire system carrying these mutated cells.  This maintenance is crucial to prevent creosote buildups and potential chimney fires. \n\nIP Security Cameras are known as being easy to set up you dont have to be a computer expert to set these up.  Also an EPA report concluded that the toxic chemicals in household cleaners are three times more likely to cause cancer than air pollution.  They sometimes come with a mobile app that you can set the cameras up even when youre away from home. \n\n  Keep the roof of your house clear of leaves pine needles and other debris and remove any branches that may be hanging above the chimney.   By building small fires they will burn more completely and will produce less smoke. \n\n', 'admin', '2014-01-18'),
+(4, '{Anti Slip Products|What Are Some Different Types Of Home Security Cameras?|How To Save Money When H', ' The extreme temperatures inside a dishwasher will kill all bed bugs. Having a home security system gives you the sense of security for you and your family giving you piece of mind for the family home when you are home and away from home. \n\n But keep in mind that a moderate amount of alcohol (from white wines or beer) alcohol in general is now believed to also be good for the body. \n\nBed bugs have re-surged to become a very real problem in todays world. \n\nBuy books online. \n\n', 'admin', '2014-01-18'),
+(5, 'Generated Project about Gaming', ' This pushes you to weigh the pros and cons of your choices. In a nutshell people learn faster when theyre having fun.  The content here can vary greatly in terms of age appropriateness just like other kinds. \n\n Ever since video games came to be a number of people-mostly adults-have condemned video games as a waste of time and money.  The results were remarkably positive leading to the creation of digital learning tools.  Sorry Rick Grimes but they have virtually invaded the world and there is no stopping them. \n\n Several versions have been released including one for Facebook.  Even so there are quite a few third party video game accessories that are licensed and therefore a good buy. Social networkingAs the name suggest these forms are played from within a social networking site. \n\n', 'admin', '2014-01-18');
 
 -- --------------------------------------------------------
 
@@ -91,7 +116,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `email` varchar(50) NOT NULL,
   `type` varchar(10) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 --
 -- Dumping data for table `users`
