@@ -26,7 +26,7 @@ class Projects extends MY_Controller {
     public function viewFull($id) {
         $project = $this->projects_model->getProject($id);
         if ($project != null) {
-            $data['output'] = $project->title . "|" . $project->content;
+            $data['output'] = "$project->title \r\n $project->content";
             $this->load->view('pages/projects_output', $data);
         } else {
             show_404();
@@ -36,8 +36,8 @@ class Projects extends MY_Controller {
     public function viewTitle($id) {
         $project = $this->projects_model->getProject($id);
         if ($project != null) {
-            $this->data['output'] = $project->title;
-            $this->_renderL('pages/projects_output');
+            $data['output'] = $project->title;
+            $this->load->view('pages/projects_output', $data);
         } else {
             show_404();
         }
@@ -46,8 +46,8 @@ class Projects extends MY_Controller {
     public function viewContent($id) {
         $project = $this->projects_model->getProject($id);
         if ($project != null) {
-            $this->data['output'] = $project->content;
-            $this->load->view('pages/projects_output');
+            $data['output'] = $project->content;
+            $this->load->view('pages/projects_output', $data);
         } else {
             show_404();
         }
@@ -56,8 +56,8 @@ class Projects extends MY_Controller {
     public function viewSummary($id) {
         $project = $this->projects_model->getProject($id);
         if ($project != null) {
-            $this->data['output'] = substr($project->content, 0, 50) . "...";
-            $this->_renderL('pages/projects_output');
+            $data['output'] = substr($project->content, 0, 200) . "...";
+            $this->load->view('pages/projects_output', $data);
         } else {
             show_404();
         }

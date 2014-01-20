@@ -422,6 +422,36 @@ function activateGenerateTitle() {
             }
         }
     });
+    $("#gtSpinBtn").click(function() {
+        if ($("#gtGeneratedTitles").val() === "") {
+            $("#gtMessage").removeClass().addClass('alert alert-danger')
+                    .html("<i class='fa fa-exclamation-circle'></i> You must generate a title first.");
+        } else if ($("#gtGeneratedTitles").val().length < 8) {
+            $("#gtMessage").removeClass().addClass('alert alert-danger')
+                    .html("<i class='fa fa-exclamation-circle'></i> Generated title must be atleast 8 characters.");
+        } else {
+            var verify = confirm("Are you sure you want to spin the title?");
+            if (verify) {
+                $.ajax({
+                    url: base_url + "main/spin",
+                    data: {'text': $("#gtGeneratedTitles").val()},
+                    cache: false,
+                    type: 'post',
+                    dataType: 'json',
+                    success: function(data) {
+                        if (data.result === "OK") {
+                            $("#gtMessage").removeClass().addClass('alert alert-success')
+                                    .html("<i class='fa fa-check'></i> Spinning Titles Successful!");
+                            $("#gtGeneratedTitles").html(data.output);
+                            gtAutoHeightContent();
+                        } else {
+                            $("#gtMessage").removeClass().addClass('alert alert-danger').html(data);
+                        }
+                    }
+                });
+            }
+        }
+    });
 }
 
 // adding new article

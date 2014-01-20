@@ -142,6 +142,8 @@
                             <textarea class="form-control" id="gtGeneratedTitles"></textarea>
                         </div>
                     </div>
+                    <button type="button" id="gtSpinBtn" data-loading-text="Loading..." class="btn btn-danger pull-right"><i class="fa fa-spinner"></i> Spin</button>
+                    <div class="clearfix"></div>
                 </form>
             </div>
             <div class="modal-footer">
