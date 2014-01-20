@@ -1,7 +1,7 @@
 $(document).ready(function() {
     autoHeightContent();
-//    activateUpdate();
-//    activateDelete();
+    activateUpdate();
+    activateDelete();
 });
 
 function autoHeightContent() {
@@ -19,28 +19,25 @@ function autoHeightContent() {
 function activateUpdate() {
     $("#showUpdateBtn").click(function() {
         $("#title").val($("#readTitle").html());
-        $("#category").val($("#readCategory").html());
         $("#acontent").val($("#readContent").val());
     });
 
     $("#updateBtn").click(function() {
         if (validateInput() === true) {
             $.ajax({
-                url: base_url + 'articles/update',
-                data: {'title': $("#title").val(), 'category': $("#category").val(),
-                    'content': $("#acontent").val()},
+                url: base_url + 'projects/update',
+                data: {'title': $("#title").val(), 'content': $("#acontent").val()},
                 dataType: 'json',
                 type: 'post',
                 cache: false,
                 success: function(data) {
                     if (data.result === "OK") {
                         $("#readTitle").html(data.title);
-                        $("#readCategory").html(data.category);
                         $("#readContent").val(data.content);
                         $("#updateModal").modal('hide');
                         autoHeightContent();
                         clearData();
-                        toastr.success('Updating Article Successful!');
+                        toastr.success('Updating Project Successful!');
                     } else {
                         alert(data.result);
                     }
@@ -54,22 +51,16 @@ function activateUpdate() {
 
     function clearData() {
         $("#title").val("");
-        $("#category").val("");
         $("#content").val("");
         $("#message").removeClass('alert').html("");
     }
 
     function validateInput() {
         var title = $("#title").val();
-        var category = $("#category").val();
         var content = $("#acontent").val();
 
-        if (title.length < 2) {
+        if (title.length < 3) {
             $("#message").addClass('alert').html("<i class='fa fa-exclamation-circle'></i> Title must be atleast 3 characters.");
-            return false;
-        }
-        if (category === "") {
-            $("#message").addClass('alert').html("<i class='fa fa-exclamation-circle'></i> Please choose a category.");
             return false;
         }
         if (content.length < 30) {
@@ -82,10 +73,10 @@ function activateUpdate() {
 
 function activateDelete() {
     $("#deleteBtn").click(function() {
-        var confirmDelete = confirm("Are you sure to delete this article?");
+        var confirmDelete = confirm("Are you sure to delete this project?");
         if (confirmDelete === true) {
             $.ajax({
-                url: base_url + 'articles/delete',
+                url: base_url + 'projects/delete',
                 success: function(data) {
                     if (data === "OK") {
                         window.location = base_url + 'main';

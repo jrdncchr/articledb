@@ -112,7 +112,7 @@ function activateGenerateArticles() {
     });
     $("#gaKeyword").keyup(function(e) {
         if (e.which !== 13) {
-            if ($("#gaKeyword").val().length > 2) {
+            if ($("#gaKeyword").val().length > 3) {
                 $.ajax({
                     url: base_url + 'main/countArticlesByKeyword',
                     data: {'keyword': $("#gaKeyword").val()},
@@ -128,10 +128,10 @@ function activateGenerateArticles() {
                                 $("#gaNoArticlesToMix").html(options);
                             }
                             $("#gaMessage").removeClass().addClass('alert alert-success')
-                                    .html("<i class='fa fa-smile-o'></i> There are articles found containing the keyword.");
+                                    .html("<i class='fa fa-smile-o'></i> There are " + data + " articles found containing the keyword.");
                         } else {
                             $("#gaMessage").removeClass().addClass('alert alert-danger')
-                                    .html("<i class='fa fa-exclamation-circle'></i> There are no articles found containing the keyword.");
+                                    .html("<i class='fa fa-frown-o'></i> Sorry! There are no articles yet containing the keyword.");
                             $("#gaNoArticlesToMix").html("");
                         }
                     },
@@ -170,7 +170,7 @@ function validateGenerateArticles() {
     if (keyword !== "") {
         if (keyword.length > 0 && keyword.length < 3) {
             $("#gaMessage").removeClass().addClass('alert alert-danger')
-                    .html("<i class='fa fa-exclamation-circle'></i> Keyword must be atleast 3 characters.");
+                    .html("<i class='fa fa-exclamation-circle'></i> Keyword must be atleast 4 characters.");
             return false;
         }
     }

@@ -27,4 +27,25 @@ class Projects_Model extends CI_Model {
         }
     }
 
+    public function deleteProject($id) {
+        try {
+            $this->db->where('id', $id);
+            $this->db->delete('projects');
+            echo "OK";
+        } catch (Exception $e) {
+            echo "DELETING ARTICLE ERROR: " . $e->message();
+        }
+    }
+    
+    function updateProject($id, $project) {
+        try {
+            $this->db->where('id', $id);
+            $this->db->update('projects', $project);
+            $data = array('result' => 'OK', 'title' => $project['title'], 'content' => $project['content']);
+            echo json_encode($data);
+        } catch (Exception $e) {
+            echo "UPDATE PROJECT ERROR: " . $e->message();
+        }
+    }
+
 }

@@ -38,6 +38,20 @@ class Projects extends MY_Controller {
         );
         $this->projects_model->addProject($project);
     }
+    
+    public function delete() {
+        $id = $this->session->userdata('selectedProject');
+        $this->projects_model->deleteProject($id);
+    }
+    
+    public function update() {
+        $id = $this->session->userdata('selectedProject');
+        $project = array(
+            'title' => $_POST['title'],
+            'content' => $_POST['content']
+        );
+        $this->projects_model->updateProject($id, $project);
+    }
 
     public function get() {
         $aColumns = array('id', 'title');
