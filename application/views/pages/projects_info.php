@@ -2,9 +2,11 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-7 col-md-7">
-                <h2 id="readTitle"><?php echo $project->title ?></h2>
+                <h2 id="readName"><?php echo $project->name ?></h2>
                 <hr />
+                <h3 id="readTitle"><?php echo $project->title ?></h3>
                 <p>
+                    <span id="readCategory"><?php echo $project->category ?></span>
                     <span class="pull-right"><i><?php echo $project->date ?></i></span>
                 </p>
                 <textarea id="readContent" class="form-control"><?php echo $project->content ?></textarea>
@@ -15,9 +17,21 @@
                 <div class="spacer"></div>
                 <button class="btn btn-success btn-block" id="showUpdateBtn" data-toggle="modal" data-target="#updateModal"><i class="fa fa-edit"></i> <strong>Edit</strong></button>
                 <button class="btn btn-danger btn-block" id="deleteBtn"><i class="fa fa-trash-o"></i> <strong>Delete</strong></button>
+                <hr />
+                <div class="btn-group" style="width: 100%">
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-rocket"></i> <strong>Actions</strong>
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="<?php echo base_url() . 'projects/viewFull/' . $project->id ?>" target="_blank">View Full</a></li>
+                        <li><a href="#" target="_blank">View Title Only</a></li>
+                        <li><a href="#" target="_blank">View Content Only</a></li>
+                        <li><a href="#" target="_blank">View Summary</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
-
     </div>
 </div>
 

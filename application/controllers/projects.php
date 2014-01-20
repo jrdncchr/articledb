@@ -7,15 +7,68 @@ class Projects extends MY_Controller {
 
     public function __construct() {
         parent::__construct();
+        $this->load->model('projects_model');
         $this->load->library('session');
+    }
+
+    public function view($id) {
+        $project = $this->projects_model->getProject($id);
+        if ($project != null) {
+            $this->js[] = "custom/projects_view.js";
+            $this->data['project'] = $project;
+            $this->session->set_userdata('selectedProjectView', $id);
+            $this->_renderL('pages/projects_view');
+        } else {
+            show_404();
+        }
+    }
+
+    public function viewFull($id) {
+        $project = $this->projects_model->getProject($id);
+        if ($project != null) {
+            $data['output'] = $project->title . "|" . $project->content;
+            $this->load->view('pages/projects_output', $data);
+        } else {
+            show_404();
+        }
+    }
+
+    public function viewTitle($id) {
+        $project = $this->projects_model->getProject($id);
+        if ($project != null) {
+            $this->data['output'] = $project->title;
+            $this->_renderL('pages/projects_output');
+        } else {
+            show_404();
+        }
+    }
+
+    public function viewContent($id) {
+        $project = $this->projects_model->getProject($id);
+        if ($project != null) {
+            $this->data['output'] = $project->content;
+            $this->load->view('pages/projects_output');
+        } else {
+            show_404();
+        }
+    }
+
+    public function viewSummary($id) {
+        $project = $this->projects_model->getProject($id);
+        if ($project != null) {
+            $this->data['output'] = substr($project->content, 0, 50) . "...";
+            $this->_renderL('pages/projects_output');
+        } else {
+            show_404();
+        }
+    }
+
+    public function info($id) {
         $user = $this->session->userdata('user');
         if (null == $user) {
             redirect(base_url());
         }
-        $this->load->model('projects_model');
-    }
-    
-    public function info($id) {
+
         $project = $this->projects_model->getProject($id);
         if ($project != null) {
             $this->js[] = "custom/projects_info.js";
@@ -27,24 +80,40 @@ class Projects extends MY_Controller {
             show_404();
         }
     }
-    
+
     public function add() {
         $user = $this->session->userdata('user');
+        if (null == $user) {
+            redirect(base_url());
+        }
+
         $project = array(
             'title' => $_POST['title'],
             'content' => $_POST['content'],
             'author' => $user->username,
+            'category' => $_POST['category'],
+            'name' => $_POST['name'],
             'date' => date('Y-m-d')
         );
         $this->projects_model->addProject($project);
     }
-    
+
     public function delete() {
+        $user = $this->session->userdata('user');
+        if (null == $user) {
+            redirect(base_url());
+        }
+
         $id = $this->session->userdata('selectedProject');
         $this->projects_model->deleteProject($id);
     }
-    
+
     public function update() {
+        $user = $this->session->userdata('user');
+        if (null == $user) {
+            redirect(base_url());
+        }
+
         $id = $this->session->userdata('selectedProject');
         $project = array(
             'title' => $_POST['title'],
@@ -53,8 +122,37 @@ class Projects extends MY_Controller {
         $this->projects_model->updateProject($id, $project);
     }
 
+    public function getProjectCategories() {
+        $user = $this->session->userdata('user');
+        $categories = $this->projects_model->getProjectCategories($user->username);
+        if (count($categories) > 0) {
+            $categoryString = "";
+            foreach ($categories as $c) {
+                $categoryString .= "<option value='" . $c->category . "'>" . $c->category . "</option>";
+            }
+            echo $categoryString;
+        } else {
+            echo "<option value=''></option>";
+        }
+    }
+
+    public function getProjectCountByCategory() {
+        $user = $this->session->userdata('user');
+        $data = array(
+            'category' => $_POST['category'],
+            'author' => $user->username
+        );
+        $this->projects_model->getProjectCountByCategory($data);
+    }
+
+    public function countProjectsByKeyword() {
+        $user = $this->session->userdata('user');
+        $keyword = $_POST['keyword'];
+        $this->projects_model->countProjectsByKeyword($keyword, $user->username);
+    }
+
     public function get() {
-        $aColumns = array('id', 'title');
+        $aColumns = array('id', 'name');
 
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = "id";

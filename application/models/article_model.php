@@ -82,6 +82,31 @@ class Article_Model extends CI_Model {
         }
     }
 
+    function generateTitlesByProject($keyword, $category, $noTitles, $author) {
+        try {
+            if ($keyword != "") {
+                $this->db->order_by('id', 'random');
+                $this->db->like('title', $keyword, 'both');
+                $result = $this->db->get_where('articles', array('author' => $author), $noTitles);
+                if ($result->num_rows() > 0) {
+                    return $result->result();
+                } else {
+                    return array();
+                }
+            } else {
+                $this->db->order_by('id', 'random');
+                $result = $this->db->get_where('articles', array('category' => $category, 'author' => $author), $noTitles);
+                if ($result->num_rows() > 0) {
+                    return $result->result();
+                } else {
+                    return array();
+                }
+            }
+        } catch (Exception $e) {
+            echo "GETTING TITLES BY PROJECT ERROR: " . $e->message();
+        }
+    }
+
     public function countArticlesByKeyword($keyword) {
         try {
             $this->db->like('title', $keyword, 'both');
@@ -91,7 +116,7 @@ class Article_Model extends CI_Model {
             echo "COUNT ARTICLES BY KEYWORD ERROR: " . $e->message();
         }
     }
-
+    
     public function generateArticles($data) {
         try {
             // get all articles depending on key or category on an array
@@ -118,7 +143,7 @@ class Article_Model extends CI_Model {
             }
 
             // split the article string by '.' to sepearate each sentences
-            $articlesSplit = explode(".", $articlesStr);
+            $articlesSplit = explode(". ", $articlesStr);
 
             $generatedArticle = "";
 
@@ -141,7 +166,7 @@ class Article_Model extends CI_Model {
                         unset($articlesSplit[$randomIndex]);
                         $articlesSplit = array_values($articlesSplit);
                         if (strpos($generatedArticle, $sentence) == false) {
-                            $paragraph .= $sentence . ". ";
+                            $paragraph .= $sentence . ".";
                         }
                     }
                 }
@@ -161,13 +186,13 @@ class Article_Model extends CI_Model {
             if ($data['keyword'] != "") {
                 $this->db->order_by('id', 'random');
                 $this->db->like('title', $data['keyword'], 'both');
-                $result = $this->db->get('articles', $data['noArticlesToMix']);
+                $result = $this->db->get_where('projects', array('author' => $data['author']), $data['noArticlesToMix']);
                 if ($result->num_rows() > 0) {
                     $articles = $result->result();
                 }
             } else {
                 $this->db->order_by('id', 'random');
-                $result = $this->db->get_where('articles', array('category' => $data['category']), $data['noArticlesToMix']);
+                $result = $this->db->get_where('projects', array('category' => $data['category'], 'author' => $data['author']), $data['noArticlesToMix']);
                 if ($result->num_rows() > 0) {
                     $articles = $result->result();
                 }
@@ -180,7 +205,7 @@ class Article_Model extends CI_Model {
             }
 
             // split the article string by '.' to sepearate each sentences
-            $articlesSplit = explode(".", $articlesStr);
+            $articlesSplit = explode(". ", $articlesStr);
 
             $generatedArticle = "";
 
@@ -203,7 +228,7 @@ class Article_Model extends CI_Model {
                         unset($articlesSplit[$randomIndex]);
                         $articlesSplit = array_values($articlesSplit);
                         if (strpos($generatedArticle, $sentence) == false) {
-                            $paragraph .= $sentence . ". ";
+                            $paragraph .= $sentence . ".";
                         }
                     }
                 }
@@ -212,7 +237,7 @@ class Article_Model extends CI_Model {
             }
             return $generatedArticle;
         } catch (Exception $e) {
-            echo "GENERATE ARTICLE ERROR: " . $e->message();
+            echo "GENERATE ARTICLE BY PROJECT ERROR: " . $e->message();
         }
     }
 

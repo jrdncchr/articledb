@@ -87,10 +87,16 @@ class Main extends MY_Controller {
             echo json_encode($data);
         }
     }
-    
+
     public function countArticlesByKeyword() {
         $keyword = $_POST['keyword'];
         $this->article_model->countArticlesByKeyword($keyword);
+    }
+
+    public function countProjectsByKeyword() {
+        $keyword = $_POST['keyword'];
+        $user = $this->session->userdata('user');
+        $this->article_model->countArticlesByKeyword($keyword, $user->username);
     }
 
     public function generateArticles() {
@@ -104,9 +110,9 @@ class Main extends MY_Controller {
             'sMin' => $_POST['sMin'],
             'sMax' => $_POST['sMax']
         );
-        
+
         $result = array();
-        
+
         //Generate Titles
         $generateTitles = $this->article_model->generateTitles($data['keyword'], $data['category'], $data['noTitles']);
         if (sizeof($generateTitles) > 0) {
@@ -121,11 +127,49 @@ class Main extends MY_Controller {
         } else {
             $result['titles'] = "No titles found.";
         }
-        
+
         //Generate Article
         $generateArticle = $this->article_model->generateArticles($data);
         $result['article'] = $generateArticle;
-        
+
+        echo json_encode($result);
+    }
+
+    public function generateArticlesByProject() {
+        $user = $this->session->userdata('user');
+        $data = array(
+            'keyword' => $_POST['keyword'],
+            'category' => $_POST['category'],
+            'noTitles' => $_POST['noTitles'],
+            'noArticlesToMix' => $_POST['noArticlesToMix'],
+            'pMin' => $_POST['pMin'],
+            'pMax' => $_POST['pMax'],
+            'sMin' => $_POST['sMin'],
+            'sMax' => $_POST['sMax'],
+            'author' => $user->username
+        );
+
+        $result = array();
+
+        //Generate Titles
+        $generateTitles = $this->article_model->generateTitlesByProject($data['keyword'], $data['category'], $data['noTitles'], $data['author']);
+        if (sizeof($generateTitles) > 0) {
+            $titles = "{";
+            foreach ($generateTitles as $title) {
+                $titles .= "$title->title|";
+            }
+            $titles = substr($titles, 0, -1);
+            $titles .= "}";
+
+            $result['titles'] = $titles;
+        } else {
+            $result['titles'] = "No titles found.";
+        }
+
+        //Generate Article
+        $generateArticle = $this->article_model->generateArticlesByProject($data);
+        $result['article'] = $generateArticle;
+
         echo json_encode($result);
     }
 

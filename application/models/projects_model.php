@@ -36,7 +36,7 @@ class Projects_Model extends CI_Model {
             echo "DELETING ARTICLE ERROR: " . $e->message();
         }
     }
-    
+
     function updateProject($id, $project) {
         try {
             $this->db->where('id', $id);
@@ -45,6 +45,39 @@ class Projects_Model extends CI_Model {
             echo json_encode($data);
         } catch (Exception $e) {
             echo "UPDATE PROJECT ERROR: " . $e->message();
+        }
+    }
+
+    public function getProjectCategories($author) {
+        $this->db->distinct();
+        $this->db->select('category');
+        $result = $this->db->get_where('projects', array('author' => $author));
+        if ($result->num_rows() > 0) {
+            $categories = $result->result();
+            return $categories;
+        } else {
+            return array();
+        }
+    }
+
+    public function getProjectCountByCategory($data) {
+        try {
+            $this->db->where($data);
+            $this->db->from('projects');
+            echo $this->db->count_all_results();
+        } catch (Exception $e) {
+            echo "COUNT ARTICLES BY KEYWORD ERROR: " . $e->message();
+        }
+    }
+
+    public function countProjectsByKeyword($keyword, $author) {
+        try {
+            $this->db->where('author', $author);
+            $this->db->like('title', $keyword, 'both');
+            $this->db->from('projects');
+            echo $this->db->count_all_results();
+        } catch (Exception $e) {
+            echo "COUNT ARTICLES BY KEYWORD ERROR: " . $e->message();
         }
     }
 

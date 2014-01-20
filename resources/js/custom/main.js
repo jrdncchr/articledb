@@ -3,6 +3,7 @@ $(document).ready(function() {
     activateAddArticle();
     activateGenerateTitle();
     activateGenerateArticles();
+    activateGenerateArticlesByProject();
 });
 
 
@@ -37,6 +38,175 @@ function activateTables() {
         ],
         "oLanguage": {
             "sEmptyTable": "You don't have any projects yet."
+        }
+    });
+}
+
+function activateGenerateArticlesByProject() {
+    $("#showGABPForm").click(function() {
+        $.ajax({
+            url: base_url + 'projects/getProjectCategories',
+            cache: false,
+            success: function(data) {
+                $("#gabpCategory").html(data);
+            }
+        });
+    });
+    $("#gabpCategory").change(function() {
+        if ($("#gabpCategory").val() !== "") {
+            checkCategory();
+        } else {
+            if ($("#gabpKeyword").val().length > 3) {
+                checkKeyword();
+            }
+            $("#gabpMessage").removeClass().addClass('alert alert-info')
+                    .html("<i class='fa fa-info'></i> Keyword and Category can't have a value at the same time.");
+        }
+    });
+    function checkCategory() {
+        $.ajax({
+            url: base_url + 'projects/getProjectCountByCategory',
+            cache: false,
+            type: 'post',
+            data: {'category': $("#gabpCategory").val()},
+            success: function(data) {
+                if (data > 0 && data < 15) {
+                    var options;
+                    for (var i = 1; i <= data; i++) {
+                        options += "<option value='" + i + "'>" + i + "</option>";
+                    }
+                    $("#gabpNoArticlesToMix").html(options);
+                } else {
+                    var options;
+                    for (var i = 1; i <= 15; i++) {
+                        options += "<option value='" + i + "'>" + i + "</option>";
+                    }
+                    $("#gabpNoArticlesToMix").html(options);
+                }
+                $("#gabpMessage").removeClass().addClass('alert alert-success')
+                        .html("<i class='fa fa-smile-o'></i> There are " + data + " projects in that category.");
+            }
+        });
+    }
+    $("#gabpKeyword").keyup(function(e) {
+        if (e.which !== 13) {
+            if ($("#gabpKeyword").val().length > 3) {
+                checkKeyword();
+            } else {
+                $("#gabpMessage").removeClass().addClass('alert alert-info')
+                        .html("<i class='fa fa-info'></i> Keyword and Category can't have a value at the same time.");
+                $("#gabpNoArticlesToMix").html("");
+                if ($("#gabpKeyword").val().length === 0) {
+                    checkCategory();
+                }
+            }
+        }
+
+    });
+    function checkKeyword() {
+        $.ajax({
+            url: base_url + 'projects/countProjectsByKeyword',
+            data: {'keyword': $("#gabpKeyword").val()},
+            cache: false,
+            type: 'post',
+            success: function(data) {
+                if (data > 0) {
+                    var options = "";
+                    if (data < 15) {
+                        for (var i = 1; i <= data; i++) {
+                            options += "<option value='" + i + "'>" + i + "</option>";
+                        }
+                        $("#gabpNoArticlesToMix").html(options);
+                    } else {
+                        for (var i = 1; i <= 15; i++) {
+                            options += "<option value='" + i + "'>" + i + "</option>";
+                        }
+                        $("#gabpNoArticlesToMix").html(options);
+                    }
+                    $("#gabpMessage").removeClass().addClass('alert alert-success')
+                            .html("<i class='fa fa-smile-o'></i> There are " + data + " projects found containing the keyword.");
+                } else {
+                    $("#gabpMessage").removeClass().addClass('alert alert-danger')
+                            .html("<i class='fa fa-frown-o'></i> Sorry! You don't have any project containing that keyword.");
+                    $("#gabpNoArticlesToMix").html("");
+                }
+            },
+            error: function(xhr, status, error) {
+                alert(error);
+            }
+        });
+    }
+    $("#gabpRefreshBtn").click(function() {
+        refresh();
+    });
+    function refresh() {
+        $("#gabpMessage").removeClass().addClass('alert alert-info')
+                .html("<i class='fa fa-info'></i> Keyword and Category can't have a value at the same time.");
+        $("#gabpArticleForm").slideDown('slow');
+        $("#gabpArticleFormOutput").slideUp('slow');
+        $("#gabpSaveBtn").hide();
+        $("#gabpGenerateBtn").show();
+    }
+    $("#gabpGenerateBtn").click(function() {
+        if (validateGenerateArticlesByProject() === true) {
+            $.ajax({
+                url: base_url + 'main/generateArticlesByProject',
+                data: {'keyword': $("#gabpKeyword").val(), 'category': $("#gabpCategory").val(), 'noTitles': $("#gabpNoTitles").val(),
+                    'noArticlesToMix': $("#gabpNoArticlesToMix").val(), 'pMin': $("#gabpPMin").val(), 'pMax': $("#gabpPMax").val(),
+                    sMin: $("#gabpSPMin").val(), sMax: $("#gabpSPMax").val()},
+                cache: false,
+                type: 'post',
+                dataType: 'json',
+                success: function(data) {
+                    $("#gabpArticleForm").slideUp('fast');
+                    $("#gabpArticleFormOutput").slideDown('slow');
+                    $("#gabpGenerateBtn").hide();
+                    $("#gabpSaveBtn").show();
+                    $("#gabpMessage").removeClass().addClass('alert alert-success')
+                            .html("<i class='fa fa-check'></i> Generating Project Successful!.");
+                    $("#gabpGeneratedTitles").html(data.titles);
+                    gabpTitleAutoHeightContent();
+                    $("#gabpGeneratedContents").html(data.article);
+                    gabpContentAutoHeightContent();
+                },
+                error: function(xhr, status, error) {
+                    $("#gabpMessage").removeClass().addClass('alert alert-danger')
+                            .html("<i class='fa fa-exclamation-circle'></i> Mixing projects failed, please try again.");
+                }
+            });
+        }
+    });
+    $("#gabpSaveBtn").click(function() {
+        if (($("#gabpGeneratedTitles").val().length < 5) || ($("#gabpGeneratedContents").val().length < 15)) {
+            $("#gabpMessage").removeClass().addClass('alert alert-danger')
+                    .html("<i class='fa fa-exclamation-circle'></i> Title/Content Character length in not enough.");
+        } else {
+            if ($("#gabpName").val().length < 4) {
+                $("#gabpMessage").removeClass().addClass('alert alert-danger')
+                        .html("<i class='fa fa-exclamation-circle'></i> Project name is required. Characters should be atleast 4 characters.");
+            } else {
+                $.ajax({
+                    url: base_url + 'projects/add',
+                    data: {'title': $("#gabpGeneratedTitles").val(), 'content': $("#gabpGeneratedContents").val(),
+                        'category': $("#gabpCategory").val(), 'name': $("#gabpName").val()},
+                    cache: false,
+                    type: 'post',
+                    success: function(data) {
+                        if (data === "OK") {
+                            refresh();
+                            $("#genABPModal").modal('hide');
+                            var oTable = $('#projects').dataTable();
+                            oTable.fnReloadAjax();
+                            toastr.success('Saving Project Successful!');
+                        } else {
+                            alert(data);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert(error);
+                    }
+                });
+            }
         }
     });
 }
@@ -88,26 +258,32 @@ function activateGenerateArticles() {
             $("#gaMessage").removeClass().addClass('alert alert-danger')
                     .html("<i class='fa fa-exclamation-circle'></i> Title/Content Character length in not enough.");
         } else {
-            $.ajax({
-                url: base_url + 'projects/add',
-                data: {'title': $("#gaGeneratedTitles").val(), 'content': $("#gaGeneratedContents").val()},
-                cache: false,
-                type: 'post',
-                success: function(data) {
-                    if (data === "OK") {
-                        refresh();
-                        $("#genArticleModal").modal('hide');
-                        var oTable = $('#projects').dataTable();
-                        oTable.fnReloadAjax();
-                        toastr.success('Saving Project Successful!');
-                    } else {
-                        alert(data);
+            if ($("#gaName").val().length < 4) {
+                $("#gaMessage").removeClass().addClass('alert alert-danger')
+                        .html("<i class='fa fa-exclamation-circle'></i> Project name is required. Characters should be atleast 4 characters.");
+            } else {
+                $.ajax({
+                    url: base_url + 'projects/add',
+                    data: {'title': $("#gaGeneratedTitles").val(), 'content': $("#gaGeneratedContents").val(),
+                        'category': $("#gaCategory").val(), 'name': $("#gaName").val()},
+                    cache: false,
+                    type: 'post',
+                    success: function(data) {
+                        if (data === "OK") {
+                            refresh();
+                            $("#genArticleModal").modal('hide');
+                            var oTable = $('#projects').dataTable();
+                            oTable.fnReloadAjax();
+                            toastr.success('Saving Project Successful!');
+                        } else {
+                            alert(data);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert(error);
                     }
-                },
-                error: function(xhr, status, error) {
-                    alert(error);
-                }
-            });
+                });
+            }
         }
     });
     $("#gaKeyword").keyup(function(e) {
@@ -168,7 +344,7 @@ function validateGenerateArticles() {
         return false;
     }
     if (keyword !== "") {
-        if (keyword.length > 0 && keyword.length < 3) {
+        if (keyword.length > 0 && keyword.length < 4) {
             $("#gaMessage").removeClass().addClass('alert alert-danger')
                     .html("<i class='fa fa-exclamation-circle'></i> Keyword must be atleast 4 characters.");
             return false;
@@ -180,6 +356,35 @@ function validateGenerateArticles() {
         return false;
     }
 
+    return true;
+}
+
+function validateGenerateArticlesByProject() {
+    var keyword = $("#gabpKeyword").val();
+    var category = $("#gabpCategory").val();
+
+    if (keyword === "" && category === "") {
+        $("#gabpMessage").removeClass().addClass('alert alert-danger')
+                .html("<i class='fa fa-exclamation-circle'></i> Keyword and Category cannot be both empty.");
+        return false;
+    }
+    if (keyword !== "" && category !== "") {
+        $("#gabpMessage").removeClass().addClass('alert alert-danger')
+                .html("<i class='fa fa-exclamation-circle'></i> Keyword and Category can't have value at the same time.");
+        return false;
+    }
+    if (keyword !== "") {
+        if (keyword.length > 0 && keyword.length < 4) {
+            $("#gabpMessage").removeClass().addClass('alert alert-danger')
+                    .html("<i class='fa fa-exclamation-circle'></i> Keyword must be atleast 4 characters.");
+            return false;
+        }
+    }
+    if ((parseInt($("#gabpPMin").val()) > parseInt($("#gabpPMax").val())) || (parseInt($("#gabpSPMin").val()) > parseInt($("#gabpSPMax").val()))) {
+        $("#gabpMessage").removeClass().addClass('alert alert-danger')
+                .html("<i class='fa fa-exclamation-circle'></i> Minimum value cannot be greater than Maximum value.");
+        return false;
+    }
     return true;
 }
 
@@ -298,6 +503,22 @@ function gaContentAutoHeightContent() {
         $(this).height(this.scrollHeight);
     });
     $('#gaGeneratedContents').keyup();
+}
+
+function gabpTitleAutoHeightContent() {
+    $('#gabpGeneratedTitles').on('keyup', function(e) {
+        $(this).css('height', 'auto');
+        $(this).height(this.scrollHeight);
+    });
+    $('#gabpGeneratedTitles').keyup();
+
+}
+function gabpContentAutoHeightContent() {
+    $('#gabpGeneratedContents').on('keyup', function(e) {
+        $(this).css('height', 'auto');
+        $(this).height(this.scrollHeight);
+    });
+    $('#gabpGeneratedContents').keyup();
 }
 
 $.fn.dataTableExt.oApi.fnReloadAjax = function(oSettings, sNewSource, fnCallback, bStandingRedraw)

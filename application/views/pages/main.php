@@ -10,7 +10,7 @@
                 <ul class="dropdown-menu">
                     <li><a href="#" data-toggle="modal" data-target="#genTitleModal">Generate Titles</a></li>
                     <li><a href="#" data-toggle="modal" data-target="#genArticleModal">Generate Articles</a></li>
-                    <li><a href="#" data-toggle="modal" data-target="#genABPModal">Generate Articles By Project</a></li>
+                    <li><a href="#" id="showGABPForm" data-toggle="modal" data-target="#genABPModal">Generate Articles By Project</a></li>
                 </ul>
             </div>
         </div>
@@ -24,7 +24,7 @@
                 <thead>
                     <tr>
                         <th width="20%">ID</th>
-                        <th width="80%">Project Title</th>
+                        <th width="80%">Project Name</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -183,7 +183,7 @@
                         <label for="titles" class="col-sm-3 control-label">Titles to Display</label>
                         <div class="col-sm-3">
                             <select id="gaNoTitles" class="form-control">
-                                <?php for ($i = 1; $i <= 30; $i++) { ?>
+                                <?php for ($i = 1; $i <= 15; $i++) { ?>
                                     <option value="<?php echo $i ?>"><?php echo $i ?></option>
                                 <?php } ?>
                             </select>
@@ -237,9 +237,16 @@
                     </div>
                 </form>
                 <form id='genArticleFormOutput' style='display:none;' class="form-horizontal" role="form">
+                    <button type="button" style='display: none;' id='gaSaveBtn' class="btn btn-success pull-left">Save</button>
                     <button type="button" id="gaRefreshBtn" class="btn btn-primary pull-right"><i class='fa fa-refresh'></i> Generate Again</button>
                     <div class="clearfix"></div>
                     <div class='spacer-sm'></div>
+                    <div class="form-group">
+                        <label for="output" class="col-sm-2 control-label">Name</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="gaName" />
+                        </div>
+                    </div>
                     <div class="form-group">
                         <label for="output" class="col-sm-2 control-label">Generated Title(s)</label>
                         <div class="col-sm-10">
@@ -257,13 +264,12 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 <button type="button" id='gaGenerateBtn' class="btn btn-primary pull-right">Generate</button>
-                <button type="button" style='display: none;' id='gaSaveBtn' class="btn btn-success pull-right">Save</button>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Generate Article Modal -->
+<!-- Generate Article By Project Modal -->
 <div class="modal fade" id="genABPModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -272,24 +278,18 @@
                 <h4 class="modal-title" id="myModalLabel"><i class="fa fa-flash"></i> Generate Article By Project</h4>
             </div>
             <div class="modal-body">
-                <div class="alert-danger" id="gabpMessage"></div>
-                <form class="form-horizontal" role="form">
+                <div class="alert alert-info" id="gabpMessage"><i class="fa fa-info"></i> Keyword and Category can't have a value at the same time.</div>
+                <form id='gabpArticleForm' class="form-horizontal" role="form">
                     <div class="form-group">
-                        <label for="title" class="col-sm-3 control-label">Project Title</label>
-                        <div class="col-sm-9">
-                            <input type="text" class="form-control" id="gabpTitle" placeholder="Project Title">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="keyword" class="col-sm-3 control-label">Keyword</label>
-                        <div class="col-sm-9">
+                        <label for="keyword" class="col-sm-2 control-label">Keyword</label>
+                        <div class="col-sm-10">
                             <input type="text" class="form-control" id="gabpKeyword" placeholder="Keyword">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="category" class="col-sm-3 control-label">Category</label>
-                        <div class="col-sm-9">
-                            <select class="form-control">
+                        <label for="category" class="col-sm-2 control-label">Category</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" id='gabpCategory'>
                                 <option value="">Select a category</option>
                                 <?php foreach ($categories as $category): ?>
                                     <option value="<?php echo $category->name ?>"><?php echo $category->name ?></option>
@@ -298,26 +298,87 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="category" class="col-sm-3 control-label">Articles to Mix</label>
-                        <div class="col-sm-9">
-                            <input type="number" class="form-control" id="gabpArticlesToMix">
+                        <label for="titles" class="col-sm-3 control-label">Titles to Display</label>
+                        <div class="col-sm-3">
+                            <select id="gabpNoTitles" class="form-control">
+                                <?php for ($i = 1; $i <= 15; $i++) { ?>
+                                    <option value="<?php echo $i ?>"><?php echo $i ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                        <label for="articlesToMix" class="col-sm-3 control-label">Articles to Mix</label>
+                        <div class="col-sm-3">
+                            <select id="gabpNoArticlesToMix" class="form-control">
+                            </select>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="category" class="col-sm-3 control-label">Paragraphs</label>
-                        <div class="col-sm-3">
-                            <input type="number" class="form-control" id="gabpNoParagraphs">
+                        <div class="col-sm-4">
+                            <h5><small>Min</small></h5>
+                            <select id="gabpPMin" class="form-control">
+                                <?php for ($i = 1; $i <= 10; $i++) { ?>
+                                    <option value="<?php echo $i ?>"><?php echo $i ?></option>
+                                <?php } ?>
+                            </select>
                         </div>
-                        <label for="category" class="col-sm-3 control-label">Sentence/Paragraph</label>
-                        <div class="col-sm-3">
-                            <input type="number" class="form-control" id="gabpNoOfSP">
+                        <div class='col-sm-4'>
+                            <h5><small>Max</small></h5>
+                            <select id="gabpPMax" class="form-control">
+                                <?php for ($i = 1; $i <= 10; $i++) { ?>
+                                    <option value="<?php echo $i ?>"><?php echo $i ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="category" class="col-sm-3 control-label">Sentences / Paragraph</label>
+                        <div class="col-sm-4">
+                            <h5><small>Min</small></h5>
+                            <select id="gabpSPMin" class="form-control">
+                                <?php for ($i = 1; $i <= 10; $i++) { ?>
+                                    <option value="<?php echo $i ?>"><?php echo $i ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                        <div class='col-sm-4'>
+                            <h5><small>Max</small></h5>
+                            <select id="gabpSPMax" class="form-control">
+                                <?php for ($i = 1; $i <= 10; $i++) { ?>
+                                    <option value="<?php echo $i ?>"><?php echo $i ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+                <form id='gabpArticleFormOutput' style='display:none;' class="form-horizontal" role="form">
+                    <button type="button" style='display: none;' id='gabpSaveBtn' class="btn btn-success pull-left">Save</button>
+                    <button type="button" id="gabpRefreshBtn" class="btn btn-primary pull-right"><i class='fa fa-refresh'></i> Generate Again</button>
+                    <div class="clearfix"></div>
+                    <div class='spacer-sm'></div>
+                    <div class="form-group">
+                        <label for="output" class="col-sm-2 control-label">Name</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="gabpName" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="output" class="col-sm-2 control-label">Generated Title(s)</label>
+                        <div class="col-sm-10">
+                            <textarea class="form-control" id="gabpGeneratedTitles"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="output" class="col-sm-2 control-label">Generated Content</label>
+                        <div class="col-sm-10">
+                            <textarea class="form-control" id="gabpGeneratedContents"></textarea>
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Generate</button>
+                <button type="button" id='gabpGenerateBtn' class="btn btn-primary pull-right">Generate</button>
             </div>
         </div>
     </div>
