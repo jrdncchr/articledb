@@ -209,6 +209,57 @@ function activateGenerateArticlesByProject() {
             }
         }
     });
+    $("#gabpSpinTitle").click(function() {
+        if ($("#gabpGeneratedTitles").val().length < 8) {
+            $("#gabpMessage").removeClass().addClass('alert alert-danger')
+                    .html("<i class='fa fa-exclamation-circle'></i> Generated title must be atleast 8 characters.");
+        } else {
+            $.ajax({
+                url: base_url + "main/spin",
+                data: {'text': $("#gabpGeneratedTitles").val()},
+                cache: false,
+                type: 'post',
+                dataType: 'json',
+                success: function(data) {
+                    if (data.result === "OK") {
+                        $("#gabpMessage").removeClass().addClass('alert alert-success')
+                                .html("<i class='fa fa-check'></i> Spinning Titles Successful!");
+                        $("#gabpGeneratedTitles").html(data.output);
+                        gabpTitleAutoHeightContent();
+                    } else {
+                        $("#gabpMessage").removeClass().addClass('alert alert-danger').html(data);
+                    }
+                }
+            });
+        }
+    });
+    $("#gabpSpinContent").click(function() {
+        if ($("#gabpGeneratedContents").val().length < 8) {
+            $("#gabpMessage").removeClass().addClass('alert alert-danger')
+                    .html("<i class='fa fa-exclamation-circle'></i> Generated title must be atleast 8 characters.");
+        } else if ($("#gabpGeneratedContents").val().length > 5000) {
+            $("#gabpMessage").removeClass().addClass('alert alert-danger')
+                    .html("<i class='fa fa-exclamation-circle'></i> You cannot spin text with more than 5000 characters.");
+        } else {
+            $.ajax({
+                url: base_url + "main/spin",
+                data: {'text': $("#gabpGeneratedContents").val()},
+                cache: false,
+                type: 'post',
+                dataType: 'json',
+                success: function(data) {
+                    if (data.result === "OK") {
+                        $("#gabpMessage").removeClass().addClass('alert alert-success')
+                                .html("<i class='fa fa-check'></i> Spinning Contents Successful!");
+                        $("#gabpGeneratedContents").html(data.output);
+//                        gabpContentAutoHeightContent();
+                    } else {
+                        $("#gabpMessage").removeClass().addClass('alert alert-danger').html(data);
+                    }
+                }
+            });
+        }
+    });
 }
 
 function activateGenerateArticles() {
@@ -326,7 +377,58 @@ function activateGenerateArticles() {
             }
         }
     });
-
+    $("#gaSpinTitle").click(function() {
+        if ($("#gaGeneratedTitles").val().length < 8) {
+            $("#gaMessage").removeClass().addClass('alert alert-danger')
+                    .html("<i class='fa fa-exclamation-circle'></i> Generated title must be atleast 8 characters.");
+        } else {
+            $("#gaSpinBtn").html("<img src='" + base_url + "resources/images/ajax-loader.gif' />");
+            $.ajax({
+                url: base_url + "main/spin",
+                data: {'text': $("#gaGeneratedTitles").val()},
+                cache: false,
+                type: 'post',
+                dataType: 'json',
+                success: function(data) {
+                    if (data.result === "OK") {
+                        $("#gaMessage").removeClass().addClass('alert alert-success')
+                                .html("<i class='fa fa-check'></i> Spinning Titles Successful!");
+                        $("#gaGeneratedTitles").html(data.output);
+                        gaTitleAutoHeightContent();
+                    } else {
+                        $("#gaMessage").removeClass().addClass('alert alert-danger').html(data);
+                    }
+                }
+            });
+        }
+    });
+    $("#gaSpinContent").click(function() {
+        if ($("#gaGeneratedContents").val().length < 8) {
+            $("#gaMessage").removeClass().addClass('alert alert-danger')
+                    .html("<i class='fa fa-exclamation-circle'></i> Generated title must be atleast 8 characters.");
+        } else if ($("#gaGeneratedContents").val().length > 5000) {
+            $("#gaMessage").removeClass().addClass('alert alert-danger')
+                    .html("<i class='fa fa-exclamation-circle'></i> You cannot spin text with more than 5000 characters.");
+        } else {
+            $.ajax({
+                url: base_url + "main/spin",
+                data: {'text': $("#gaGeneratedContents").val()},
+                cache: false,
+                type: 'post',
+                dataType: 'json',
+                success: function(data) {
+                    if (data.result === "OK") {
+                        $("#gaMessage").removeClass().addClass('alert alert-success')
+                                .html("<i class='fa fa-check'></i> Spinning Contents Successful!");
+                        $("#gaGeneratedContents").html(data.output);
+//                        gaContentAutoHeightContent();
+                    } else {
+                        $("#gaMessage").removeClass().addClass('alert alert-danger').html(data);
+                    }
+                }
+            });
+        }
+    });
 }
 
 function validateGenerateArticles() {
@@ -430,26 +532,24 @@ function activateGenerateTitle() {
             $("#gtMessage").removeClass().addClass('alert alert-danger')
                     .html("<i class='fa fa-exclamation-circle'></i> Generated title must be atleast 8 characters.");
         } else {
-            var verify = confirm("Are you sure you want to spin the title?");
-            if (verify) {
-                $.ajax({
-                    url: base_url + "main/spin",
-                    data: {'text': $("#gtGeneratedTitles").val()},
-                    cache: false,
-                    type: 'post',
-                    dataType: 'json',
-                    success: function(data) {
-                        if (data.result === "OK") {
-                            $("#gtMessage").removeClass().addClass('alert alert-success')
-                                    .html("<i class='fa fa-check'></i> Spinning Titles Successful!");
-                            $("#gtGeneratedTitles").html(data.output);
-                            gtAutoHeightContent();
-                        } else {
-                            $("#gtMessage").removeClass().addClass('alert alert-danger').html(data);
-                        }
+            $("#gtSpinBtn").html("<img src='" + base_url + "resources/images/ajax-loader.gif' />");
+            $.ajax({
+                url: base_url + "main/spin",
+                data: {'text': $("#gtGeneratedTitles").val()},
+                cache: false,
+                type: 'post',
+                dataType: 'json',
+                success: function(data) {
+                    if (data.result === "OK") {
+                        $("#gtMessage").removeClass().addClass('alert alert-success')
+                                .html("<i class='fa fa-check'></i> Spinning Titles Successful!");
+                        $("#gtGeneratedTitles").html(data.output);
+                        gtAutoHeightContent();
+                    } else {
+                        $("#gtMessage").removeClass().addClass('alert alert-danger').html(data);
                     }
-                });
-            }
+                }
+            });
         }
     });
 }

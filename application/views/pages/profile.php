@@ -54,7 +54,26 @@
                     <div class="clearfix"></div>
                     <hr />
                 </div>
-                <div class="col-lg-3 col-md-3">
+                <div class="col-lg-6 col-md-6">
+                    <div class='alert alert-info'>
+                        <div class="alert"><i class='fa fa-info'></i> If you have an account in the TBS, put your details here to enable the spin feature.</div>
+                        <form class="form-horizontal" role="form">
+                            <div class="form-group">
+                                <label for="tbsun" class="col-sm-4 control-label">TBS Username</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="tbsun" value="<?php echo $user->tbsun ?>">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="tbspw" class="col-sm-4 control-label">TBS Password</label>
+                                <div class="col-sm-8">
+                                    <input type="password" class="form-control" id="tbspw" value="<?php echo $user->tbspw ?>">
+                                </div>
+                            </div>
+                            <button type="button" id="saveTBSBtn" class="btn btn-success pull-right">Save Details</button>
+                        </form>
+                        <div class="clearfix"></div>
+                    </div>
                 </div>
             </div>
         </div>

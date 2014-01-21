@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jan 20, 2014 at 09:27 AM
+-- Generation Time: Jan 21, 2014 at 08:45 AM
 -- Server version: 5.6.12-log
 -- PHP Version: 5.4.16
 
@@ -120,6 +120,8 @@ CREATE TABLE IF NOT EXISTS `users` (
   `name` varchar(50) NOT NULL,
   `email` varchar(50) NOT NULL,
   `type` varchar(10) NOT NULL,
+  `tbsun` varchar(100) NOT NULL,
+  `tbspw` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
@@ -127,9 +129,9 @@ CREATE TABLE IF NOT EXISTS `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `password`, `name`, `email`, `type`) VALUES
-(1, 'jordan', 'jordan', 'Jordan Cachero', 'jrdncchr@gmail.com', 'admin'),
-(2, 'admin', 'admin143', 'Administrator', 'admin@gmail.com', 'admin');
+INSERT INTO `users` (`id`, `username`, `password`, `name`, `email`, `type`, `tbsun`, `tbspw`) VALUES
+(1, 'jordan', 'jordan', 'Jordan Cachero', 'jrdncchr@gmail.com', 'admin', 'jrdncchr@gmail.com', '4e95ae0d1c730'),
+(2, 'admin', 'admin143', 'Administrator', 'admin@gmail.com', 'admin', 'george2006m@gmail.com', '4e95ae0d1c730');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

@@ -8,7 +8,7 @@
  */
 define('CSS', 'resources/css/');
 define('JS', 'resources/js/');
-define('IMAGES', 'resources/images/');
+define('IMG', 'resources/images/');
 define('FONT', 'resources/font-awesome/');
 
 define('DB_USER', 'root');

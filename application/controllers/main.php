@@ -62,6 +62,16 @@ class Main extends MY_Controller {
         }
     }
 
+    public function updateTBSInfo() {
+        $this->load->model('user_model');
+        $user = $this->session->userdata('user');
+        $update = array(
+            'tbsun' => $_POST['tbsun'],
+            'tbspw' => $_POST['tbspw']
+        );
+        $this->user_model->update($user, $update);
+    }
+
     public function generateTitles() {
         $keyword = $_POST['keyword'];
         $category = $_POST['category'];
@@ -175,80 +185,87 @@ class Main extends MY_Controller {
 
     function spin() {
         $result = array();
-        
-        function curl_post($url, $data, &$info) {
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, curl_postData($data));
-            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_REFERER, $url);
-            $html = trim(curl_exec($ch));
-            curl_close($ch);
-            return $html;
-        }
+        session_start();
+        $user = $_SESSION['user'];
 
-        function curl_postData($data) {
-            $fdata = "";
-            foreach ($data as $key => $val) {
-                $fdata .= "$key=" . urlencode($val) . "&";
+        if ($user->tbsun == null && $user->tbspw == null) {
+            $result['result'] = "You must setup your TBS details in your profile to enable this feature.";
+        } else {
+
+            function curl_post($url, $data, &$info) {
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, $url);
+                curl_setopt($ch, CURLOPT_POST, true);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, curl_postData($data));
+                curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                curl_setopt($ch, CURLOPT_REFERER, $url);
+                $html = trim(curl_exec($ch));
+                curl_close($ch);
+                return $html;
             }
-            return $fdata;
-        }
 
-        $url = 'http://thebestspinner.com/api.php';
+            function curl_postData($data) {
+                $fdata = "";
+                foreach ($data as $key => $val) {
+                    $fdata .= "$key=" . urlencode($val) . "&";
+                }
+                return $fdata;
+            }
 
-        #$testmethod = 'identifySynonyms';
-        $testmethod = 'replaceEveryonesFavorites';
+            $url = 'http://thebestspinner.com/api.php';
+
+            #$testmethod = 'identifySynonyms';
+            $testmethod = 'replaceEveryonesFavorites';
 
 
-        # Build the data array for authenticating.
-        $data = array();
-        $data['action'] = 'authenticate';
-        $data['format'] = 'php'; # You can also specify 'xml' as the format.
-        # The user credentials should change for each UAW user with a TBS account.
-        $data['username'] = 'george2006m@gmail.com';
-        $data['password'] = '4e95ae0d1c730';
-
-        # Authenticate and get back the session id.
-        # You only need to authenticate once per session.
-        # A session is good for 24 hours.
-        $output = unserialize(curl_post($url, $data, $info));
-
-        if ($output['success'] == 'true') {
-            # Success.
-            $session = $output['session'];
-
-            # Build the data array for the example.
+            # Build the data array for authenticating.
             $data = array();
-            $data['session'] = $session;
+            $data['action'] = 'authenticate';
             $data['format'] = 'php'; # You can also specify 'xml' as the format.
-            $data['text'] = $_POST['text'];
-            $data['action'] = $testmethod;
-            $data['maxsyns'] = '3'; # The number of synonyms per term.
+            # The user credentials should change for each UAW user with a TBS account.
+            $data['username'] = $user->tbsun;
+            $data['password'] = $user->tbspw;
 
-            if ($testmethod == 'replaceEveryonesFavorites') {
-                # Add a quality score for this method.
-                $data['quality'] = '1';
-            }
-
-            # Post to API and get back results.
-            $output = curl_post($url, $data, $info);
-            $output = unserialize($output);
-
-            $data['action'] = 'apiQuota';
-            $quota = curl_post($url, $data, $info);
-            $quota = unserialize($quota);
+            # Authenticate and get back the session id.
+            # You only need to authenticate once per session.
+            # A session is good for 24 hours.
+            $output = unserialize(curl_post($url, $data, $info));
 
             if ($output['success'] == 'true') {
-                $result['output'] = str_replace("\r", "<br>", $output['output']);
-                $result['result'] = "OK";
+                # Success.
+                $session = $output['session'];
+
+                # Build the data array for the example.
+                $data = array();
+                $data['session'] = $session;
+                $data['format'] = 'php'; # You can also specify 'xml' as the format.
+                $data['text'] = $_POST['text'];
+                $data['action'] = $testmethod;
+                $data['maxsyns'] = '3'; # The number of synonyms per term.
+
+                if ($testmethod == 'replaceEveryonesFavorites') {
+                    # Add a quality score for this method.
+                    $data['quality'] = '1';
+                }
+
+                # Post to API and get back results.
+                $output = curl_post($url, $data, $info);
+                $output = unserialize($output);
+
+                $data['action'] = 'apiQuota';
+                $quota = curl_post($url, $data, $info);
+                $quota = unserialize($quota);
+
+                if ($output['success'] == 'true') {
+                    $result['output'] = str_replace("\r", "<br>", $output['output']);
+                    $result['result'] = "OK";
+                } else {
+                    $result['result'] = $output[error];
+                }
             } else {
                 $result['result'] = $output[error];
             }
-        } else {
-            $result['result'] = $output[error];
         }
         echo json_encode($result);
     }

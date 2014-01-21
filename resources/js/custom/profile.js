@@ -3,6 +3,23 @@ $(document).ready(function() {
 });
 
 function activateEvents() {
+    $("#saveTBSBtn").click(function() {
+        $.ajax({
+            url: base_url + 'main/updateTBSInfo',
+            data: {'tbsun': $("#tbsun").val(), 'tbspw': $('#tbspw').val()},
+            type: 'post',
+            cache: false,
+            success: function(data) {
+                if (data === "OK") {
+                    toastr.success('Updating TBS Details Successful!');
+                }
+            },
+            error: function(xhr, status, error) {
+                alert(error);
+            }
+        });
+    });
+
     $("#saveBtn").click(function() {
         if (validateInfo() === true) {
             $.ajax({

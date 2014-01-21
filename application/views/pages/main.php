@@ -142,7 +142,7 @@
                             <textarea class="form-control" id="gtGeneratedTitles"></textarea>
                         </div>
                     </div>
-                    <button type="button" id="gtSpinBtn" data-loading-text="Loading..." class="btn btn-danger pull-right"><i class="fa fa-spinner"></i> Spin</button>
+                    <button type="button" id="gtSpinBtn" class="btn btn-danger pull-right"><i class="fa fa-spinner"></i> Spin</button>
                     <div class="clearfix"></div>
                 </form>
             </div>
@@ -240,7 +240,19 @@
                 </form>
                 <form id='genArticleFormOutput' style='display:none;' class="form-horizontal" role="form">
                     <button type="button" style='display: none;' id='gaSaveBtn' class="btn btn-success pull-left">Save</button>
-                    <button type="button" id="gaRefreshBtn" class="btn btn-primary pull-right"><i class='fa fa-refresh'></i> Generate Again</button>
+                    <div class="btn-group pull-right">
+                        <div class="btn-group">
+                            <button type="button" id='gaSpinBtn' class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
+                                <i class='fa fa-spinner'></i> Spin
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a id='gaSpinTitle'>Title</a></li>
+                                <li><a id='gaSpinContent'>Content</a></li>
+                            </ul>
+                        </div>
+                        <button type="button" id="gaRefreshBtn" class="btn btn-primary pull-right"><i class='fa fa-refresh'></i> Generate Again</button>
+                    </div>
                     <div class="clearfix"></div>
                     <div class='spacer-sm'></div>
                     <div class="form-group">
