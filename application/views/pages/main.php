@@ -133,7 +133,15 @@
                             </select>
                         </div>
                     </div>
-                    <button type="button" id="gtBtn" class="btn btn-primary pull-right">Generate Title</button>
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <input id="gtCheck" type="checkbox" checked> Spin results using TBS spun format
+                        </div>
+                        <div class="col-sm-6">
+                            <button type="button" id="gtBtn" class="btn btn-primary pull-right">Generate Title</button>
+                        </div>
+                    </div>
+
                     <div class="clearfix"></div>
                     <hr />
                     <div class="form-group">
@@ -142,8 +150,6 @@
                             <textarea class="form-control" id="gtGeneratedTitles"></textarea>
                         </div>
                     </div>
-                    <button type="button" id="gtSpinBtn" class="btn btn-danger pull-right"><i class="fa fa-spinner"></i> Spin</button>
-                    <div class="clearfix"></div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -239,7 +245,7 @@
                     </div>
                 </form>
                 <form id='genArticleFormOutput' style='display:none;' class="form-horizontal" role="form">
-                    <button type="button" style='display: none;' id='gaSaveBtn' class="btn btn-success pull-left"><i class="fa fa-save"></i> Save</button>
+                    <button type="button" id='gaSaveBtn' class="btn btn-success pull-left"><i class="fa fa-save"></i> Save</button>
                     <div class="btn-group pull-right">
                         <div class="btn-group">
                             <button type="button" id='gaSpinBtn' class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
@@ -276,8 +282,15 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" id='gaGenerateBtn' class="btn btn-primary pull-right">Generate</button>
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <div id="gaCheckDiv" class="pull-left">
+                            <input id="gaCheck" type="checkbox" checked> Spin results using TBS spun format
+                        </div>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" id='gaGenerateBtn' class="btn btn-primary pull-right">Generate</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -403,8 +416,15 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" id='gabpGenerateBtn' class="btn btn-primary pull-right">Generate</button>
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <div id="gabpCheckDiv" class="pull-left">
+                            <input id="gabpCheck" type="checkbox" checked /> Spin results using TBS spun format
+                        </div>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" id='gabpGenerateBtn' class="btn btn-primary pull-right">Generate</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
