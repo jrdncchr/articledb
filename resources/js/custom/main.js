@@ -4,6 +4,7 @@ $(document).ready(function() {
     activateGenerateTitle();
     activateGenerateArticles();
     activateGenerateArticlesByProject();
+    activateAddMultipleArticles();
 });
 
 
@@ -40,6 +41,81 @@ function activateTables() {
             "sEmptyTable": "You don't have any projects yet."
         }
     });
+}
+
+function activateAddMultipleArticles() {
+    var list = new Array();
+
+    $("#namInput").change(function(e) {
+        list = new Array();
+        var error = "";
+        var files = e.target.files;
+        if (files) {
+            for (var i = 0, f; f = files[i]; i++) {
+                if (!f.type.match('text.*')) {
+                    error += "<p><i class='fa fa-exclamation-circle'></i> " + f.name + " is not a valid text file.</p>";
+                } else {
+                    var r = new FileReader();
+                    r.onload = (function(f) {
+                        return function(e) {
+                            var contents = e.target.result;
+                            list.push(contents);
+                        };
+                    })(f);
+                    r.readAsText(f);
+                }
+
+            }
+            if (error !== "") {
+                $("#namMessage").removeClass().addClass('alert alert-danger')
+                        .html(error);
+            } else {
+                $("#namMessage").removeClass().addClass('alert alert-success')
+                        .html("<p><i class='fa fa-check'></i> All files are ready to be added.</p>");
+            }
+        } else {
+            alert("Failed to load files");
+        }
+    });
+    $("#namBtn").click(function() {
+        if (list.length > 0) {
+            if ($("#namCategory").val() !== "") {
+                $.ajax({
+                    url: base_url + "articles/addMultiple",
+                    data: {'list': list, 'category': $("#namCategory").val()},
+                    type: 'post',
+                    cache: false,
+                    success: function(data) {
+                        $("#namMessage").removeClass().addClass('alert alert-success')
+                                .html("<p><i class='fa fa-check'></i> You have successfully added " + list.length + " articles in " + $("#namCategory").val() + " category!</p>");
+                        reset($("#namInput"));
+                        $("#namCategory").val("");
+                        var oTable = $('#articles').dataTable();
+                        oTable.fnReloadAjax();
+                        toastr.success('Adding Articles Successful!');
+                        list = new Array();
+                    }
+                });
+            } else {
+                $("#namMessage").removeClass().addClass('alert alert-danger')
+                        .html("<p><i class='fa fa-exclamation-circle'></i> Please select the category of the articles to be added.</p>");
+            }
+        } else {
+            $("#namMessage").removeClass().addClass('alert alert-danger')
+                    .html("<p><i class='fa fa-exclamation-circle'></i> Please select atleast 1 file(.txt).</p>");
+        }
+    });
+    $("#namClearBtn").click(function() {
+        list = new Array();
+        reset($("#namInput"));
+        $("#namCategory").val("");
+        $("#namMessage").removeClass().addClass('alert alert-info')
+                    .html("<p><i class='fa fa-info'></i> Select all the files(.txt) to be added. Note that the first line will be the title.</p>");
+    });
+    function reset(e) {
+        e.wrap('<form>').parent('form').trigger('reset');
+        e.unwrap();
+    }
 }
 
 function activateGenerateArticlesByProject() {
@@ -144,7 +220,6 @@ function activateGenerateArticlesByProject() {
                 .html("<i class='fa fa-info'></i> Keyword and Category can't have a value at the same time.");
         $("#gabpArticleForm").slideDown('slow');
         $("#gabpArticleFormOutput").slideUp('slow');
-        $("#gabpSaveBtn").hide();
         $("#gabpGenerateBtn").show();
         $("#gabpCheckDiv").fadeIn('fast');
     }
@@ -189,18 +264,18 @@ function activateGenerateArticlesByProject() {
                                                 $("#gabpMessage").removeClass().addClass('alert alert-danger')
                                                         .html("<i class='fa fa-exclamation-circle'></i> " + data3.result);
                                             }
-                                            $("#gabpCharCount").html("Characters Count: " + $("#gabpGeneratedContents").val().length);
                                             $("#gabpGenerateBtn").prop('disabled', false).html("Generate");
+                                            $("#gabpGenerateBtn").hide();
                                             $("#gabpArticleForm").slideUp('fast');
                                             $("#gabpArticleFormOutput").slideDown('slow');
                                             $("#gabpGenerateBtn").hide();
                                             $("#gabpCheckDiv").fadeOut('fast');
+                                            gabpTitleAutoHeightContent();
                                         }
                                     });
                                 } else {
                                     $("#gabpMessage").removeClass().addClass('alert alert-danger')
                                             .html("<i class='fa fa-exclamation-circle'></i> " + data2.result);
-                                    $("#gabpCharCount").html("Characters Count: " + $("#gabpGeneratedContents").val().length);
                                     $("#gabpGenerateBtn").prop('disabled', false).html("Generate");
                                 }
                             }
@@ -212,9 +287,8 @@ function activateGenerateArticlesByProject() {
                         $("#gabpMessage").removeClass().addClass('alert alert-success')
                                 .html("<i class='fa fa-check'></i> Generating Article Successful!.");
                         $("#gabpGeneratedTitles").val(data.titles);
-                        gaTitleAutoHeightContent();
+                        gabpTitleAutoHeightContent();
                         $("#gabpGeneratedContents").val(data.article);
-                        $("#gabpCharCount").html("Characters Count: " + $("#gabpGeneratedContents").val().length);
                         $("#gabpGenerateBtn").prop('disabled', false).html("Generate");
                         $("#gabpCheckDiv").fadeOut('fast');
                     }
@@ -304,18 +378,17 @@ function activateGenerateArticles() {
                                                 $("#gaMessage").removeClass().addClass('alert alert-danger')
                                                         .html("<i class='fa fa-exclamation-circle'></i> " + data3.result);
                                             }
-                                            $("#gaCharCount").html("Characters Count: " + $("#gaGeneratedContents").val().length);
                                             $("#gaGenerateBtn").prop('disabled', false).html("Generate");
-                                            $("#gaCheck").fadeOut('fast');
                                             $("#genArticleForm").slideUp('fast');
+                                            $("#gaGenerateBtn").hide();
                                             $("#genArticleFormOutput").slideDown('slow');
                                             $("#gaCheckDiv").fadeOut('fast');
+                                            gaTitleAutoHeightContent();
                                         }
                                     });
                                 } else {
                                     $("#gaMessage").removeClass().addClass('alert alert-danger')
                                             .html("<i class='fa fa-exclamation-circle'></i> " + data2.result);
-                                    $("#gaCharCount").html("Characters Count: " + $("#gaGeneratedContents").val().length);
                                     $("#gaGenerateBtn").prop('disabled', false).html("Generate");
                                 }
                             }
@@ -329,7 +402,6 @@ function activateGenerateArticles() {
                         $("#gaGeneratedTitles").val(data.titles);
                         gaTitleAutoHeightContent();
                         $("#gaGeneratedContents").val(data.article);
-                        $("#gaCharCount").html("Characters Count: " + $("#gaGeneratedContents").val().length);
                         $("#gaGenerateBtn").prop('disabled', false).html("Generate");
                         $("#gaCheckDiv").fadeOut('fast');
                     }
@@ -350,7 +422,6 @@ function activateGenerateArticles() {
                 .html("<i class='fa fa-info'></i> Keyword and Category can't have a value at the same time.");
         $("#genArticleForm").slideDown('slow');
         $("#genArticleFormOutput").slideUp('slow');
-        $("#gaSaveBtn").hide();
         $("#gaGenerateBtn").show();
         $("#gaCheckDiv").fadeIn('fast');
     }
@@ -428,10 +499,6 @@ function activateGenerateArticles() {
             }
         }
     });
-    $("#gaGeneratedContents").keyup(function() {
-        $("#gaCharCount").html("Characters Count: " + $("#gaGeneratedContents").val().length);
-    });
-
 }
 
 function validateGenerateArticles() {

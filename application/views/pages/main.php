@@ -1,7 +1,16 @@
 <div class="row">
     <div class="col-lg-10 col-md-10">
         <div class="btn-group">
-            <button class="btn btn-success" data-toggle="modal" data-target="#newArticleModal"><i class="fa fa-pencil"></i> <strong>Add Article</strong></button>
+            <div class="btn-group">
+                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+                    <i class="fa fa-pencil"></i> <strong>Add Articles</strong>
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a href="#" data-toggle="modal" data-target="#newArticleModal">Add Manually</a></li>
+                    <li><a href="#" data-toggle="modal" data-target="#newArticleMultipleModal">Multiple Add By File Read</a></li>
+                </ul>
+            </div>
             <div class="btn-group">
                 <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                     <i class="fa fa-flash"></i> <strong>Generate</strong>
@@ -57,13 +66,47 @@
     </div>
 </div>
 
+<div class="modal fade" id="newArticleMultipleModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel"><i class="fa fa-pencil"></i> Add Article - Multiple By File Read</h4>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-info" id="namMessage"><i class="fa fa-info"></i> 
+                    Select all the files(.txt) to be added. Note that the first line will be the title.
+                </div>
+                <div class="form-group">
+                    <label for="files">Select files</label>
+                    <input type="file" id="namInput" multiple />
+                </div>
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <select id="namCategory" class="form-control">
+                        <option value="">Select a category</option>
+                        <?php foreach ($categories as $category): ?>
+                            <option value="<?php echo $category->name ?>"><?php echo $category->name ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="namClearBtn" type="button" class="btn btn-danger pull-left">Clear</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button id="namBtn" type="button" class="btn btn-success">Add</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- New Article Modal -->
 <div class="modal fade" id="newArticleModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel"><i class="fa fa-pencil"></i> New Article</h4>
+                <h4 class="modal-title" id="myModalLabel"><i class="fa fa-pencil"></i> New Article - Manually</h4>
             </div>
             <div class="modal-body">
                 <div class="alert-danger" id="naMessage"></div>
@@ -89,7 +132,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button id="naBtn" type="button" class="btn btn-primary">Add</button>
+                <button id="naBtn" type="button" class="btn btn-success">Add</button>
             </div>
         </div>
     </div>
@@ -127,7 +170,7 @@
                         <label for="category" class="col-sm-2 control-label">No. Titles</label>
                         <div class="col-sm-2">
                             <select id="gtNoTitles" class="form-control">
-                                <?php for ($i = 1; $i <= 30; $i++) { ?>
+                                <?php for ($i = 1; $i <= 5; $i++) { ?>
                                     <option value="<?php echo $i ?>"><?php echo $i ?></option>
                                 <?php } ?>
                             </select>
@@ -191,7 +234,7 @@
                         <label for="titles" class="col-sm-3 control-label">Titles to Display</label>
                         <div class="col-sm-3">
                             <select id="gaNoTitles" class="form-control">
-                                <?php for ($i = 1; $i <= 15; $i++) { ?>
+                                <?php for ($i = 1; $i <= 5; $i++) { ?>
                                     <option value="<?php echo $i ?>"><?php echo $i ?></option>
                                 <?php } ?>
                             </select>
@@ -199,7 +242,7 @@
                         <label for="articles" class="col-sm-3 control-label">Articles to Mix</label>
                         <div class="col-sm-3">
                             <select id="gaNoArticlesToMix" class="form-control">
-                                <?php for ($i = 1; $i <= 15; $i++) { ?>
+                                <?php for ($i = 1; $i <= 10; $i++) { ?>
                                     <option value="<?php echo $i ?>"><?php echo $i ?></option>
                                 <?php } ?>
                             </select>
@@ -210,7 +253,7 @@
                         <div class="col-sm-4">
                             <h5><small>Min</small></h5>
                             <select id="gaPMin" class="form-control">
-                                <?php for ($i = 1; $i <= 10; $i++) { ?>
+                                <?php for ($i = 5; $i <= 8; $i++) { ?>
                                     <option value="<?php echo $i ?>"><?php echo $i ?></option>
                                 <?php } ?>
                             </select>
@@ -218,7 +261,7 @@
                         <div class='col-sm-4'>
                             <h5><small>Max</small></h5>
                             <select id="gaPMax" class="form-control">
-                                <?php for ($i = 1; $i <= 10; $i++) { ?>
+                                <?php for ($i = 5; $i <= 8; $i++) { ?>
                                     <option value="<?php echo $i ?>"><?php echo $i ?></option>
                                 <?php } ?>
                             </select>
@@ -229,7 +272,7 @@
                         <div class="col-sm-4">
                             <h5><small>Min</small></h5>
                             <select id="gaSPMin" class="form-control">
-                                <?php for ($i = 1; $i <= 10; $i++) { ?>
+                                <?php for ($i = 5; $i <= 8; $i++) { ?>
                                     <option value="<?php echo $i ?>"><?php echo $i ?></option>
                                 <?php } ?>
                             </select>
@@ -237,7 +280,7 @@
                         <div class='col-sm-4'>
                             <h5><small>Max</small></h5>
                             <select id="gaSPMax" class="form-control">
-                                <?php for ($i = 1; $i <= 10; $i++) { ?>
+                                <?php for ($i = 5; $i <= 8; $i++) { ?>
                                     <option value="<?php echo $i ?>"><?php echo $i ?></option>
                                 <?php } ?>
                             </select>
@@ -246,18 +289,7 @@
                 </form>
                 <form id='genArticleFormOutput' style='display:none;' class="form-horizontal" role="form">
                     <button type="button" id='gaSaveBtn' class="btn btn-success pull-left"><i class="fa fa-save"></i> Save</button>
-                    <div class="btn-group pull-right">
-                        <div class="btn-group">
-                            <button type="button" id='gaSpinBtn' class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
-                                <i class='fa fa-spinner'></i> Spin <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a id='gaSpinTitle'>Title</a></li>
-                                <li><a id='gaSpinContent'>Content</a></li>
-                            </ul>
-                        </div>
-                        <button type="button" id="gaRefreshBtn" class="btn btn-primary pull-right"><i class='fa fa-refresh'></i> Generate Again</button>
-                    </div>
+                    <button type="button" id="gaRefreshBtn" class="btn btn-primary pull-right"><i class='fa fa-refresh'></i> Generate Again</button>
                     <div class="clearfix"></div>
                     <div class='spacer-sm'></div>
                     <div class="form-group">
@@ -275,7 +307,6 @@
                     <div class="form-group">
                         <label for="output" class="col-sm-2 control-label">Generated Content</label>
                         <div class="col-sm-10">
-                            <h5 class="pull-right"><small id="gaCharCount">Characters Count: 2012</small></h5>
                             <textarea class="form-control" id="gaGeneratedContents" style="min-height: 250px;"></textarea>
                         </div>
                     </div>
@@ -328,7 +359,7 @@
                         <label for="titles" class="col-sm-3 control-label">Titles to Display</label>
                         <div class="col-sm-3">
                             <select id="gabpNoTitles" class="form-control">
-                                <?php for ($i = 1; $i <= 15; $i++) { ?>
+                                <?php for ($i = 1; $i <= 5; $i++) { ?>
                                     <option value="<?php echo $i ?>"><?php echo $i ?></option>
                                 <?php } ?>
                             </select>
@@ -344,7 +375,7 @@
                         <div class="col-sm-4">
                             <h5><small>Min</small></h5>
                             <select id="gabpPMin" class="form-control">
-                                <?php for ($i = 1; $i <= 10; $i++) { ?>
+                                <?php for ($i = 5; $i <= 8; $i++) { ?>
                                     <option value="<?php echo $i ?>"><?php echo $i ?></option>
                                 <?php } ?>
                             </select>
@@ -352,7 +383,7 @@
                         <div class='col-sm-4'>
                             <h5><small>Max</small></h5>
                             <select id="gabpPMax" class="form-control">
-                                <?php for ($i = 1; $i <= 10; $i++) { ?>
+                                <?php for ($i = 5; $i <= 8; $i++) { ?>
                                     <option value="<?php echo $i ?>"><?php echo $i ?></option>
                                 <?php } ?>
                             </select>
@@ -363,7 +394,7 @@
                         <div class="col-sm-4">
                             <h5><small>Min</small></h5>
                             <select id="gabpSPMin" class="form-control">
-                                <?php for ($i = 1; $i <= 10; $i++) { ?>
+                                <?php for ($i = 5; $i <= 8; $i++) { ?>
                                     <option value="<?php echo $i ?>"><?php echo $i ?></option>
                                 <?php } ?>
                             </select>
@@ -371,7 +402,7 @@
                         <div class='col-sm-4'>
                             <h5><small>Max</small></h5>
                             <select id="gabpSPMax" class="form-control">
-                                <?php for ($i = 1; $i <= 10; $i++) { ?>
+                                <?php for ($i = 5; $i <= 8; $i++) { ?>
                                     <option value="<?php echo $i ?>"><?php echo $i ?></option>
                                 <?php } ?>
                             </select>
@@ -379,19 +410,8 @@
                     </div>
                 </form>
                 <form id='gabpArticleFormOutput' style='display:none;' class="form-horizontal" role="form">
-                    <button type="button" style='display: none;' id='gabpSaveBtn' class="btn btn-success pull-left"><i class="fa fa-save"></i> Save</button>
-                    <div class="btn-group pull-right">
-                        <div class="btn-group">
-                            <button type="button" id='gabpSpinBtn' class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
-                                <i class='fa fa-spinner'></i> Spin <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a id='gabpSpinTitle'>Title</a></li>
-                                <li><a id='gabpSpinContent'>Content</a></li>
-                            </ul>
-                        </div>
-                        <button type="button" id="gabpRefreshBtn" class="btn btn-primary pull-right"><i class='fa fa-refresh'></i> Generate Again</button>
-                    </div>
+                    <button type="button" id='gabpSaveBtn' class="btn btn-success pull-left"><i class="fa fa-save"></i> Save</button>
+                    <button type="button" id="gabpRefreshBtn" class="btn btn-primary pull-right"><i class='fa fa-refresh'></i> Generate Again</button>
                     <div class="clearfix"></div>
                     <div class='spacer-sm'></div>
                     <div class="form-group">
@@ -409,7 +429,6 @@
                     <div class="form-group">
                         <label for="output" class="col-sm-2 control-label">Generated Content</label>
                         <div class="col-sm-10">
-                            <h5 class="pull-right"><small id="gabpCharCount">Characters Count: 2012</small></h5>
                             <textarea class="form-control" id="gabpGeneratedContents" style="min-height: 250px;"></textarea>
                         </div>
                     </div>

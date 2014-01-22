@@ -51,6 +51,24 @@ class Articles extends MY_Controller {
         $this->article_model->addArticle($article);
     }
 
+    public function addMultiple() {
+        $list = $_POST['list'];
+        $category = $_POST['category'];
+        $user = $this->session->userdata('user');
+        for ($i = 0; $i < sizeof($list); $i++) {
+            $title = strtok($list[$i], "\n");
+            $content = substr($list[$i], strlen($title));
+            $article = array(
+                'title' => $title,
+                'category' => $category,
+                'content' => $content,
+                'author' => $user->username,
+                'date' => date('Y-m-d')
+            );
+            $this->article_model->addArticle($article);
+        }
+    }
+
     public function update() {
         $id = $this->session->userdata('selectedArticle');
         $article = array(

@@ -264,7 +264,7 @@ class Main extends MY_Controller {
                     $result['result'] = "Spinning failed, please try again...";
                 }
             } else {
-                $result['result'] = "Invalid TBS Username or Password";
+                $result['result'] = "Invalid TBS Username or Password, uncheck the checkbox below to mix only.";
             }
         }
         echo json_encode($result);
