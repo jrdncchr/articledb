@@ -239,12 +239,11 @@
                     </div>
                 </form>
                 <form id='genArticleFormOutput' style='display:none;' class="form-horizontal" role="form">
-                    <button type="button" style='display: none;' id='gaSaveBtn' class="btn btn-success pull-left">Save</button>
+                    <button type="button" style='display: none;' id='gaSaveBtn' class="btn btn-success pull-left"><i class="fa fa-save"></i> Save</button>
                     <div class="btn-group pull-right">
                         <div class="btn-group">
                             <button type="button" id='gaSpinBtn' class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
-                                <i class='fa fa-spinner'></i> Spin
-                                <span class="caret"></span>
+                                <i class='fa fa-spinner'></i> Spin <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu">
                                 <li><a id='gaSpinTitle'>Title</a></li>
@@ -270,7 +269,8 @@
                     <div class="form-group">
                         <label for="output" class="col-sm-2 control-label">Generated Content</label>
                         <div class="col-sm-10">
-                            <textarea class="form-control" id="gaGeneratedContents"></textarea>
+                            <h5 class="pull-right"><small id="gaCharCount">Characters Count: 2012</small></h5>
+                            <textarea class="form-control" id="gaGeneratedContents" style="min-height: 250px;"></textarea>
                         </div>
                     </div>
                 </form>
@@ -366,8 +366,19 @@
                     </div>
                 </form>
                 <form id='gabpArticleFormOutput' style='display:none;' class="form-horizontal" role="form">
-                    <button type="button" style='display: none;' id='gabpSaveBtn' class="btn btn-success pull-left">Save</button>
-                    <button type="button" id="gabpRefreshBtn" class="btn btn-primary pull-right"><i class='fa fa-refresh'></i> Generate Again</button>
+                    <button type="button" style='display: none;' id='gabpSaveBtn' class="btn btn-success pull-left"><i class="fa fa-save"></i> Save</button>
+                    <div class="btn-group pull-right">
+                        <div class="btn-group">
+                            <button type="button" id='gabpSpinBtn' class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
+                                <i class='fa fa-spinner'></i> Spin <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a id='gabpSpinTitle'>Title</a></li>
+                                <li><a id='gabpSpinContent'>Content</a></li>
+                            </ul>
+                        </div>
+                        <button type="button" id="gabpRefreshBtn" class="btn btn-primary pull-right"><i class='fa fa-refresh'></i> Generate Again</button>
+                    </div>
                     <div class="clearfix"></div>
                     <div class='spacer-sm'></div>
                     <div class="form-group">
@@ -385,7 +396,8 @@
                     <div class="form-group">
                         <label for="output" class="col-sm-2 control-label">Generated Content</label>
                         <div class="col-sm-10">
-                            <textarea class="form-control" id="gabpGeneratedContents"></textarea>
+                            <h5 class="pull-right"><small id="gabpCharCount">Characters Count: 2012</small></h5>
+                            <textarea class="form-control" id="gabpGeneratedContents" style="min-height: 250px;"></textarea>
                         </div>
                     </div>
                 </form>

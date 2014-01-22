@@ -87,7 +87,7 @@ class Article_Model extends CI_Model {
             if ($keyword != "") {
                 $this->db->order_by('id', 'random');
                 $this->db->like('title', $keyword, 'both');
-                $result = $this->db->get_where('articles', array('author' => $author), $noTitles);
+                $result = $this->db->get_where('projects', array('author' => $author), $noTitles);
                 if ($result->num_rows() > 0) {
                     return $result->result();
                 } else {
@@ -95,7 +95,7 @@ class Article_Model extends CI_Model {
                 }
             } else {
                 $this->db->order_by('id', 'random');
-                $result = $this->db->get_where('articles', array('category' => $category, 'author' => $author), $noTitles);
+                $result = $this->db->get_where('projects', array('category' => $category, 'author' => $author), $noTitles);
                 if ($result->num_rows() > 0) {
                     return $result->result();
                 } else {

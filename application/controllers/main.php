@@ -261,10 +261,10 @@ class Main extends MY_Controller {
                     $result['output'] = str_replace("\r", "<br>", $output['output']);
                     $result['result'] = "OK";
                 } else {
-                    $result['result'] = $output[error];
+                    $result['result'] = "Spinning failed, please try again...";
                 }
             } else {
-                $result['result'] = $output[error];
+                $result['result'] = "Invalid TBS Username or Password";
             }
         }
         echo json_encode($result);

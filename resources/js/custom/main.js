@@ -164,10 +164,10 @@ function activateGenerateArticlesByProject() {
                     $("#gabpSaveBtn").show();
                     $("#gabpMessage").removeClass().addClass('alert alert-success')
                             .html("<i class='fa fa-check'></i> Generating Project Successful!.");
-                    $("#gabpGeneratedTitles").html(data.titles);
+                    $("#gabpGeneratedTitles").val(data.titles);
                     gabpTitleAutoHeightContent();
-                    $("#gabpGeneratedContents").html(data.article);
-                    gabpContentAutoHeightContent();
+                    $("#gabpGeneratedContents").val(data.article);
+                    $("#gabpCharCount").html("Characters Count: " + $("#gabpGeneratedContents").val().length);
                 },
                 error: function(xhr, status, error) {
                     $("#gabpMessage").removeClass().addClass('alert alert-danger')
@@ -214,6 +214,11 @@ function activateGenerateArticlesByProject() {
             $("#gabpMessage").removeClass().addClass('alert alert-danger')
                     .html("<i class='fa fa-exclamation-circle'></i> Generated title must be atleast 8 characters.");
         } else {
+            $("#gabpSpinBtn").prop('disabled', true).html("<img src='" + base_url + "resources/images/ajax-loader.gif' />");
+            $("#gabpSaveBtn").prop('disabled', true);
+            $("#gabpRefreshBtn").prop('disabled', true);
+            $("#gabpMessage").removeClass().addClass('alert alert-warning')
+                    .html("<i class='fa fa-anchor'></i> Spinning, please wait...");
             $.ajax({
                 url: base_url + "main/spin",
                 data: {'text': $("#gabpGeneratedTitles").val()},
@@ -224,11 +229,15 @@ function activateGenerateArticlesByProject() {
                     if (data.result === "OK") {
                         $("#gabpMessage").removeClass().addClass('alert alert-success')
                                 .html("<i class='fa fa-check'></i> Spinning Titles Successful!");
-                        $("#gabpGeneratedTitles").html(data.output);
+                        $("#gabpGeneratedTitles").val(data.output);
                         gabpTitleAutoHeightContent();
                     } else {
-                        $("#gabpMessage").removeClass().addClass('alert alert-danger').html(data);
+                        $("#gabpMessage").removeClass().addClass('alert alert-danger')
+                                .html("<i class='fa fa-exclamation-circle'></i> " + data.result);
                     }
+                    $("#gabpSpinBtn").prop('disabled', false).html("<i class='fa fa-spinner'></i> Spin <span class='caret'></span>");
+                    $("#gabpSaveBtn").prop('disabled', false);
+                    $("#gabpRefreshBtn").prop('disabled', false);
                 }
             });
         }
@@ -241,6 +250,11 @@ function activateGenerateArticlesByProject() {
             $("#gabpMessage").removeClass().addClass('alert alert-danger')
                     .html("<i class='fa fa-exclamation-circle'></i> You cannot spin text with more than 5000 characters.");
         } else {
+            $("#gabpSpinBtn").prop('disabled', true).html("<img src='" + base_url + "resources/images/ajax-loader.gif' />");
+            $("#gabpSaveBtn").prop('disabled', true);
+            $("#gabpRefreshBtn").prop('disabled', true);
+            $("#gabpMessage").removeClass().addClass('alert alert-warning')
+                    .html("<i class='fa fa-anchor'></i> Spinning, please wait...");
             $.ajax({
                 url: base_url + "main/spin",
                 data: {'text': $("#gabpGeneratedContents").val()},
@@ -251,14 +265,21 @@ function activateGenerateArticlesByProject() {
                     if (data.result === "OK") {
                         $("#gabpMessage").removeClass().addClass('alert alert-success')
                                 .html("<i class='fa fa-check'></i> Spinning Contents Successful!");
-                        $("#gabpGeneratedContents").html(data.output);
-//                        gabpContentAutoHeightContent();
+                        $("#gabpGeneratedContents").val(data.output);
                     } else {
-                        $("#gabpMessage").removeClass().addClass('alert alert-danger').html(data);
+                        $("#gabpMessage").removeClass().addClass('alert alert-danger')
+                                .html("<i class='fa fa-exclamation-circle'></i> " + data.result);
                     }
+                    $("#gabpCharCount").html("Characters Count: " + $("#gabpGeneratedContents").val().length);
+                    $("#gabpSpinBtn").prop('disabled', false).html("<i class='fa fa-spinner'></i> Spin <span class='caret'></span>");
+                    $("#gabpSaveBtn").prop('disabled', false);
+                    $("#gabpRefreshBtn").prop('disabled', false);
                 }
             });
         }
+    });
+    $("#gabpGeneratedContents").keyup(function() {
+        $("#gabpCharCount").html("Characters Count: " + $("#gabpGeneratedContents").val().length);
     });
 }
 
@@ -280,10 +301,10 @@ function activateGenerateArticles() {
                     $("#gaSaveBtn").show();
                     $("#gaMessage").removeClass().addClass('alert alert-success')
                             .html("<i class='fa fa-check'></i> Generating Article Successful!.");
-                    $("#gaGeneratedTitles").html(data.titles);
+                    $("#gaGeneratedTitles").val(data.titles);
                     gaTitleAutoHeightContent();
-                    $("#gaGeneratedContents").html(data.article);
-                    gaContentAutoHeightContent();
+                    $("#gaGeneratedContents").val(data.article);
+                    $("#gaCharCount").html("Characters Count: " + $("#gaGeneratedContents").val().length);
                 },
                 error: function(xhr, status, error) {
                     $("#gaMessage").removeClass().addClass('alert alert-danger')
@@ -382,7 +403,11 @@ function activateGenerateArticles() {
             $("#gaMessage").removeClass().addClass('alert alert-danger')
                     .html("<i class='fa fa-exclamation-circle'></i> Generated title must be atleast 8 characters.");
         } else {
-            $("#gaSpinBtn").html("<img src='" + base_url + "resources/images/ajax-loader.gif' />");
+            $("#gaSpinBtn").prop('disabled', true).html("<img src='" + base_url + "resources/images/ajax-loader.gif' />");
+            $("#gaSaveBtn").prop('disabled', true);
+            $("#gaRefreshBtn").prop('disabled', true);
+            $("#gaMessage").removeClass().addClass('alert alert-warning')
+                    .html("<i class='fa fa-anchor'></i> Spinning, please wait...");
             $.ajax({
                 url: base_url + "main/spin",
                 data: {'text': $("#gaGeneratedTitles").val()},
@@ -393,11 +418,15 @@ function activateGenerateArticles() {
                     if (data.result === "OK") {
                         $("#gaMessage").removeClass().addClass('alert alert-success')
                                 .html("<i class='fa fa-check'></i> Spinning Titles Successful!");
-                        $("#gaGeneratedTitles").html(data.output);
+                        $("#gaGeneratedTitles").val(data.output);
                         gaTitleAutoHeightContent();
                     } else {
-                        $("#gaMessage").removeClass().addClass('alert alert-danger').html(data);
+                        $("#gaMessage").removeClass().addClass('alert alert-danger')
+                                .html("<i class='fa fa-exclamation-circle'></i> " + data.result);
                     }
+                    $("#gaSpinBtn").prop('disabled', false).html("<i class='fa fa-spinner'></i> Spin <span class='caret'></span>");
+                    $("#gaSaveBtn").prop('disabled', false);
+                    $("#gaRefreshBtn").prop('disabled', false);
                 }
             });
         }
@@ -410,6 +439,11 @@ function activateGenerateArticles() {
             $("#gaMessage").removeClass().addClass('alert alert-danger')
                     .html("<i class='fa fa-exclamation-circle'></i> You cannot spin text with more than 5000 characters.");
         } else {
+            $("#gaSpinBtn").prop('disabled', true).html("<img src='" + base_url + "resources/images/ajax-loader.gif' />");
+            $("#gaSaveBtn").prop('disabled', true);
+            $("#gaRefreshBtn").prop('disabled', true);
+            $("#gaMessage").removeClass().addClass('alert alert-warning')
+                    .html("<i class='fa fa-anchor'></i> Spinning, please wait...");
             $.ajax({
                 url: base_url + "main/spin",
                 data: {'text': $("#gaGeneratedContents").val()},
@@ -420,15 +454,23 @@ function activateGenerateArticles() {
                     if (data.result === "OK") {
                         $("#gaMessage").removeClass().addClass('alert alert-success')
                                 .html("<i class='fa fa-check'></i> Spinning Contents Successful!");
-                        $("#gaGeneratedContents").html(data.output);
-//                        gaContentAutoHeightContent();
+                        $("#gaGeneratedContents").val(data.output);
                     } else {
-                        $("#gaMessage").removeClass().addClass('alert alert-danger').html(data);
+                        $("#gaMessage").removeClass().addClass('alert alert-danger')
+                                .html("<i class='fa fa-exclamation-circle'></i> " + data.result);
                     }
+                    $("#gaCharCount").html("Characters Count: " + $("#gaGeneratedContents").val().length);
+                    $("#gaSpinBtn").prop('disabled', false).html("<i class='fa fa-spinner'></i> Spin <span class='caret'></span>");
+                    $("#gaSaveBtn").prop('disabled', false);
+                    $("#gaRefreshBtn").prop('disabled', false);
                 }
             });
         }
     });
+    $("#gaGeneratedContents").keyup(function() {
+        $("#gaCharCount").html("Characters Count: " + $("#gaGeneratedContents").val().length);
+    });
+
 }
 
 function validateGenerateArticles() {
@@ -514,7 +556,7 @@ function activateGenerateTitle() {
                         if (data.result === "OK") {
                             $("#gtMessage").removeClass().addClass('alert alert-success')
                                     .html("<i class='fa fa-check'></i> Generating Titles Successful!");
-                            $("#gtGeneratedTitles").html(data.titles);
+                            $("#gtGeneratedTitles").val(data.titles);
                             gtAutoHeightContent();
                         } else {
                             $("#gtMessage").removeClass().addClass('alert alert-danger').html(data);
@@ -532,7 +574,10 @@ function activateGenerateTitle() {
             $("#gtMessage").removeClass().addClass('alert alert-danger')
                     .html("<i class='fa fa-exclamation-circle'></i> Generated title must be atleast 8 characters.");
         } else {
-            $("#gtSpinBtn").html("<img src='" + base_url + "resources/images/ajax-loader.gif' />");
+            $("#gtSpinBtn").prop('disabled', true).html("<img src='" + base_url + "resources/images/ajax-loader.gif' />");
+            $("#gtBtn").prop('disabled', true);
+            $("#gtMessage").removeClass().addClass('alert alert-warning')
+                    .html("<i class='fa fa-anchor'></i> Spinning, please wait...");
             $.ajax({
                 url: base_url + "main/spin",
                 data: {'text': $("#gtGeneratedTitles").val()},
@@ -543,11 +588,18 @@ function activateGenerateTitle() {
                     if (data.result === "OK") {
                         $("#gtMessage").removeClass().addClass('alert alert-success')
                                 .html("<i class='fa fa-check'></i> Spinning Titles Successful!");
-                        $("#gtGeneratedTitles").html(data.output);
+                        $("#gtGeneratedTitles").val(data.output);
                         gtAutoHeightContent();
                     } else {
-                        $("#gtMessage").removeClass().addClass('alert alert-danger').html(data);
+                        $("#gtMessage").removeClass().addClass('alert alert-danger')
+                                .html("<i class='fa fa-exclamation-circle'></i> " + data.result);
                     }
+                    $("#gtSpinBtn").prop('disabled', false).html("<i class='fa fa-spinner'></i> Spin");
+                    $("#gtBtn").prop('disabled', false);
+                },
+                error: function(xhr, status, error) {
+                    $("#gtMessage").removeClass().addClass('alert alert-danger')
+                            .html("<i class='fa fa-exclamation-circle'></i> " + data.result);
                 }
             });
         }
@@ -627,13 +679,6 @@ function gaTitleAutoHeightContent() {
     $('#gaGeneratedTitles').keyup();
 
 }
-function gaContentAutoHeightContent() {
-    $('#gaGeneratedContents').on('keyup', function(e) {
-        $(this).css('height', 'auto');
-        $(this).height(this.scrollHeight);
-    });
-    $('#gaGeneratedContents').keyup();
-}
 
 function gabpTitleAutoHeightContent() {
     $('#gabpGeneratedTitles').on('keyup', function(e) {
@@ -641,14 +686,6 @@ function gabpTitleAutoHeightContent() {
         $(this).height(this.scrollHeight);
     });
     $('#gabpGeneratedTitles').keyup();
-
-}
-function gabpContentAutoHeightContent() {
-    $('#gabpGeneratedContents').on('keyup', function(e) {
-        $(this).css('height', 'auto');
-        $(this).height(this.scrollHeight);
-    });
-    $('#gabpGeneratedContents').keyup();
 }
 
 $.fn.dataTableExt.oApi.fnReloadAjax = function(oSettings, sNewSource, fnCallback, bStandingRedraw)

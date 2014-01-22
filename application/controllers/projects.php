@@ -127,8 +127,11 @@ class Projects extends MY_Controller {
         $categories = $this->projects_model->getProjectCategories($user->username);
         if (count($categories) > 0) {
             $categoryString = "";
+            $categoryString .= "<option value=''>Select Category</option>";
             foreach ($categories as $c) {
-                $categoryString .= "<option value='" . $c->category . "'>" . $c->category . "</option>";
+                if ($c->category != "" || $c->category != null) {
+                    $categoryString .= "<option value='" . $c->category . "'>" . $c->category . "</option>";
+                }
             }
             echo $categoryString;
         } else {
