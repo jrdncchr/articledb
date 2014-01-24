@@ -170,7 +170,7 @@
                         <label for="category" class="col-sm-2 control-label">No. Titles</label>
                         <div class="col-sm-2">
                             <select id="gtNoTitles" class="form-control">
-                                <?php for ($i = 1; $i <= 5; $i++) { ?>
+                                <?php for ($i = 1; $i <= 30; $i++) { ?>
                                     <option value="<?php echo $i ?>"><?php echo $i ?></option>
                                 <?php } ?>
                             </select>
@@ -178,9 +178,11 @@
                     </div>
                     <div class="form-group">
                         <div class="col-sm-6">
+                            <input id="gtTemplate" type="checkbox"> Use Templates <br />
                             <input id="gtCheck" type="checkbox" checked> Spin results using TBS spun format
                         </div>
                         <div class="col-sm-6">
+                            <br />
                             <button type="button" id="gtBtn" class="btn btn-primary pull-right">Generate Title</button>
                         </div>
                     </div>
@@ -234,7 +236,7 @@
                         <label for="titles" class="col-sm-3 control-label">Titles to Display</label>
                         <div class="col-sm-3">
                             <select id="gaNoTitles" class="form-control">
-                                <?php for ($i = 1; $i <= 5; $i++) { ?>
+                                <?php for ($i = 1; $i <= 30; $i++) { ?>
                                     <option value="<?php echo $i ?>"><?php echo $i ?></option>
                                 <?php } ?>
                             </select>
@@ -253,7 +255,7 @@
                         <div class="col-sm-4">
                             <h5><small>Min</small></h5>
                             <select id="gaPMin" class="form-control">
-                                <?php for ($i = 5; $i <= 8; $i++) { ?>
+                                <?php for ($i = 1; $i <= 10; $i++) { ?>
                                     <option value="<?php echo $i ?>"><?php echo $i ?></option>
                                 <?php } ?>
                             </select>
@@ -261,7 +263,7 @@
                         <div class='col-sm-4'>
                             <h5><small>Max</small></h5>
                             <select id="gaPMax" class="form-control">
-                                <?php for ($i = 5; $i <= 8; $i++) { ?>
+                                <?php for ($i = 1; $i <= 10; $i++) { ?>
                                     <option value="<?php echo $i ?>"><?php echo $i ?></option>
                                 <?php } ?>
                             </select>
@@ -272,7 +274,7 @@
                         <div class="col-sm-4">
                             <h5><small>Min</small></h5>
                             <select id="gaSPMin" class="form-control">
-                                <?php for ($i = 5; $i <= 8; $i++) { ?>
+                                <?php for ($i = 1; $i <= 10; $i++) { ?>
                                     <option value="<?php echo $i ?>"><?php echo $i ?></option>
                                 <?php } ?>
                             </select>
@@ -280,10 +282,17 @@
                         <div class='col-sm-4'>
                             <h5><small>Max</small></h5>
                             <select id="gaSPMax" class="form-control">
-                                <?php for ($i = 5; $i <= 8; $i++) { ?>
+                                <?php for ($i = 1; $i <= 10; $i++) { ?>
                                     <option value="<?php echo $i ?>"><?php echo $i ?></option>
                                 <?php } ?>
                             </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="addCode" class="col-sm-3 control-label">Add Text/Code</label>
+                        <div class="col-sm-9">
+                            <textarea class="form-control" id="gaAddedCode" rel="popover" data-placement="bottom" data-trigger="hover" 
+                                      data-content="This text/code will be inserted in a random location in the generated article."></textarea>
                         </div>
                     </div>
                 </form>
@@ -359,7 +368,7 @@
                         <label for="titles" class="col-sm-3 control-label">Titles to Display</label>
                         <div class="col-sm-3">
                             <select id="gabpNoTitles" class="form-control">
-                                <?php for ($i = 1; $i <= 5; $i++) { ?>
+                                <?php for ($i = 1; $i <= 30; $i++) { ?>
                                     <option value="<?php echo $i ?>"><?php echo $i ?></option>
                                 <?php } ?>
                             </select>
@@ -375,7 +384,7 @@
                         <div class="col-sm-4">
                             <h5><small>Min</small></h5>
                             <select id="gabpPMin" class="form-control">
-                                <?php for ($i = 5; $i <= 8; $i++) { ?>
+                                <?php for ($i = 1; $i <= 10; $i++) { ?>
                                     <option value="<?php echo $i ?>"><?php echo $i ?></option>
                                 <?php } ?>
                             </select>
@@ -383,7 +392,7 @@
                         <div class='col-sm-4'>
                             <h5><small>Max</small></h5>
                             <select id="gabpPMax" class="form-control">
-                                <?php for ($i = 5; $i <= 8; $i++) { ?>
+                                <?php for ($i = 1; $i <= 10; $i++) { ?>
                                     <option value="<?php echo $i ?>"><?php echo $i ?></option>
                                 <?php } ?>
                             </select>
@@ -394,7 +403,7 @@
                         <div class="col-sm-4">
                             <h5><small>Min</small></h5>
                             <select id="gabpSPMin" class="form-control">
-                                <?php for ($i = 5; $i <= 8; $i++) { ?>
+                                <?php for ($i = 1; $i <= 10; $i++) { ?>
                                     <option value="<?php echo $i ?>"><?php echo $i ?></option>
                                 <?php } ?>
                             </select>
@@ -402,10 +411,17 @@
                         <div class='col-sm-4'>
                             <h5><small>Max</small></h5>
                             <select id="gabpSPMax" class="form-control">
-                                <?php for ($i = 5; $i <= 8; $i++) { ?>
+                                <?php for ($i = 1; $i <= 10; $i++) { ?>
                                     <option value="<?php echo $i ?>"><?php echo $i ?></option>
                                 <?php } ?>
                             </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="addCode" class="col-sm-3 control-label">Add Text/Code</label>
+                        <div class="col-sm-9">
+                            <textarea class="form-control" id="gabpAddedCode" rel="popover" data-placement="bottom" data-trigger="hover" 
+                                      data-content="This text/code will be inserted in a random location in the generated article."></textarea>
                         </div>
                     </div>
                 </form>

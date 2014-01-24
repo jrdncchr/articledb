@@ -1,4 +1,5 @@
 $(document).ready(function() {
+    setDefaultValues();
     activateTables();
     activateAddArticle();
     activateGenerateTitle();
@@ -7,6 +8,48 @@ $(document).ready(function() {
     activateAddMultipleArticles();
 });
 
+function setDefaultValues() {
+    $("#gaAddedCode").popover();
+    $("#gabpAddedCode").popover();
+
+    $("select#gtNoTitles option").each(function() {
+        this.selected = (this.text === '5');
+    });
+    $("select#gaNoTitles option").each(function() {
+        this.selected = (this.text === '5');
+    });
+    $("select#gabpNoTitles option").each(function() {
+        this.selected = (this.text === '5');
+    });
+    $("select#gaNoArticlesToMix option").each(function() {
+        this.selected = (this.text === '5');
+    });
+    $("select#gaPMin option").each(function() {
+        this.selected = (this.text === '5');
+    });
+    $("select#gaPMax option").each(function() {
+        this.selected = (this.text === '8');
+    });
+    $("select#gaSPMin option").each(function() {
+        this.selected = (this.text === '5');
+    });
+    $("select#gaSPMax option").each(function() {
+        this.selected = (this.text === '8');
+    });
+    $("select#gabpPMin option").each(function() {
+        this.selected = (this.text === '5');
+    });
+    $("select#gabpPMax option").each(function() {
+        this.selected = (this.text === '8');
+    });
+    $("select#gabpSPMin option").each(function() {
+        this.selected = (this.text === '5');
+    });
+    $("select#gabpSPMax option").each(function() {
+        this.selected = (this.text === '8');
+    });
+
+}
 
 function activateTables() {
     $('#articles').dataTable({
@@ -110,7 +153,7 @@ function activateAddMultipleArticles() {
         reset($("#namInput"));
         $("#namCategory").val("");
         $("#namMessage").removeClass().addClass('alert alert-info')
-                    .html("<p><i class='fa fa-info'></i> Select all the files(.txt) to be added. Note that the first line will be the title.</p>");
+                .html("<p><i class='fa fa-info'></i> Select all the files(.txt) to be added. Note that the first line will be the title.</p>");
     });
     function reset(e) {
         e.wrap('<form>').parent('form').trigger('reset');
@@ -225,6 +268,7 @@ function activateGenerateArticlesByProject() {
     }
     $("#gabpGenerateBtn").click(function() {
         if (validateGenerateArticlesByProject() === true) {
+            $("#gabpGenerateBtn").prop('disabled', true).html("<img src='" + base_url + "resources/images/ajax-loader.gif' />");
             $.ajax({
                 url: base_url + 'main/generateArticlesByProject',
                 data: {'keyword': $("#gabpKeyword").val(), 'category': $("#gabpCategory").val(), 'noTitles': $("#gabpNoTitles").val(),
@@ -236,7 +280,6 @@ function activateGenerateArticlesByProject() {
                 success: function(data) {
                     // Spin GENERATED TITLES and CONTENTS
                     if ($("#gabpCheck").is(":checked")) {
-                        $("#gabpGenerateBtn").prop('disabled', true).html("<img src='" + base_url + "resources/images/ajax-loader.gif' />");
                         $("#gabpMessage").removeClass().addClass('alert alert-warning')
                                 .html("<i class='fa fa-anchor'></i> Spinning, please wait...");
                         $.ajax({
@@ -259,7 +302,21 @@ function activateGenerateArticlesByProject() {
                                             if (data3.result === "OK") {
                                                 $("#gabpMessage").removeClass().addClass('alert alert-success')
                                                         .html("<i class='fa fa-check'></i> Generating and Spinning Contents Successful!");
-                                                $("#gabpGeneratedContents").val(data3.output);
+                                                if ($("#gabpAddedCode").val() !== "") {
+                                                    var content = data3.output;
+                                                    var splitContent = $.trim(content).split(".");
+                                                    var randomIndex = Math.floor((Math.random() * splitContent.length) + 1);
+                                                    splitContent[randomIndex] = " " + $("#gabpAddedCode").val() + splitContent[randomIndex];
+                                                    var newContent = "";
+                                                    for (var i = 0; i < splitContent.length; i++) {
+                                                        if (splitContent[i].length > 5) {
+                                                            newContent += splitContent[i] + ".";
+                                                        }
+                                                    }
+                                                    $("#gabpGeneratedContents").val(newContent);
+                                                } else {
+                                                    $("#gabpGeneratedContents").val(data3.output);
+                                                }
                                             } else {
                                                 $("#gabpMessage").removeClass().addClass('alert alert-danger')
                                                         .html("<i class='fa fa-exclamation-circle'></i> " + data3.result);
@@ -281,14 +338,28 @@ function activateGenerateArticlesByProject() {
                             }
                         });
                     } else {
+                        if ($("#gabpAddedCode").val() !== "") {
+                            var content = data.article;
+                            var splitContent = $.trim(content).split(".");
+                            var randomIndex = Math.floor((Math.random() * splitContent.length) + 1);
+                            splitContent[randomIndex] = " " + $("#gabpAddedCode").val() + splitContent[randomIndex];
+                            var newContent = "";
+                            for (var i = 0; i < splitContent.length; i++) {
+                                if (splitContent[i].length > 5) {
+                                    newContent += splitContent[i] + ".";
+                                }
+                            }
+                            $("#gabpGeneratedContents").val(newContent);
+                        } else {
+                            $("#gabpGeneratedContents").val(data.article);
+                        }
                         $("#gabpArticleForm").slideUp('fast');
                         $("#gabpArticleFormOutput").slideDown('slow');
                         $("#gabpGenerateBtn").hide();
                         $("#gabpMessage").removeClass().addClass('alert alert-success')
-                                .html("<i class='fa fa-check'></i> Generating Article Successful!.");
+                                .html("<i class='fa fa-check'></i> Generating Article Successful!");
                         $("#gabpGeneratedTitles").val(data.titles);
                         gabpTitleAutoHeightContent();
-                        $("#gabpGeneratedContents").val(data.article);
                         $("#gabpGenerateBtn").prop('disabled', false).html("Generate");
                         $("#gabpCheckDiv").fadeOut('fast');
                     }
@@ -339,6 +410,7 @@ function activateGenerateArticlesByProject() {
 function activateGenerateArticles() {
     $("#gaGenerateBtn").click(function() {
         if (validateGenerateArticles() === true) {
+            $("#gaGenerateBtn").prop('disabled', true).html("<img src='" + base_url + "resources/images/ajax-loader.gif' />");
             $.ajax({
                 url: base_url + 'main/generateArticles',
                 data: {'keyword': $("#gaKeyword").val(), 'category': $("#gaCategory").val(), 'noTitles': $("#gaNoTitles").val(),
@@ -350,7 +422,6 @@ function activateGenerateArticles() {
                 success: function(data) {
                     // Spin GENERATED TITLES and CONTENTS
                     if ($("#gaCheck").is(":checked")) {
-                        $("#gaGenerateBtn").prop('disabled', true).html("<img src='" + base_url + "resources/images/ajax-loader.gif' />");
                         $("#gaMessage").removeClass().addClass('alert alert-warning')
                                 .html("<i class='fa fa-anchor'></i> Spinning, please wait...");
                         $.ajax({
@@ -373,7 +444,21 @@ function activateGenerateArticles() {
                                             if (data3.result === "OK") {
                                                 $("#gaMessage").removeClass().addClass('alert alert-success')
                                                         .html("<i class='fa fa-check'></i> Generating and Spinning Contents Successful!");
-                                                $("#gaGeneratedContents").val(data3.output);
+                                                if ($("#gaAddedCode").val() !== "") {
+                                                    var content = data3.output;
+                                                    var splitContent = content.split(".");
+                                                    var randomIndex = Math.floor((Math.random() * splitContent.length) + 10);
+                                                    splitContent[randomIndex] = " " + $("#gaAddedCode").val() + splitContent[randomIndex];
+                                                    var newContent = "";
+                                                    for (var i = 0; i < splitContent.length; i++) {
+                                                        if (splitContent[i].length > 5) {
+                                                            newContent += splitContent[i] + ".";
+                                                        }
+                                                    }
+                                                    $("#gaGeneratedContents").val(newContent);
+                                                } else {
+                                                    $("#gaGeneratedContents").val(data3.output);
+                                                }
                                             } else {
                                                 $("#gaMessage").removeClass().addClass('alert alert-danger')
                                                         .html("<i class='fa fa-exclamation-circle'></i> " + data3.result);
@@ -394,14 +479,28 @@ function activateGenerateArticles() {
                             }
                         });
                     } else {
+                        if ($("#gaAddedCode").val() !== "") {
+                            var content = data.article;
+                            var splitContent = content.split(".");
+                            var randomIndex = Math.floor((Math.random() * splitContent.length) + 10);
+                            splitContent[randomIndex] = " " + $("#gaAddedCode").val() + splitContent[randomIndex];
+                            var newContent = "";
+                            for (var i = 0; i < splitContent.length; i++) {
+                                if (splitContent[i].length > 5) {
+                                    newContent += splitContent[i] + ".";
+                                }
+                            }
+                            $("#gaGeneratedContents").val(newContent);
+                        } else {
+                            $("#gaGeneratedContents").val(data.article);
+                        }
                         $("#genArticleForm").slideUp('fast');
                         $("#genArticleFormOutput").slideDown('slow');
                         $("#gaGenerateBtn").hide();
                         $("#gaMessage").removeClass().addClass('alert alert-success')
-                                .html("<i class='fa fa-check'></i> Generating Article Successful!.");
+                                .html("<i class='fa fa-check'></i> Generating Article Successful!");
                         $("#gaGeneratedTitles").val(data.titles);
                         gaTitleAutoHeightContent();
-                        $("#gaGeneratedContents").val(data.article);
                         $("#gaGenerateBtn").prop('disabled', false).html("Generate");
                         $("#gaCheckDiv").fadeOut('fast');
                     }
@@ -572,12 +671,19 @@ function activateGenerateTitle() {
         } else {
             if (keyword !== "" && category !== "") {
                 $("#gtMessage").removeClass().addClass('alert alert-danger')
-                        .html("<i class='fa fa-exclamation-circle'></i> Keyword and Category can't have value at the same time.");
+                        .html("<i class='fa fa-exclamation-circle'></i> Keyword or Category is required.");
+            } else if ($("#gtTemplate").is(":checked") && keyword === "") {
+                $("#gtMessage").removeClass().addClass('alert alert-danger')
+                        .html("<i class='fa fa-exclamation-circle'></i> If you want to use templates, keyword must be have a value.");
             } else {
                 $("#gtBtn").prop('disabled', true).html("<img src='" + base_url + "resources/images/ajax-loader.gif' />");
+                var useTemplate = "NO";
+                if ($("#gtTemplate").is(":checked")) {
+                    useTemplate = "YES";
+                }
                 $.ajax({
                     url: base_url + "main/generateTitles",
-                    data: {'keyword': keyword, 'category': category, 'noTitles': noTitles},
+                    data: {'keyword': keyword, 'category': category, 'noTitles': noTitles, 'useTemplate': useTemplate},
                     cache: false,
                     type: 'post',
                     dataType: 'json',

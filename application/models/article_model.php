@@ -116,7 +116,7 @@ class Article_Model extends CI_Model {
             echo "COUNT ARTICLES BY KEYWORD ERROR: " . $e->message();
         }
     }
-    
+
     public function generateArticles($data) {
         try {
             // get all articles depending on key or category on an array
@@ -139,7 +139,7 @@ class Article_Model extends CI_Model {
             // loop the articles array and remove unnecessary characters. put them all in one string
             $articlesStr = "";
             foreach ($articles as $a) {
-                $articlesStr .= preg_replace('/[^a-zA-Z0-9_ %\[\]\.\(\)%&-]/s', '', $a->content);
+                $articlesStr .= preg_replace('/[^a-zA-Z0-9_ %\[\]\.\(\)\'\;\:\?\!\,%&-]/s', '', $a->content);
             }
 
             // split the article string by '.' to sepearate each sentences
@@ -166,7 +166,7 @@ class Article_Model extends CI_Model {
                         unset($articlesSplit[$randomIndex]);
                         $articlesSplit = array_values($articlesSplit);
                         if (strpos($generatedArticle, $sentence) == false) {
-                            $paragraph .= $sentence . ".";
+                            $paragraph .= $sentence . ". ";
                         }
                     }
                 }
@@ -201,7 +201,7 @@ class Article_Model extends CI_Model {
             // loop the articles array and remove unnecessary characters. put them all in one string
             $articlesStr = "";
             foreach ($articles as $a) {
-                $articlesStr .= preg_replace('/[^a-zA-Z0-9_ %\[\]\.\(\)%&-]/s', '', $a->content);
+                $articlesStr .= preg_replace('/[^a-zA-Z0-9_ %\[\]\.\(\)\'\;\:\?\!\,%&-]/s', '', $a->content);
             }
 
             // split the article string by '.' to sepearate each sentences
@@ -228,7 +228,7 @@ class Article_Model extends CI_Model {
                         unset($articlesSplit[$randomIndex]);
                         $articlesSplit = array_values($articlesSplit);
                         if (strpos($generatedArticle, $sentence) == false) {
-                            $paragraph .= $sentence . ".";
+                            $paragraph .= $sentence . ". ";
                         }
                     }
                 }

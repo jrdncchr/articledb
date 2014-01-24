@@ -15,6 +15,11 @@ class Main extends MY_Controller {
         $this->load->model('article_model');
     }
 
+//    public function test() {
+//        $this->load->model('titleTemplate_model');
+//        $this->titleTemplate_model->testAdd();
+//    }
+
     public function index() {
         $this->title = "Article Database &raquo; Main";
         $this->js[] = "custom/main.js";
@@ -73,13 +78,23 @@ class Main extends MY_Controller {
     }
 
     public function generateTitles() {
+        $useTemplate = $_POST['useTemplate'];
         $keyword = $_POST['keyword'];
         $category = $_POST['category'];
         $noTitles = $_POST['noTitles'];
-        $result = $this->article_model->generateTitles($keyword, $category, $noTitles);
+        $result = array();
+        if ($useTemplate == "YES") {
+            $this->load->model('titleTemplate_model');
+            $result = $this->titleTemplate_model->getRandomTitles($noTitles);
+        } else {
+            $result = $this->article_model->generateTitles($keyword, $category, $noTitles);
+        }
         if (sizeof($result) > 0) {
             $titles = "{";
             foreach ($result as $title) {
+                if ($useTemplate == "YES") {
+                    $title->title = str_replace("Keyword", $keyword, $title->title);
+                }
                 $titles .= "$title->title|";
             }
             $titles = substr($titles, 0, -1);
