@@ -201,7 +201,7 @@ class Article_Model extends CI_Model {
             // loop the articles array and remove unnecessary characters. put them all in one string
             $articlesStr = "";
             foreach ($articles as $a) {
-                $articlesStr .= preg_replace('/[^a-zA-Z0-9_ %\[\]\.\(\)\'\;\:\?\!\,%&-]/s', '', $a->content);
+                $articlesStr .= preg_replace('/[^a-zA-Z0-9_ %\[\]\.\(\)\'\;\:\?\!\,%&-]/s', '', $this->unspun($a->content));
             }
 
             // split the article string by '.' to sepearate each sentences
@@ -239,6 +239,16 @@ class Article_Model extends CI_Model {
         } catch (Exception $e) {
             echo "GENERATE ARTICLE BY PROJECT ERROR: " . $e->message();
         }
+    }
+
+    public function unspun($s) {
+        if (preg_match_all('#\{(((?>[^{}]+)|(?R))*)\}#', $s, $matches, PREG_OFFSET_CAPTURE)) {
+            for ($i = count($matches[0]) - 1; $i >= 0; --$i) {
+                $s = substr_replace($s, $this->unspun($matches[1][$i][0]), $matches[0][$i][1], strlen($matches[0][$i][0]));
+            }
+        }
+        $choices = explode('|', $s);
+        return $choices[array_rand($choices)];
     }
 
 }

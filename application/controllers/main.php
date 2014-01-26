@@ -23,6 +23,7 @@ class Main extends MY_Controller {
     public function index() {
         $this->title = "Article Database &raquo; Main";
         $this->js[] = "custom/main.js";
+        $this->js[] = "custom/main2.js";
         $this->data['user'] = $this->session->userdata('user');
         $this->load->model('categories_model');
         $this->data['categories'] = $this->categories_model->get();
@@ -84,8 +85,8 @@ class Main extends MY_Controller {
         $noTitles = $_POST['noTitles'];
         $result = array();
         if ($useTemplate == "YES") {
-            $this->load->model('titleTemplate_model');
-            $result = $this->titleTemplate_model->getRandomTitles($noTitles);
+            $this->load->model('titletemplate_model');
+            $result = $this->titletemplate_model->getRandomTitles($noTitles);
         } else {
             $result = $this->article_model->generateTitles($keyword, $category, $noTitles);
         }
@@ -181,7 +182,7 @@ class Main extends MY_Controller {
         if (sizeof($generateTitles) > 0) {
             $titles = "{";
             foreach ($generateTitles as $title) {
-                $titles .= "$title->title|";
+                $titles .= $this->unspun($title->title) . "|";
             }
             $titles = substr($titles, 0, -1);
             $titles .= "}";
@@ -196,6 +197,16 @@ class Main extends MY_Controller {
         $result['article'] = $generateArticle;
 
         echo json_encode($result);
+    }
+
+    public function unspun($s) {
+        if (preg_match_all('#\{(((?>[^{}]+)|(?R))*)\}#', $s, $matches, PREG_OFFSET_CAPTURE)) {
+            for ($i = count($matches[0]) - 1; $i >= 0; --$i) {
+                $s = substr_replace($s, $this->unspun($matches[1][$i][0]), $matches[0][$i][1], strlen($matches[0][$i][0]));
+            }
+        }
+        $choices = explode('|', $s);
+        return $choices[array_rand($choices)];
     }
 
     function spin() {

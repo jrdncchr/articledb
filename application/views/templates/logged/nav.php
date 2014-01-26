@@ -10,9 +10,10 @@
     </div>
     <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
-            <li><a href="#about">About</a></li>
-            <li><a href="#services">Services</a></li>
-            <li><a href="#contact">Contact</a></li>
+            <ul class="nav navbar-nav">
+                <li><a href="<?php echo base_url() . "faqs"; ?>">FAQs</a></li>
+                <li><a href="#">Suggestions</a></li>
+            </ul>
         </ul>
         <ul class="nav navbar-nav navbar-right navbar-user" style="margin-right: 10px;">
             <li class="dropdown user-dropdown">

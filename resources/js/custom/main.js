@@ -11,7 +11,13 @@ $(document).ready(function() {
 function setDefaultValues() {
     $("#gaAddedCode").popover();
     $("#gabpAddedCode").popover();
-
+    
+    $("select#gabpNoBlogs option").each(function() {
+        this.selected = (this.text === '3');
+    });
+    $("select#gaNoBlogs option").each(function() {
+        this.selected = (this.text === '3');
+    });
     $("select#gtNoTitles option").each(function() {
         this.selected = (this.text === '5');
     });
@@ -265,6 +271,8 @@ function activateGenerateArticlesByProject() {
         $("#gabpArticleFormOutput").slideUp('slow');
         $("#gabpGenerateBtn").show();
         $("#gabpCheckDiv").fadeIn('fast');
+        $("#gabpPostMessage").removeClass().addClass("alert alert-info")
+                             .html("<i class='fa fa-info'></i> This will post your generated article in a random available blogs. After posting, it will show you the full URL of the posted articles.");
     }
     $("#gabpGenerateBtn").click(function() {
         if (validateGenerateArticlesByProject() === true) {
@@ -291,7 +299,6 @@ function activateGenerateArticlesByProject() {
                             success: function(data2) {
                                 if (data2.result === "OK") {
                                     $("#gabpGeneratedTitles").val(data2.output);
-                                    gaTitleAutoHeightContent();
                                     $.ajax({
                                         url: base_url + "main/spin",
                                         data: {'text': data.article},
@@ -304,18 +311,20 @@ function activateGenerateArticlesByProject() {
                                                         .html("<i class='fa fa-check'></i> Generating and Spinning Contents Successful!");
                                                 if ($("#gabpAddedCode").val() !== "") {
                                                     var content = data3.output;
-                                                    var splitContent = $.trim(content).split(".");
+                                                    var splitContent = content.trim().split(".");
                                                     var randomIndex = Math.floor((Math.random() * splitContent.length) + 1);
-                                                    splitContent[randomIndex] = " " + $("#gabpAddedCode").val() + splitContent[randomIndex];
+                                                    splitContent[randomIndex] = " " + $("#gabpAddedCode").val() + splitContent[randomIndex] + " ";
                                                     var newContent = "";
                                                     for (var i = 0; i < splitContent.length; i++) {
-                                                        if (splitContent[i].length > 5) {
-                                                            newContent += splitContent[i] + ".";
+                                                        if (typeof(splitContent[i]) !== undefined) {
+                                                            if (splitContent[i].length > 5) {
+                                                                newContent += splitContent[i] + ".";
+                                                            }
                                                         }
                                                     }
                                                     $("#gabpGeneratedContents").val(newContent);
                                                 } else {
-                                                    $("#gabpGeneratedContents").val(data3.output);
+                                                    $("#gabpGeneratedContents").val($.trim(data3.output));
                                                 }
                                             } else {
                                                 $("#gabpMessage").removeClass().addClass('alert alert-danger')
@@ -327,12 +336,11 @@ function activateGenerateArticlesByProject() {
                                             $("#gabpArticleFormOutput").slideDown('slow');
                                             $("#gabpGenerateBtn").hide();
                                             $("#gabpCheckDiv").fadeOut('fast');
-                                            gabpTitleAutoHeightContent();
                                         }
                                     });
                                 } else {
                                     $("#gabpMessage").removeClass().addClass('alert alert-danger')
-                                            .html("<i class='fa fa-exclamation-circle'></i> " + data2.result);
+                                            .html("<i class='fa fa-exclamation-circle'></i> " + data2.result) + " ";
                                     $("#gabpGenerateBtn").prop('disabled', false).html("Generate");
                                 }
                             }
@@ -340,18 +348,20 @@ function activateGenerateArticlesByProject() {
                     } else {
                         if ($("#gabpAddedCode").val() !== "") {
                             var content = data.article;
-                            var splitContent = $.trim(content).split(".");
+                            var splitContent = content.trim().split(".");
                             var randomIndex = Math.floor((Math.random() * splitContent.length) + 1);
                             splitContent[randomIndex] = " " + $("#gabpAddedCode").val() + splitContent[randomIndex];
                             var newContent = "";
                             for (var i = 0; i < splitContent.length; i++) {
-                                if (splitContent[i].length > 5) {
-                                    newContent += splitContent[i] + ".";
+                                if (typeof(splitContent[i]) !== undefined) {
+                                    if (splitContent[i].length > 5) {
+                                        newContent += splitContent[i] + ".";
+                                    }
                                 }
                             }
                             $("#gabpGeneratedContents").val(newContent);
                         } else {
-                            $("#gabpGeneratedContents").val(data.article);
+                            $("#gabpGeneratedContents").val($.trim(data.article));
                         }
                         $("#gabpArticleForm").slideUp('fast');
                         $("#gabpArticleFormOutput").slideDown('slow');
@@ -359,7 +369,6 @@ function activateGenerateArticlesByProject() {
                         $("#gabpMessage").removeClass().addClass('alert alert-success')
                                 .html("<i class='fa fa-check'></i> Generating Article Successful!");
                         $("#gabpGeneratedTitles").val(data.titles);
-                        gabpTitleAutoHeightContent();
                         $("#gabpGenerateBtn").prop('disabled', false).html("Generate");
                         $("#gabpCheckDiv").fadeOut('fast');
                     }
@@ -433,7 +442,6 @@ function activateGenerateArticles() {
                             success: function(data2) {
                                 if (data2.result === "OK") {
                                     $("#gaGeneratedTitles").val(data2.output);
-                                    gaTitleAutoHeightContent();
                                     $.ajax({
                                         url: base_url + "main/spin",
                                         data: {'text': data.article},
@@ -446,18 +454,22 @@ function activateGenerateArticles() {
                                                         .html("<i class='fa fa-check'></i> Generating and Spinning Contents Successful!");
                                                 if ($("#gaAddedCode").val() !== "") {
                                                     var content = data3.output;
-                                                    var splitContent = content.split(".");
+                                                    var splitContent = content.trim().split(".");
                                                     var randomIndex = Math.floor((Math.random() * splitContent.length) + 10);
-                                                    splitContent[randomIndex] = " " + $("#gaAddedCode").val() + splitContent[randomIndex];
+                                                    splitContent[randomIndex] = " " + $("#gaAddedCode").val() + splitContent[randomIndex] + " ";
                                                     var newContent = "";
                                                     for (var i = 0; i < splitContent.length; i++) {
                                                         if (splitContent[i].length > 5) {
-                                                            newContent += splitContent[i] + ".";
+                                                            if (typeof(splitContent[i]) !== undefined) {
+                                                                if (splitContent[i].length > 5) {
+                                                                    newContent += splitContent[i] + ".";
+                                                                }
+                                                            }
                                                         }
                                                     }
                                                     $("#gaGeneratedContents").val(newContent);
                                                 } else {
-                                                    $("#gaGeneratedContents").val(data3.output);
+                                                    $("#gaGeneratedContents").val($.trim(data3.output));
                                                 }
                                             } else {
                                                 $("#gaMessage").removeClass().addClass('alert alert-danger')
@@ -468,7 +480,6 @@ function activateGenerateArticles() {
                                             $("#gaGenerateBtn").hide();
                                             $("#genArticleFormOutput").slideDown('slow');
                                             $("#gaCheckDiv").fadeOut('fast');
-                                            gaTitleAutoHeightContent();
                                         }
                                     });
                                 } else {
@@ -481,18 +492,20 @@ function activateGenerateArticles() {
                     } else {
                         if ($("#gaAddedCode").val() !== "") {
                             var content = data.article;
-                            var splitContent = content.split(".");
+                            var splitContent = content.trim().split(".");
                             var randomIndex = Math.floor((Math.random() * splitContent.length) + 10);
-                            splitContent[randomIndex] = " " + $("#gaAddedCode").val() + splitContent[randomIndex];
+                            splitContent[randomIndex] = " " + $("#gaAddedCode").val() + splitContent[randomIndex] + " ";
                             var newContent = "";
                             for (var i = 0; i < splitContent.length; i++) {
-                                if (splitContent[i].length > 5) {
-                                    newContent += splitContent[i] + ".";
+                                if (typeof(splitContent[i]) !== undefined) {
+                                    if (splitContent[i].length > 5) {
+                                        newContent += splitContent[i] + ".";
+                                    }
                                 }
                             }
                             $("#gaGeneratedContents").val(newContent);
                         } else {
-                            $("#gaGeneratedContents").val(data.article);
+                            $("#gaGeneratedContents").val($.trim(data.article));
                         }
                         $("#genArticleForm").slideUp('fast');
                         $("#genArticleFormOutput").slideDown('slow');
@@ -500,7 +513,6 @@ function activateGenerateArticles() {
                         $("#gaMessage").removeClass().addClass('alert alert-success')
                                 .html("<i class='fa fa-check'></i> Generating Article Successful!");
                         $("#gaGeneratedTitles").val(data.titles);
-                        gaTitleAutoHeightContent();
                         $("#gaGenerateBtn").prop('disabled', false).html("Generate");
                         $("#gaCheckDiv").fadeOut('fast');
                     }
@@ -523,6 +535,8 @@ function activateGenerateArticles() {
         $("#genArticleFormOutput").slideUp('slow');
         $("#gaGenerateBtn").show();
         $("#gaCheckDiv").fadeIn('fast');
+        $("#gaPostMessage").removeClass().addClass("alert alert-info")
+                             .html("<i class='fa fa-info'></i> This will post your generated article in a random available blogs. After posting, it will show you the full URL of the posted articles.");
     }
 
     $("#gaSaveBtn").click(function() {
@@ -799,22 +813,22 @@ function gtAutoHeightContent() {
 
 }
 
-function gaTitleAutoHeightContent() {
-    $('#gaGeneratedTitles').on('keyup', function(e) {
-        $(this).css('height', 'auto');
-        $(this).height(this.scrollHeight);
-    });
-    $('#gaGeneratedTitles').keyup();
-
-}
-
-function gabpTitleAutoHeightContent() {
-    $('#gabpGeneratedTitles').on('keyup', function(e) {
-        $(this).css('height', 'auto');
-        $(this).height(this.scrollHeight);
-    });
-    $('#gabpGeneratedTitles').keyup();
-}
+//function gaTitleAutoHeightContent() {
+//    $('#gaGeneratedTitles').on('keyup', function(e) {
+//        $(this).css('height', 'auto');
+//        $(this).height(this.scrollHeight);
+//    });
+//    $('#gaGeneratedTitles').keyup();
+//
+//}
+//
+//function gabpTitleAutoHeightContent() {
+//    $('#gabpGeneratedTitles').on('keyup', function(e) {
+//        $(this).css('height', 'auto');
+//        $(this).height(this.scrollHeight);
+//    });
+//    $('#gabpGeneratedTitles').keyup();
+//}
 
 $.fn.dataTableExt.oApi.fnReloadAjax = function(oSettings, sNewSource, fnCallback, bStandingRedraw)
 {

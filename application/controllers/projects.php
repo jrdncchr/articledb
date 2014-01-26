@@ -11,6 +11,47 @@ class Projects extends MY_Controller {
         $this->load->library('session');
     }
 
+    public function post() {
+        $post = array(
+            'title' => $_POST['title'],
+            'content' => $_POST['content']
+        );
+        $blogCount = $_POST['blogCount'];
+        $type = $_POST['type'];
+
+        $this->load->model('blogs_model');
+        $randomBlogs = $this->blogs_model->getRandomBlogs($type, $blogCount);
+        $ids = "";
+        foreach ($randomBlogs as $blog) {
+            $id = $this->blogs_model->postArticle($blog, $post);
+            echo "<url>" . $blog->url ."</url>";
+        }
+    }
+
+    public function preview() {
+
+        function unspun($s) {
+            if (preg_match_all('#\{(((?>[^{}]+)|(?R))*)\}#', $s, $matches, PREG_OFFSET_CAPTURE)) {
+                for ($i = count($matches[0]) - 1; $i >= 0; --$i) {
+                    $s = substr_replace($s, unspun($matches[1][$i][0]), $matches[0][$i][1], strlen($matches[0][$i][0]));
+                }
+            }
+            $choices = explode('|', $s);
+            return $choices[array_rand($choices)];
+        }
+
+        $text = $_POST['text'];
+        session_start();
+        $_SESSION['preview'] = unspun($text);
+        echo "OK";
+    }
+
+    public function showPreview() {
+        session_start();
+        $data['output'] = nl2br($_SESSION['preview']);
+        $this->load->view('pages/projects_output', $data);
+    }
+
     public function view($id) {
         $project = $this->projects_model->getProject($id);
         if ($project != null) {
