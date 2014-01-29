@@ -1,4 +1,9 @@
 <div class="row">
+    <div class="col-lg-10">
+        <div id="mainMessage" class="alert-success"></div>
+    </div>
+</div>
+<div class="row">
     <div class="col-lg-10 col-md-10">
         <div class="btn-group">
             <div class="btn-group">
@@ -64,6 +69,8 @@
             </table>
         </div>
     </div>
+
+    <a href="<?php echo base_url() . "projects/showPreview"; ?>"id="showPreview" style="display: none;" target="_blank"></a>
 </div>
 
 <div class="modal fade" id="newArticleMultipleModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -297,10 +304,48 @@
                     </div>
                 </form>
                 <form id='genArticleFormOutput' style='display:none;' class="form-horizontal" role="form">
-                    <button type="button" id='gaSaveBtn' class="btn btn-success pull-left"><i class="fa fa-save"></i> Save</button>
-                    <button type="button" id="gaRefreshBtn" class="btn btn-primary pull-right"><i class='fa fa-refresh'></i> Generate Again</button>
-                    <div class="clearfix"></div>
-                    <div class='spacer-sm'></div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button type="button" id='gaSaveBtn' class="btn btn-success pull-left"><i class="fa fa-save"></i> Save</button>
+                            <div class="checkbox col-sm-4">
+                                <label>
+                                    <input style="margin-left: 10px;" id="gaPostCheck" type="checkbox" /> Post on wordpress blog
+                                </label>
+                            </div>
+                            <div class="btn-group pull-right">
+                                <button type="button" id="gaPreviewBtn" class="btn btn-default"><i class='fa fa-eye'></i> Preview</button>
+                                <button type="button" id="gaRefreshBtn" class="btn btn-primary"><i class='fa fa-refresh'></i> Generate Again</button>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class='spacer-sm'></div>
+                        </div>
+                    </div>
+                    <div class="row" id="gaPostDiv" style="display: none;">
+                        <div class="form-group">
+                            <label for="output" class="col-sm-3 control-label">How many blogs?</label>
+                            <div class="col-sm-5">
+                                <select id="gaNoBlogs" class="form-control">
+                                    <?php for ($i = 1; $i <= 5; $i++) { ?>
+                                        <option value="<?php echo $i ?>"><?php echo $i ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="output" class="col-sm-3 control-label">Type of Blogs 
+                            </label>
+                            <div class="checkbox col-sm-2">
+                                <label>
+                                    <input style="margin-left: 10px;" id="gaAdmin" type="checkbox" checked /> Admin 
+                                </label>
+                            </div>
+                            <div class="checkbox col-sm-2">
+                                <label>
+                                    <input style="margin-left: 10px;" id="gaPublic" type="checkbox"> Public
+                                </label>
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-group">
                         <label for="output" class="col-sm-2 control-label">Name</label>
                         <div class="col-sm-10">
@@ -311,59 +356,12 @@
                         <label for="output" class="col-sm-2 control-label">Generated Title(s)</label>
                         <div class="col-sm-10">
                             <textarea class="form-control" id="gaGeneratedTitles" style="min-height: 80px;"></textarea>
-                            <button type="button" class="btn btn-default btn-xs pull-right" id="gaTitlePreview"><i class="fa fa-eye"></i> Preview</button>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="output" class="col-sm-2 control-label">Generated Content</label>
                         <div class="col-sm-10">
                             <textarea class="form-control" id="gaGeneratedContents" style="min-height: 150px;"></textarea>
-                            <button type="button" class="btn btn-default btn-xs pull-right" id="gaContentPreview"><i class="fa fa-eye"></i> Preview</button>
-                        </div>
-                    </div>
-                    <div class="panel-group" id="accordion">
-                        <div class="panel panel-default">
-                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" 
-                               style="color: white; text-decoration-line: none">
-                                <button type="button" class="btn btn-danger btn-block panel-title">
-                                    <i class="fa fa-share"></i> Post on random WordPress Blogs!
-                                </button>
-                            </a>
-                            <div id="collapseOne" class="panel-collapse collapse">
-                                <div class="panel-body">
-                                    <div class="alert alert-info" id="gaPostMessage">
-                                        <i class="fa fa-info"></i> This will post your generated article in a random available blogs. 
-                                        After posting, it will show you the full URL of the posted articles.
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="output" class="col-sm-4 control-label">How many blogs?</label>
-                                        <div class="col-sm-8">
-                                            <select id="gaNoBlogs" class="form-control">
-                                                <?php for ($i = 1; $i <= 5; $i++) { ?>
-                                                    <option value="<?php echo $i ?>"><?php echo $i ?></option>
-                                                <?php } ?>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="output" class="col-sm-4 control-label">Type of Blogs 
-                                        </label>
-                                        <div class="checkbox col-sm-2">
-                                            <label>
-                                                <input style="margin-left: 10px;" id="gaAdmin" type="checkbox" checked /> Admin 
-                                            </label>
-                                        </div>
-                                        <div class="checkbox col-sm-2">
-                                            <label>
-                                                <input style="margin-left: 10px;" id="gaPublic" type="checkbox"> Public
-                                            </label>
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <button type="button" class="btn btn-danger pull-right" id="gaPostBtn">Post</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </form>
@@ -472,10 +470,48 @@
                     </div>
                 </form>
                 <form id='gabpArticleFormOutput' style='display:none;' class="form-horizontal" role="form">
-                    <button type="button" id='gabpSaveBtn' class="btn btn-success pull-left"><i class="fa fa-save"></i> Save</button>
-                    <button type="button" id="gabpRefreshBtn" class="btn btn-primary pull-right"><i class='fa fa-refresh'></i> Generate Again</button>
-                    <div class="clearfix"></div>
-                    <div class='spacer-sm'></div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button type="button" id='gabpSaveBtn' class="btn btn-success pull-left"><i class="fa fa-save"></i> Save</button>
+                            <div class="checkbox col-sm-4">
+                                <label>
+                                    <input style="margin-left: 10px;" id="gabpPostCheck" type="checkbox" /> Post on wordpress blog
+                                </label>
+                            </div>
+                            <div class="btn-group pull-right">
+                                <button type="button" id="gabpPreviewBtn" class="btn btn-default"><i class='fa fa-eye'></i> Preview</button>
+                                <button type="button" id="gabpRefreshBtn" class="btn btn-primary"><i class='fa fa-refresh'></i> Generate Again</button>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class='spacer-sm'></div>
+                        </div>
+                    </div>
+                    <div class="row" id="gabpPostDiv" style="display: none;">
+                        <div class="form-group">
+                            <label for="output" class="col-sm-3 control-label">How many blogs?</label>
+                            <div class="col-sm-5">
+                                <select id="gabpNoBlogs" class="form-control">
+                                    <?php for ($i = 1; $i <= 5; $i++) { ?>
+                                        <option value="<?php echo $i ?>"><?php echo $i ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="output" class="col-sm-3 control-label">Type of Blogs 
+                            </label>
+                            <div class="checkbox col-sm-2">
+                                <label>
+                                    <input style="margin-left: 10px;" id="gabpAdmin" type="checkbox" checked /> Admin 
+                                </label>
+                            </div>
+                            <div class="checkbox col-sm-2">
+                                <label>
+                                    <input style="margin-left: 10px;" id="gabpPublic" type="checkbox"> Public
+                                </label>
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-group">
                         <label for="output" class="col-sm-2 control-label">Name</label>
                         <div class="col-sm-10">
@@ -486,59 +522,12 @@
                         <label for="output" class="col-sm-2 control-label">Generated Title(s)</label>
                         <div class="col-sm-10">
                             <textarea class="form-control" id="gabpGeneratedTitles"></textarea>
-                            <button type="button" class="btn btn-default btn-xs pull-right" id="gabpTitlePreview"><i class="fa fa-eye"></i> Preview</button>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="output" class="col-sm-2 control-label">Generated Content</label>
                         <div class="col-sm-10">
                             <textarea class="form-control" id="gabpGeneratedContents" style="min-height: 200px;"></textarea>
-                            <button type="button" class="btn btn-default btn-xs pull-right" id="gabpContentPreview"><i class="fa fa-eye"></i> Preview</button>
-                        </div>
-                    </div>
-                    <div class="panel-group" id="accordion">
-                        <div class="panel panel-default">
-                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" 
-                               style="color: white; text-decoration-line: none">
-                                <button type="button" class="btn btn-danger btn-block panel-title">
-                                    <i class="fa fa-share"></i> Post on random WordPress Blogs!
-                                </button>
-                            </a>
-                            <div id="collapseTwo" class="panel-collapse collapse">
-                                <div class="panel-body">
-                                    <div class="alert alert-info" id="gabpPostMessage">
-                                        <i class="fa fa-info"></i> This will post your generated article in a random available blogs. 
-                                        After posting, it will show you the full URL of the posted articles.
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="output" class="col-sm-4 control-label">How many blogs?</label>
-                                        <div class="col-sm-8">
-                                            <select id="gabpNoBlogs" class="form-control">
-                                                <?php for ($i = 1; $i <= 5; $i++) { ?>
-                                                    <option value="<?php echo $i ?>"><?php echo $i ?></option>
-                                                <?php } ?>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="output" class="col-sm-4 control-label">Type of Blogs 
-                                        </label>
-                                        <div class="checkbox col-sm-2">
-                                            <label>
-                                                <input style="margin-left: 10px;" id="gabpAdmin" type="checkbox" checked /> Admin 
-                                            </label>
-                                        </div>
-                                        <div class="checkbox col-sm-2">
-                                            <label>
-                                                <input style="margin-left: 10px;" id="gabpPublic" type="checkbox"> Public
-                                            </label>
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <button type="button" class="btn btn-danger pull-right" id="gabpPostBtn">Post</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </form>

@@ -311,7 +311,7 @@
                     </div>
                     <div class="form-group">
                         <label for="title">Answer</label>
-                        <input type="text" class="form-control" id="nfAnswer" placeholder="Answer">
+                        <textarea class="form-control" id="nfAnswer" placeholder="Answer"></textarea>
                     </div>
                 </form>
             </div>

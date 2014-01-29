@@ -11,7 +11,7 @@ $(document).ready(function() {
 function setDefaultValues() {
     $("#gaAddedCode").popover();
     $("#gabpAddedCode").popover();
-    
+
     $("select#gabpNoBlogs option").each(function() {
         this.selected = (this.text === '3');
     });
@@ -272,7 +272,7 @@ function activateGenerateArticlesByProject() {
         $("#gabpGenerateBtn").show();
         $("#gabpCheckDiv").fadeIn('fast');
         $("#gabpPostMessage").removeClass().addClass("alert alert-info")
-                             .html("<i class='fa fa-info'></i> This will post your generated article in a random available blogs. After posting, it will show you the full URL of the posted articles.");
+                .html("<i class='fa fa-info'></i> This will post your generated article in a random available blogs. After posting, it will show you the full URL of the posted articles.");
     }
     $("#gabpGenerateBtn").click(function() {
         if (validateGenerateArticlesByProject() === true) {
@@ -390,27 +390,95 @@ function activateGenerateArticlesByProject() {
                 $("#gabpMessage").removeClass().addClass('alert alert-danger')
                         .html("<i class='fa fa-exclamation-circle'></i> Project name is required. Characters should be atleast 4 characters.");
             } else {
-                $.ajax({
-                    url: base_url + 'projects/add',
-                    data: {'title': $("#gabpGeneratedTitles").val(), 'content': $("#gabpGeneratedContents").val(),
-                        'category': $("#gabpCategory").val(), 'name': $("#gabpName").val()},
-                    cache: false,
-                    type: 'post',
-                    success: function(data) {
-                        if (data === "OK") {
-                            refresh();
-                            $("#genABPModal").modal('hide');
-                            var oTable = $('#projects').dataTable();
-                            oTable.fnReloadAjax();
-                            toastr.success('Saving Project Successful!');
-                        } else {
-                            alert(data);
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        alert(error);
+                if ($("#gabpPostCheck").is(":checked")) {
+                    $("#gabpPostBtn").prop('disabled', true).html("<img src='" + base_url + "resources/images/ajax-loader.gif' />");
+                    if (!$("#gabpAdmin").is(":checked") && !$("#gabpPublic").is(":checked")) {
+                        $("#gabpPostMessage").removeClass().addClass("alert alert-danger")
+                                .html("<i class='fa fa-exclamation-circle'></i> Please select atleast 1 blog type.");
+                    } else {
+                        $("#gabpSaveBtn").prop('disabled', true).html("<img src='" + base_url + "resources/images/ajax-loader.gif' />");
+                        $.ajax({
+                            url: base_url + 'projects/add',
+                            data: {'title': $("#gabpGeneratedTitles").val(), 'content': $("#gabpGeneratedContents").val(),
+                                'category': $("#gabpCategory").val(), 'name': $("#gabpName").val()},
+                            cache: false,
+                            type: 'post',
+                            success: function(data) {
+                                if (data === "OK") {
+                                    var type = "";
+                                    if ($("#gabpAdmin").is(":checked") && $("#gabpPublic").is(":checked")) {
+                                        type = "both";
+                                    } else if ($("#gabpAdmin").is(":checked") && !$("#gabpPublic").is(":checked")) {
+                                        type = "admin";
+                                    } else if (!$("#gabpAdmin").is(":checked") && $("#gabpPublic").is(":checked")) {
+                                        type = "public";
+                                    }
+                                    $.ajax({
+                                        url: base_url + "projects/post",
+                                        data: {'title': $("#gabpGeneratedTitles").val(), 'content': $("#gabpGeneratedContents").val(),
+                                            'type': type, 'blogCount': $("#gabpNoBlogs").val()},
+                                        cache: false,
+                                        type: 'post',
+                                        success: function(data) {
+                                            //get the ids
+                                            var string = data;
+                                            var links = "";
+                                            for (var i = 0; i < parseInt($("#gabpNoBlogs").val()); i++) {
+                                                var startTag = string.indexOf("<string>") + 8;
+                                                var endTag = string.indexOf("</string>");
+                                                var id = string.slice(startTag, endTag);
+                                                startTag = string.indexOf("<url>") + 5;
+                                                endTag = string.indexOf("</url>");
+                                                var url = string.slice(startTag, endTag);
+                                                string = string.substr(endTag + 8, string.length);
+                                                links += "<p><a href='" + url + "?p=" + id + "' target='_blank'>" + url + "?p=" + id + "</></p>";
+                                            }
+                                            $("#mainMessage").removeClass().addClass("alert alert-success")
+                                                    .html("<i class='fa fa-check'></i> Posting to WordPress successful!" + links);
+                                            $("#gabpSaveBtn").prop('disabled', false).html("Post");
+                                            refresh();
+                                            $("#genABPModal").modal('hide');
+                                            var oTable = $('#projects').dataTable();
+                                            oTable.fnReloadAjax();
+                                            toastr.success('Saving Project Successful!');
+                                        },
+                                        error: function(xhr, status, error) {
+                                            alert(error);
+                                        }
+                                    });
+                                } else {
+                                    alert(data);
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                alert(error);
+                            }
+                        });
                     }
-                });
+                } else {
+                    $.ajax({
+                        url: base_url + 'projects/add',
+                        data: {'title': $("#gabpGeneratedTitles").val(), 'content': $("#gabpGeneratedContents").val(),
+                            'category': $("#gabpCategory").val(), 'name': $("#gabpName").val()},
+                        cache: false,
+                        type: 'post',
+                        success: function(data) {
+                            if (data === "OK") {
+                                refresh();
+                                $("#genABPModal").modal('hide');
+                                var oTable = $('#projects').dataTable();
+                                oTable.fnReloadAjax();
+                                toastr.success('Saving Project Successful!');
+                            } else {
+                                alert(data);
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            alert(error);
+                        }
+                    });
+                }
+
             }
         }
     });
@@ -536,7 +604,7 @@ function activateGenerateArticles() {
         $("#gaGenerateBtn").show();
         $("#gaCheckDiv").fadeIn('fast');
         $("#gaPostMessage").removeClass().addClass("alert alert-info")
-                             .html("<i class='fa fa-info'></i> This will post your generated article in a random available blogs. After posting, it will show you the full URL of the posted articles.");
+                .html("<i class='fa fa-info'></i> This will post your generated article in a random available blogs. After posting, it will show you the full URL of the posted articles.");
     }
 
     $("#gaSaveBtn").click(function() {
@@ -548,27 +616,96 @@ function activateGenerateArticles() {
                 $("#gaMessage").removeClass().addClass('alert alert-danger')
                         .html("<i class='fa fa-exclamation-circle'></i> Project name is required. Characters should be atleast 4 characters.");
             } else {
-                $.ajax({
-                    url: base_url + 'projects/add',
-                    data: {'title': $("#gaGeneratedTitles").val(), 'content': $("#gaGeneratedContents").val(),
-                        'category': $("#gaCategory").val(), 'name': $("#gaName").val()},
-                    cache: false,
-                    type: 'post',
-                    success: function(data) {
-                        if (data === "OK") {
-                            refresh();
-                            $("#genArticleModal").modal('hide');
-                            var oTable = $('#projects').dataTable();
-                            oTable.fnReloadAjax();
-                            toastr.success('Saving Project Successful!');
-                        } else {
-                            alert(data);
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        alert(error);
+                if ($("#gaPostCheck").is(":checked")) {
+                    if (!$("#gaAdmin").is(":checked") && !$("#gaPublic").is(":checked")) {
+                        $("#gaPostMessage").removeClass().addClass("alert alert-danger")
+                                .html("<i class='fa fa-exclamation-circle'></i> Please select atleast 1 blog type.");
+                    } else {
+                        $("#gaSaveBtn").prop('disabled', true).html("<img src='" + base_url + "resources/images/ajax-loader.gif' />");
+                        $.ajax({
+                            url: base_url + 'projects/add',
+                            data: {'title': $("#gaGeneratedTitles").val(), 'content': $("#gaGeneratedContents").val(),
+                                'category': $("#gaCategory").val(), 'name': $("#gaName").val()},
+                            cache: false,
+                            type: 'post',
+                            success: function(data) {
+                                if (data === "OK") {
+                                    var type = "";
+                                    if ($("#gaAdmin").is(":checked") && $("#gaPublic").is(":checked")) {
+                                        type = "both";
+                                    } else if ($("#gaAdmin").is(":checked") && !$("#gaPublic").is(":checked")) {
+                                        type = "admin";
+                                    } else if (!$("#gaAdmin").is(":checked") && $("#gaPublic").is(":checked")) {
+                                        type = "public";
+                                    }
+                                    $.ajax({
+                                        url: base_url + "projects/post",
+                                        data: {'title': $("#gaGeneratedTitles").val(), 'content': $("#gaGeneratedContents").val(),
+                                            'type': type, 'blogCount': $("#gaNoBlogs").val()},
+                                        cache: false,
+                                        type: 'post',
+                                        success: function(data) {
+                                            //get the ids
+                                            var string = data;
+                                            var links = "";
+                                            for (var i = 0; i < parseInt($("#gaNoBlogs").val()); i++) {
+                                                var startTag = string.indexOf("<string>") + 8;
+                                                var endTag = string.indexOf("</string>");
+                                                var id = string.slice(startTag, endTag);
+                                                startTag = string.indexOf("<url>") + 5;
+                                                endTag = string.indexOf("</url>");
+                                                var url = string.slice(startTag, endTag);
+                                                string = string.substr(endTag + 8, string.length);
+                                                links += "<p><a href='" + url + "?p=" + id + "' target='_blank'>" + url + "?p=" + id + "</></p>";
+                                            }
+                                            $("#mainMessage").removeClass().addClass("alert alert-success")
+                                                    .html("<i class='fa fa-check'></i> Posting to WordPress successful!" + links);
+                                            $("#gaSaveBtn").prop('disabled', false).html("<i class='fa fa-save'></i> Save");
+                                            $("#genArticleModal").modal('hide');
+                                            refresh();
+                                            var oTable = $('#projects').dataTable();
+                                            oTable.fnReloadAjax();
+                                            toastr.success('Saving Project Successful!');
+                                            $("#gaSaveBtn").prop('disabled', false).html("<i class='fa fa-save'></i> Save");
+                                        },
+                                        error: function(xhr, status, error) {
+                                            alert(error);
+                                        }
+                                    });
+                                } else {
+                                    alert(data);
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                alert(error);
+                            }
+                        });
+
                     }
-                });
+                } else {
+                    $.ajax({
+                        url: base_url + 'projects/add',
+                        data: {'title': $("#gaGeneratedTitles").val(), 'content': $("#gaGeneratedContents").val(),
+                            'category': $("#gaCategory").val(), 'name': $("#gaName").val()},
+                        cache: false,
+                        type: 'post',
+                        success: function(data) {
+                            if (data === "OK") {
+                                refresh();
+                                $("#genArticleModal").modal('hide');
+                                var oTable = $('#projects').dataTable();
+                                oTable.fnReloadAjax();
+                                toastr.success('Saving Project Successful!');
+                            } else {
+                                alert(data);
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            alert(error);
+                        }
+                    });
+                }
+
             }
         }
     });
