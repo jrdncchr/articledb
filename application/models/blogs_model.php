@@ -95,18 +95,18 @@ class Blogs_Model extends CI_Model {
         }
     }
 
-    function addBlog($blog) {
+    function add($blog) {
         try {
             $this->db->insert('blogs', $blog);
             echo "OK";
         } catch (Exception $e) {
-            echo "ADD BLOG ERROR: " . $e;
+            echo "ADD BLOG ERROR: " . $e->message();
         }
     }
 
-    function updateBlog($blog) {
+    function update($blog) {
         try {
-            $this->db->where('id', $blog->id);
+            $this->db->where('id', $blog['id']);
             $this->db->update('blogs', $blog);
             echo "OK";
         } catch (Exception $e) {
@@ -114,7 +114,7 @@ class Blogs_Model extends CI_Model {
         }
     }
 
-    function deleteBlog($id) {
+    function delete($id) {
         try {
             $this->db->where('id', $id);
             $this->db->delete('blogs');

@@ -1,11 +1,12 @@
 $(document).ready(function() {
     activateCategories();
     activateUsers();
+    activateTitles();
+    activateFaqs();
+    activateBlogs();
 });
 function activateCategories() {
     $('#categories').dataTable({
-        "bInfo": false,
-        "bPaginate": false,
         "bProcessing": true,
         "bServerSide": true,
         "sAjaxSource": base_url + "admin/getCategories",
@@ -22,13 +23,327 @@ function activateCategories() {
     activateCategoriesEvents();
 }
 
-function activateUsers() {
-    $('#users').dataTable({
-        "bInfo": false,
-        "bPaginate": false,
+function activateFaqs() {
+    $('#faqs').dataTable({
         "bProcessing": true,
         "bServerSide": true,
-        "sAjaxSource": base_url + "admin/getUsers"
+        "sAjaxSource": base_url + "admin/getFaqs",
+        "aoColumnDefs": [
+            {
+                "aTargets": [2], // Column to target
+                "mRender": function(data, type, full) {
+                    return '<button class="btn btn-danger btn-xs" onclick="deleteFaq(' + full[0] + ');"><i class="fa fa-trash-o"></i></button>\n\
+                            <button class="btn btn-primary btn-xs" onclick="updateFaq(' + full[0] + ', \'' + full[1] + '\', \'' + full[2] + '\');"><i class="fa fa-edit"></i></button>';
+                }
+            }
+        ]
+    });
+    activateAddFaqEvents();
+}
+
+function activateTitles() {
+    $('#titles').dataTable({
+        "bProcessing": true,
+        "bServerSide": true,
+        "sAjaxSource": base_url + "admin/getTitles",
+        "aoColumnDefs": [
+            {
+                "aTargets": [2], // Column to target
+                "mRender": function(data, type, full) {
+                    return '<button class="btn btn-danger btn-xs" onclick="deleteTitleTemplate(' + full[0] + ');"><i class="fa fa-trash-o"></i></button>\n\
+                            <button class="btn btn-primary btn-xs" onclick="updateTitleTemplate(' + full[0] + ', \'' + full[1] + '\');"><i class="fa fa-edit"></i></button>';
+                }
+            }
+        ]
+    });
+    activateTitleEvents();
+}
+
+function activateBlogs() {
+    $('#blogs').dataTable({
+        "bProcessing": true,
+        "bServerSide": true,
+        "sAjaxSource": base_url + "admin/getBlogs",
+        "aoColumnDefs": [
+            {
+                "aTargets": [2], // Column to target
+                "mRender": function(data, type, full) {
+                    return '<button class="btn btn-danger btn-xs" onclick="deleteBlog(' + full[0] + ');"><i class="fa fa-trash-o"></i></button>\n\
+                            <button class="btn btn-primary btn-xs" onclick="updateBlog(' + full[0] + ', \'' + full[1] + '\');"><i class="fa fa-edit"></i></button>';
+                }
+            }
+        ]
+    });
+    activateAddBlogEvents();
+}
+
+function activateAddBlogEvents() {
+    $("#addBlogBtn").click(function() {
+        $("#nbUrl").val("");
+        $("#nbUsername").val("");
+        $("#nbPassword").val("");
+        $("#nbHead").html("Add Blog");
+        $("#ebBtn").hide();
+        $("#nbBtn").show();
+    });
+
+    $("#nbBtn").click(function() {
+        if ($("#nbUrl").val() === "" || $("#nbUsername") === "" || $("#nbPassword").val() === "") {
+            $("#nbMessage").removeClass().addClass('alert alert-danger')
+                    .html("<i class='fa fa-exclamation-circle'></i> A required field is empty.");
+        } else {
+            $.ajax({
+                url: base_url + "admin/addBlog",
+                data: {'url': $("#nbUrl").val(), 'username': $("#nbUsername").val(), 'password': $("#nbPassword").val()},
+                cache: false,
+                type: 'post',
+                success: function(data) {
+                    if (data === "OK") {
+                        var oTable = $('#blogs').dataTable();
+                        oTable.fnReloadAjax();
+                        $("#blogModal").modal('hide');
+                        toastr.success('Adding Blog Successful!');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert(error);
+                }
+            });
+        }
+    });
+}
+
+function updateBlog(id, url) {
+    $("#blogModal").modal('show');
+    $("#nbUrl").val(url);
+    $("#nbUsername").val("");
+    $("#nbPassword").val("");
+    $("#nbHead").html("Edit Blog");
+    $("#nbBtn").hide();
+    $("#ebBtn").show();
+
+    $("#ebBtn").unbind('click').click(function() {
+        if ($("#nbUrl").length === "" || $("#nbUsername") === "" || $("#nbPassword").val() === "") {
+            $("#nbMessage").removeClass().addClass('alert alert-danger')
+                    .html("<i class='fa fa-exclamation-circle'></i> A required field is empty.");
+        } else {
+            $("#nbMessage").removeClass().html("");
+            $.ajax({
+                url: base_url + 'admin/updateBlog',
+                data: {'id': id, 'url': $("#nbUrl").val(), 'username': $("#nbUsername").val(), 'password': $("#nbPassword").val()},
+                type: 'post',
+                cache: false,
+                success: function(data) {
+                    if (data === "OK") {
+                        var oTable = $('#blogs').dataTable();
+                        oTable.fnReloadAjax();
+                        $("#blogModal").modal('hide');
+                        toastr.success('Updating Blog Successful!');
+                    } else {
+                        alert(data);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert(error);
+                }
+            });
+        }
+    });
+}
+
+function deleteBlog(id) {
+    var verify = confirm('Are you sure to delete this blog?');
+    if (verify) {
+        $.ajax({
+            url: base_url + 'admin/deleteBlog',
+            data: {'id': id},
+            type: 'post',
+            cache: false,
+            success: function(data) {
+                if (data === "OK") {
+                    var oTable = $('#blogs').dataTable();
+                    oTable.fnReloadAjax();
+                    toastr.success('Deleting blog Successful!');
+                }
+            }
+        });
+    }
+}
+
+function activateAddFaqEvents() {
+    $("#addFaqBtn").click(function() {
+        $("#nfQuestion").val("");
+        $("#nfAnswer").val("");
+        $("#nbHead").html("Add FAQ");
+        $("#efBtn").hide();
+        $("#nfBtn").show();
+    });
+
+    $("#nfBtn").click(function() {
+        if ($("#nfQuestion").val() === "" || $("#nfAnswer") === "") {
+            $("#nfMessage").removeClass().addClass('alert alert-danger')
+                    .html("<i class='fa fa-exclamation-circle'></i> A required field is empty.");
+        } else {
+            $.ajax({
+                url: base_url + "admin/addFaq",
+                data: {'question': $("#nfQuestion").val(), 'answer': $("#nfAnswer").val()},
+                cache: false,
+                type: 'post',
+                success: function(data) {
+                    if (data === "OK") {
+                        var oTable = $('#faqs').dataTable();
+                        oTable.fnReloadAjax();
+                        $("#faqModal").modal('hide');
+                        toastr.success('Adding FAQ Successful!');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert(error);
+                }
+            });
+        }
+    });
+}
+
+function updateFaq(id, question, answer) {
+    $("#faqModal").modal('show');
+    $("#nfQuestion").val(question);
+    $("#nfAnswer").val(answer);
+    $("#nfHead").html("Edit FAQ");
+    $("#nfBtn").hide();
+    $("#efBtn").show();
+
+    $("#efBtn").unbind('click').click(function() {
+        if ($("#nfQuestion").length === "" || $("#nfPassword") === "") {
+            $("#nfMessage").removeClass().addClass('alert alert-danger')
+                    .html("<i class='fa fa-exclamation-circle'></i> A required field is empty.");
+        } else {
+            $("#nfMessage").removeClass().html("");
+            $.ajax({
+                url: base_url + 'admin/updateFaq',
+                data: {'id': id, 'question': $("#nfQuestion").val(), 'answer': $("#nfAnswer").val()},
+                type: 'post',
+                cache: false,
+                success: function(data) {
+                    if (data === "OK") {
+                        var oTable = $('#faqs').dataTable();
+                        oTable.fnReloadAjax();
+                        $("#faqModal").modal('hide');
+                        toastr.success('Updating FAQ Successful!');
+                    } else {
+                        alert(data);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert(error);
+                }
+            });
+        }
+    });
+}
+
+function deleteFaq(id) {
+    var verify = confirm('Are you sure to delete this FAQ?');
+    if (verify) {
+        $.ajax({
+            url: base_url + 'admin/deleteFaq',
+            data: {'id': id},
+            type: 'post',
+            cache: false,
+            success: function(data) {
+                if (data === "OK") {
+                    var oTable = $('#faqs').dataTable();
+                    oTable.fnReloadAjax();
+                    toastr.success('Deleting FAQ Successful!');
+                }
+            }
+        });
+    }
+}
+
+function activateTitleEvents() {
+    $("#addTitleBtn").click(function() {
+        $("#ntTitle").val("");
+        $("#ntHead").html("Add Title Template");
+        $("#etBtn").hide();
+        $("#ntBtn").show();
+    });
+
+    $("#ntBtn").click(function() {
+        var title = $("#ntTitle").val();
+        if (title.length > 2) {
+            $("#ntMessage").removeClass().html("");
+            $.ajax({
+                url: base_url + 'admin/addTitleTemplate',
+                data: {'title': title},
+                type: 'post',
+                cache: false,
+                success: function(data) {
+                    if (data === "OK") {
+                        var oTable = $('#titles').dataTable();
+                        oTable.fnReloadAjax();
+                        $("#titleModal").modal('hide');
+                        $("#ntTitle").val("");
+                        toastr.success('Adding Title Template Successful!');
+                    }
+                }
+            });
+        } else {
+            $("#ntMessage").removeClass().addClass('alert alert-danger')
+                    .html("<i class='fa fa-exclamation-circle'></i> Title cannot be empty.");
+        }
+    });
+}
+
+function deleteTitleTemplate(id) {
+    var verify = confirm('Are you sure to delete this title template?');
+    if (verify) {
+        $.ajax({
+            url: base_url + 'admin/deleteTitleTemplate',
+            data: {'id': id},
+            type: 'post',
+            cache: false,
+            success: function(data) {
+                if (data === "OK") {
+                    var oTable = $('#titles').dataTable();
+                    oTable.fnReloadAjax();
+                    toastr.success('Deleting title template Successful!');
+                }
+            }
+        });
+    }
+}
+
+function updateTitleTemplate(id, title) {
+    $("#titleModal").modal('show');
+    $("#ntTitle").val(title);
+    $("#ntHead").html("Edit Title Template");
+    $("#ntBtn").hide();
+    $("#etBtn").show();
+
+    $("#etBtn").unbind('click').click(function() {
+        var title = $("#ntTitle").val();
+        if (title.length > 2) {
+            $("#ntMessage").removeClass().html("");
+            $.ajax({
+                url: base_url + 'admin/updateTitleTemplate',
+                data: {'id': id, 'title': title},
+                type: 'post',
+                cache: false,
+                success: function(data) {
+                    if (data === "OK") {
+                        var oTable = $('#titles').dataTable();
+                        oTable.fnReloadAjax();
+                        $("#titleModal").modal('hide');
+                        $("#ntTitle").val("");
+                        toastr.success('Updating title template Successful!');
+                    }
+                }
+            });
+        } else {
+            $("#ncMessage").removeClass().addClass('alert alert-danger')
+                    .html("<i class='fa fa-exclamation-circle'></i> Category name must be atleast 3 characters.");
+        }
     });
 }
 
@@ -115,6 +430,14 @@ function updateCategory(id, name) {
             $("#ncMessage").removeClass().addClass('alert alert-danger')
                     .html("<i class='fa fa-exclamation-circle'></i> Category name must be atleast 3 characters.");
         }
+    });
+}
+
+function activateUsers() {
+    $('#users').dataTable({
+        "bProcessing": true,
+        "bServerSide": true,
+        "sAjaxSource": base_url + "admin/getUsers"
     });
 }
 

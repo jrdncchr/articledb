@@ -35,7 +35,7 @@ class TitleTemplate_Model extends CI_Model {
         }
     }
 
-    function addTitleTemplate($title) {
+    function add($title) {
         try {
             $this->db->insert('title_templates', array('title' => $title));
             echo "OK";
@@ -44,7 +44,7 @@ class TitleTemplate_Model extends CI_Model {
         }
     }
 
-    function updateTitleTemplate($id, $title) {
+    function update($id, $title) {
         try {
             $this->db->where('id', $id);
             $this->db->update('title_templates', array('title' => $title));
@@ -54,7 +54,7 @@ class TitleTemplate_Model extends CI_Model {
         }
     }
 
-    function deleteTitleTemp($id) {
+    function delete($id) {
         try {
             $this->db->where('id', $id);
             $this->db->delete('title_templates');

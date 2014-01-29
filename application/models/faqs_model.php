@@ -19,8 +19,8 @@ class Faqs_Model extends CI_Model {
         echo "OK";
     }
     
-    public function update($id, $faq) {
-        $this->db->where('id', $id);
+    public function update($faq) {
+        $this->db->where('id', $faq['id']);
         $this->db->update('faqs', $faq);
         echo "OK";
     }
