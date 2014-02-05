@@ -7,7 +7,6 @@ body {
     min-width: 50%;/* your width */
 }
 
-
 .spacer {
     margin-top: 40px;
 }
@@ -36,6 +35,10 @@ body {
     text-shadow: 1px 0px 20px white;
 }
 
+a {
+  color: black;  
+}
+
 a:link{
     transition: all 0.3s ease-in;
 }
@@ -48,11 +51,6 @@ a:hover{
 }
 /* Custom Navbar */
 
-.navbar-custom {
-    background-color: #3D3D3D;
-    border-color: #3D3D3D;
-}
-
 .navbar-custom .navbar-nav > li > a {
     color:#fff;
 }
@@ -64,9 +62,6 @@ a:hover{
     color:#fff;
     font-weight: bold;
 }
-
-/* Sticky footer styles
--------------------------------------------------- */
 
 html,
 body {
@@ -96,7 +91,7 @@ body {
 /* Not required for template or sticky footer method. */
 
 #wrap > .container {
-    padding: 60px 15px 0;
+    padding: 80px 15px 0;
 }
 .container .text-muted {
     margin: 20px 0;
@@ -110,3 +105,13 @@ body {
 code {
     font-size: 80%;
 }
+
+.spacer {
+    margin-top: 10px;
+}
+
+.helper {
+    cursor: pointer;
+}
+
+

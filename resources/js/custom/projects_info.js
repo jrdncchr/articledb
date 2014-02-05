@@ -1,20 +1,7 @@
 $(document).ready(function() {
-    autoHeightContent();
     activateUpdate();
     activateDelete();
 });
-
-function autoHeightContent() {
-    $('#readContent').on('keyup', function(e) {
-        $(this).css('height', 'auto');
-        $(this).height(this.scrollHeight);
-    });
-    $('#readContent').keyup();
-
-    $("#readContent").keydown(function(e) {
-        e.preventDefault();
-    });
-}
 
 function activateUpdate() {
     $("#showUpdateBtn").click(function() {

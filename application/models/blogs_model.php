@@ -37,25 +37,25 @@ class Blogs_Model extends CI_Model {
     }
 
     public function postArticle($blog, $post) {
-        $xmlrpc_url = $blog->url . "xmlrpc.php";
-        $xmlrpc_username = $blog->username; // User setup with contributor role
-        $xmlrpc_password = $blog->password; // The users password
+        require_once OTHER . "IXR_Library.php";
+        $client = new IXR_Client($blog->url . 'xmlrpc.php');
+        
+        $USER = $blog->username;
+        $PASS = $blog->password;
 
-        $content = array(
-            'post_title' => $this->unspun($post['title']),
-            'post_content' => $this->unspun($post['content']),
-            'post_status' => 'publish'
-        );
-
-        /** Encode the request * */
-        $request = xmlrpc_encode_request("wp.newPost", array(1, $xmlrpc_username, $xmlrpc_password, $content));
-
-        /** Making the request to wordpress XMLRPC * */
-        $xml_response = $this->send($request, $xmlrpc_url);
-
-        $response = xmlrpc_decode($xml_response);
-        /** Printing the response on to the console * */
-        return $response;
+        $content['title'] = $this->unspun($post['title']);
+        $content['description'] = $this->unspun($post['content']);
+        
+        if (!$client->query('metaWeblog.newPost','', $USER,$PASS, $content, true)) 
+        {
+            die( 'Error while creating a new post' . $client->getErrorCode() ." : ". $client->getErrorMessage());  
+        }
+        $ID =  $client->getResponse();
+        
+        if($ID)
+        {
+            return $ID;
+        }
     }
 
     public function getRandomBlogs($type, $count) {

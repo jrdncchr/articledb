@@ -47,7 +47,6 @@
                 </div>
 
                 <hr />
-                <button type="button" id="cancelBtn" class="btn btn-danger pull-left">Cancel</button>
                 <button class="btn btn-success pull-right">Finish</button>
                 </form>
             </div>

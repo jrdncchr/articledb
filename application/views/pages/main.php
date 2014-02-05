@@ -4,7 +4,7 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-lg-10 col-md-10">
+    <div class="col-lg-11 col-md-11">
         <div class="btn-group">
             <div class="btn-group">
                 <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
@@ -28,6 +28,9 @@
                 </ul>
             </div>
         </div>
+        <button type="button" id="addBlogBtn" class="btn btn-default pull-right" data-toggle="modal" data-target="#addBlogModal">
+            <i class="fa fa-book"></i> <strong>Add a Blog</strong>
+        </button>
     </div>
 </div>
 <div class="row">
@@ -196,11 +199,12 @@
 
                     <div class="clearfix"></div>
                     <hr />
+
                     <div class="form-group">
                         <label for="output" class="col-sm-2 control-label">Generated Title(s)</label>
                         <div class="col-sm-10">
                             <textarea class="form-control" id="gtGeneratedTitles"></textarea>
-                            <button type="button" class="btn btn-default btn-xs pull-right" id="gtTitlePreview"><i class="fa fa-eye"></i> Preview</button>
+                            <a href="<?php echo base_url() . 'projects/showPreview'; ?>" target="_blank" id="gtTitlePreview" class="btn btn-default btn-xs pull-right"><i class='fa fa-eye'></i> Preview</a>
                         </div>
                     </div>
                 </form>
@@ -307,13 +311,13 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <button type="button" id='gaSaveBtn' class="btn btn-success pull-left"><i class="fa fa-save"></i> Save</button>
-                            <div class="checkbox col-sm-4">
+                            <div class="checkbox col-sm-5">
                                 <label>
                                     <input style="margin-left: 10px;" id="gaPostCheck" type="checkbox" /> Post on wordpress blog
                                 </label>
                             </div>
                             <div class="btn-group pull-right">
-                                <button type="button" id="gaPreviewBtn" class="btn btn-default"><i class='fa fa-eye'></i> Preview</button>
+                                <a href="<?php echo base_url() . 'projects/showPreview'; ?>" target="_blank" id="gaPreviewBtn" class="btn btn-default"><i class='fa fa-eye'></i> Preview</a>
                                 <button type="button" id="gaRefreshBtn" class="btn btn-primary"><i class='fa fa-refresh'></i> Generate Again</button>
                             </div>
                             <div class="clearfix"></div>
@@ -473,13 +477,13 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <button type="button" id='gabpSaveBtn' class="btn btn-success pull-left"><i class="fa fa-save"></i> Save</button>
-                            <div class="checkbox col-sm-4">
+                            <div class="checkbox col-sm-5">
                                 <label>
                                     <input style="margin-left: 10px;" id="gabpPostCheck" type="checkbox" /> Post on wordpress blog
                                 </label>
                             </div>
                             <div class="btn-group pull-right">
-                                <button type="button" id="gabpPreviewBtn" class="btn btn-default"><i class='fa fa-eye'></i> Preview</button>
+                                <a href="<?php echo base_url() . 'projects/showPreview'; ?>" target="_blank" id="gabpPreviewBtn" class="btn btn-default"><i class='fa fa-eye'></i> Preview</a>
                                 <button type="button" id="gabpRefreshBtn" class="btn btn-primary"><i class='fa fa-refresh'></i> Generate Again</button>
                             </div>
                             <div class="clearfix"></div>
@@ -542,6 +546,46 @@
                         <button type="button" id='gabpGenerateBtn' class="btn btn-primary pull-right">Generate</button>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addBlogModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel"><i class="fa fa-book"></i> Add a Blog</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" role="form">
+                    <div class="alert alert-info" id="abMessage"><i class="fa fa-info"></i> 
+                        Your blog will be added to the public blogs after verification.
+                    </div>
+                    <div class="form-group">
+                        <label for="input" class="col-sm-2 control-label">URL</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="abUrl" placeholder="http://www.myblog.info/"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="input" class="col-sm-2 control-label">Username</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="abUsername" placeholder="admin" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="input" class="col-sm-2 control-label">Password</label>
+                        <div class="col-sm-10">
+                            <input type="password" class="form-control" id="abPassword" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button id="abSubmitBtn" type="button" class="btn btn-success">Submit</button>
             </div>
         </div>
     </div>

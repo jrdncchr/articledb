@@ -5,204 +5,137 @@
                 <h2>Administration</h2>
                 <hr />
                 <div class="row">
-                    <div class="col-lg-12 col-md-12" id="categoriesDiv">
-                        <div class="panel-group" id="accordion">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-                                        <h4 class="panel-title">
-                                            <i class="fa fa-bars"></i> Categories
-                                        </h4>
-                                    </a>
+                    <div id="tabs">
+                        <ul>
+                            <li><a href="#categoriesTab">Categories</a></li>
+                            <li><a href="#usersTab">Users</a></li>
+                            <li><a href="#blogsTab">Blogs</a></li>
+                            <li><a href="#titleTemplatesTab">Title Templates</a></li>
+                            <li><a href="#faqsTab">Faqs</a></li>
+                        </ul>
+                        <div id="categoriesTab">
+                            <div class="row">
+                                <h3 class="col-sm-5">Categories</h3>
+                                <div class="col-sm-7">
+                                    <button type="button" id="showAddCtgBtn" class="btn btn-success pull-right" data-toggle="modal" data-target="#newCategoryModal"><i class="fa fa-plus"></i> Add</button>
                                 </div>
-                                <div id="collapseOne" class="panel-collapse collapse">
-                                    <div class="panel-body">
-                                        <h3>
-                                            Categories 
-                                            <button type="button" id="showAddCtgBtn" class="btn btn-success pull-right" data-toggle="modal" data-target="#newCategoryModal"><i class="fa fa-plus"></i> Add</button>
-                                        </h3>
-                                        <div class="table-responsive">
-                                            <table cellpadding="0" cellspacing="0" border="0" class="display table table-striped" id="categories">
-                                                <thead>
-                                                    <tr>
-                                                        <th width="10%">ID</th>
-                                                        <th width="80%">Name</th>
-                                                        <th width="10%">Actions</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td colspan="3" class="dataTables_empty">Loading data from server</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table cellpadding="0" cellspacing="0" border="0" class="display table table-striped" id="categories">
+                                    <thead>
+                                        <tr>
+                                            <th width="10%">ID</th>
+                                            <th width="80%">Name</th>
+                                            <th width="10%">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="3" class="dataTables_empty">Loading data from server</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div id="usersTab">
+                            <h3>
+                                Users 
+                            </h3>
+                            <div class="table-responsive">
+                                <table cellpadding="0" cellspacing="0" border="0" class="display table table-striped" id="users">
+                                    <thead>
+                                        <tr>
+                                            <th width="20%">Username</th>
+                                            <th width="50%">Name</th>
+                                            <th width="30%">Email</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="3" class="dataTables_empty">Loading data from server</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div id="blogsTab">
+                            <div class="row">
+                                <h3 class="col-sm-5">Blogs</h3>
+                                <div class="col-sm-7">
+                                    <button type="button" id="addBlogBtn" class="btn btn-success pull-right" data-toggle="modal" data-target="#blogModal"><i class="fa fa-plus"></i> Add</button>
                                 </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table cellpadding="0" cellspacing="0" border="0" class="display table table-striped" id="blogs">
+                                    <thead>
+                                        <tr>
+                                            <th width="10%">ID</th>
+                                            <th width="40%">URL</th>
+                                            <th width="15%">Username</th>
+                                            <th width="15%">Type</th>
+                                            <th width="15%">Status</th>
+                                            <th width="15%">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="3" class="dataTables_empty">Loading data from server</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div id="titleTemplatesTab">
+                            <div class="row">
+                                <h3 class="col-sm-5">Title Templates </h3>
+                                <div class="col-sm-7">
+                                    <button type="button" id="addTitleBtn" class="btn btn-success pull-right" data-toggle="modal" data-target="#titleModal"><i class="fa fa-plus"></i> Add</button>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table cellpadding="0" cellspacing="0" border="0" class="display table table-striped" id="titles">
+                                    <thead>
+                                        <tr>
+                                            <th width="10%">ID</th>
+                                            <th width="80%">Title</th>
+                                            <th width="10%">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="3" class="dataTables_empty">Loading data from server</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div id="faqsTab">
+                            <div class="row">
+                                <h3 class="col-sm-5">FAQs </h3>
+                                <div class="col-sm-7">
+                                    <button type="button" id="addFaqBtn" class="btn btn-success pull-right" data-toggle="modal" data-target="#faqModal"><i class="fa fa-plus"></i> Add</button>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table cellpadding="0" cellspacing="0" border="0" class="display table table-striped" id="faqs">
+                                    <thead>
+                                        <tr>
+                                            <th width="10%">ID</th>
+                                            <th width="80%">Question</th>
+                                            <th width="10%">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="3" class="dataTables_empty">Loading data from server</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div style="margin-top: 10px;"></div>
-                <div class="row">
-                    <div class="col-lg-12 col-md-12" id="usersDiv">
-                        <div class="panel-group" id="accordion2">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <a data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
-                                        <h4 class="panel-title">
-                                            <i class="fa fa-users"></i> Users
-                                        </h4>
-                                    </a>
-                                </div>
-                                <div id="collapseTwo" class="panel-collapse collapse">
-                                    <div class="panel-body">
-                                        <h3>
-                                            Users 
-                                        </h3>
-                                        <div class="table-responsive">
-                                            <table cellpadding="0" cellspacing="0" border="0" class="display table table-striped" id="users">
-                                                <thead>
-                                                    <tr>
-                                                        <th width="20%">Username</th>
-                                                        <th width="50%">Name</th>
-                                                        <th width="30%">Email</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td colspan="3" class="dataTables_empty">Loading data from server</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div style="margin-top: 10px;"></div>
-                <div class="row">
-                    <div class="col-lg-12 col-md-12" id="blogsDiv">
-                        <div class="panel-group" id="accordion3">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <a data-toggle="collapse" data-parent="#accordion3" href="#collapseThree">
-                                        <h4 class="panel-title">
-                                            <i class="fa fa-book"></i> Blogs
-                                        </h4>
-                                    </a>
-                                </div>
-                                <div id="collapseThree" class="panel-collapse collapse">
-                                    <div class="panel-body">
-                                        <h3>
-                                            Blogs 
-                                            <button type="button" id="addBlogBtn" class="btn btn-success pull-right" data-toggle="modal" data-target="#blogModal"><i class="fa fa-plus"></i> Add</button>
-                                        </h3>
-                                        <div class="table-responsive">
-                                            <table cellpadding="0" cellspacing="0" border="0" class="display table table-striped" id="blogs">
-                                                <thead>
-                                                    <tr>
-                                                        <th width="10%">ID</th>
-                                                        <th width="80%">URL</th>
-                                                        <th width="20%">Actions</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td colspan="3" class="dataTables_empty">Loading data from server</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div style="margin-top: 10px"></div>
-                <div class="row">
-                    <div class="col-lg-12 col-md-12" id="categoriesDiv">
-                        <div class="panel-group" id="accordion4">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <a data-toggle="collapse" data-parent="#accordion4" href="#collapseFour">
-                                        <h4 class="panel-title">
-                                            <i class="fa fa-dot-circle-o"></i> Title Templates
-                                        </h4>
-                                    </a>
-                                </div>
-                                <div id="collapseFour" class="panel-collapse collapse">
-                                    <div class="panel-body">
-                                        <h3>
-                                            Title Templates 
-                                            <button type="button" id="addTitleBtn" class="btn btn-success pull-right" data-toggle="modal" data-target="#titleModal"><i class="fa fa-plus"></i> Add</button>
-                                        </h3>
-                                        <div class="table-responsive">
-                                            <table cellpadding="0" cellspacing="0" border="0" class="display table table-striped" id="titles">
-                                                <thead>
-                                                    <tr>
-                                                        <th width="10%">ID</th>
-                                                        <th width="80%">Title</th>
-                                                        <th width="20%">Actions</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td colspan="3" class="dataTables_empty">Loading data from server</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div style="margin-top: 10px"></div>
-                <div class="row">
-                    <div class="col-lg-12 col-md-12" id="categoriesDiv">
-                        <div class="panel-group" id="accordion5">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <a data-toggle="collapse" data-parent="#accordion5" href="#collapseFive">
-                                        <h4 class="panel-title">
-                                            <i class="fa fa-question-circle"></i> FAQs
-                                        </h4>
-                                    </a>
-                                </div>
-                                <div id="collapseFive" class="panel-collapse collapse">
-                                    <div class="panel-body">
-                                        <h3>
-                                            FAQs 
-                                            <button type="button" id="addFaqBtn" class="btn btn-success pull-right" data-toggle="modal" data-target="#faqModal"><i class="fa fa-plus"></i> Add</button>
-                                        </h3>
-                                        <div class="table-responsive">
-                                            <table cellpadding="0" cellspacing="0" border="0" class="display table table-striped" id="faqs">
-                                                <thead>
-                                                    <tr>
-                                                        <th width="10%">ID</th>
-                                                        <th width="80%">Question</th>
-                                                        <th width="20%">Actions</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td colspan="3" class="dataTables_empty">Loading data from server</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div style="margin-top: 10px"></div>
             </div>
         </div>
     </div>
@@ -244,18 +177,43 @@
             </div>
             <div class="modal-body">
                 <div class="alert-danger" id="nbMessage"></div>
-                <form role="form">
+                <form class="form-horizontal" role="form">
                     <div class="form-group">
-                        <label for="title">URL</label>
-                        <input type="text" class="form-control" id="nbUrl" placeholder="Blog URL">
+                        <label for="title" class="col-sm-2 control-label">URL</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="nbUrl" placeholder="Blog URL">
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label for="title">Username</label>
-                        <input type="text" class="form-control" id="nbUsername" placeholder="Username">
+                        <label for="title" class="col-sm-2 control-label">Username</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="nbUsername" placeholder="Username">
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label for="title">Password</label>
-                        <input type="password" class="form-control" id="nbPassword" placeholder="Password">
+                        <label for="title" class="col-sm-2 control-label">Password</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="nbPassword" placeholder="Password">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="title" class="col-sm-2 control-label">Type</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" id="nbType">
+                                <option value="public">Public</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="title" class="col-sm-2 control-label">Status</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" id="nbStatus">
+                                <option value="pending">Pending</option>
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                            </select>
+                        </div>
                     </div>
                 </form>
             </div>

@@ -12,7 +12,7 @@ class Faqs extends MY_Controller {
     }
 
     public function index() {
-        $this->title = "Article Database &raquo; Faqs";
+        $this->title = "Authority Niche Links &raquo; Faqs";
         $this->data['faqs'] = $this->faqs_model->get();
         $user = $this->session->userdata('user');
         if (null != $user) {

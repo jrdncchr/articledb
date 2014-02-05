@@ -59,6 +59,8 @@ function setDefaultValues() {
 
 function activateTables() {
     $('#articles').dataTable({
+        "bJQueryUI": true,
+        "sPaginationType": "full_numbers",
         "bProcessing": true,
         "bServerSide": true,
         "sAjaxSource": base_url + "articles/get",
@@ -75,6 +77,8 @@ function activateTables() {
         }
     });
     $('#projects').dataTable({
+        "bJQueryUI": true,
+        "sPaginationType": "full_numbers",
         "bProcessing": true,
         "bServerSide": true,
         "sAjaxSource": base_url + "projects/get",
@@ -420,18 +424,10 @@ function activateGenerateArticlesByProject() {
                                         cache: false,
                                         type: 'post',
                                         success: function(data) {
-                                            //get the ids
-                                            var string = data;
+                                            var urls = data.split(',');
                                             var links = "";
-                                            for (var i = 0; i < parseInt($("#gabpNoBlogs").val()); i++) {
-                                                var startTag = string.indexOf("<string>") + 8;
-                                                var endTag = string.indexOf("</string>");
-                                                var id = string.slice(startTag, endTag);
-                                                startTag = string.indexOf("<url>") + 5;
-                                                endTag = string.indexOf("</url>");
-                                                var url = string.slice(startTag, endTag);
-                                                string = string.substr(endTag + 8, string.length);
-                                                links += "<p><a href='" + url + "?p=" + id + "' target='_blank'>" + url + "?p=" + id + "</></p>";
+                                            for (var i = 0; i < urls.length; i++) {
+                                                links += "<p><a href='" + urls[i] + "' target='_blank'>" + urls[i] + "</a></p>";
                                             }
                                             $("#mainMessage").removeClass().addClass("alert alert-success")
                                                     .html("<i class='fa fa-check'></i> Posting to WordPress successful!" + links);
@@ -645,18 +641,10 @@ function activateGenerateArticles() {
                                         cache: false,
                                         type: 'post',
                                         success: function(data) {
-                                            //get the ids
-                                            var string = data;
+                                            var urls = data.split(',');
                                             var links = "";
-                                            for (var i = 0; i < parseInt($("#gaNoBlogs").val()); i++) {
-                                                var startTag = string.indexOf("<string>") + 8;
-                                                var endTag = string.indexOf("</string>");
-                                                var id = string.slice(startTag, endTag);
-                                                startTag = string.indexOf("<url>") + 5;
-                                                endTag = string.indexOf("</url>");
-                                                var url = string.slice(startTag, endTag);
-                                                string = string.substr(endTag + 8, string.length);
-                                                links += "<p><a href='" + url + "?p=" + id + "' target='_blank'>" + url + "?p=" + id + "</></p>";
+                                            for (var i = 0; i < urls.length; i++) {
+                                                links += "<p><a href='" + urls[i] + "' target='_blank'>" + urls[i] + "</a></p>";
                                             }
                                             $("#mainMessage").removeClass().addClass("alert alert-success")
                                                     .html("<i class='fa fa-check'></i> Posting to WordPress successful!" + links);

@@ -7,8 +7,10 @@
 
     <link rel="stylesheet" href="<?php echo base_url() . CSS . 'normalize.css'; ?>">
     <link rel="stylesheet" href="<?php echo base_url() . CSS . 'bootstrap.min.css'; ?>">
+    <link rel="stylesheet" href="<?php echo base_url() . CSS . 'bootstrap-spacelab.min.css'; ?>">
     <link rel="stylesheet" href="<?php echo base_url() . CSS . 'jquery-ui-1.10.3.custom.min.css'; ?>">
     <link rel="stylesheet" href="<?php echo base_url() . CSS . 'jquery.dataTables.css'; ?>">
+    <link rel="stylesheet" href="<?php echo base_url() . CSS . 'jquery.dataTables_themeroller.css'; ?>">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.min.css">
     <link rel="stylesheet" href="<?php echo base_url() . CSS . 'style.css'; ?>">
     <link rel="stylesheet" href="<?php echo base_url() . FONT . 'css/font-awesome.min.css'; ?>">

@@ -1,4 +1,5 @@
 $(document).ready(function() {
+    $("#tabs").tabs();
     activateCategories();
     activateUsers();
     activateTitles();
@@ -7,6 +8,8 @@ $(document).ready(function() {
 });
 function activateCategories() {
     $('#categories').dataTable({
+        "bJQueryUI": true,
+        "sPaginationType": "full_numbers",
         "bProcessing": true,
         "bServerSide": true,
         "sAjaxSource": base_url + "admin/getCategories",
@@ -25,6 +28,8 @@ function activateCategories() {
 
 function activateFaqs() {
     $('#faqs').dataTable({
+        "bJQueryUI": true,
+        "sPaginationType": "full_numbers",
         "bProcessing": true,
         "bServerSide": true,
         "sAjaxSource": base_url + "admin/getFaqs",
@@ -43,6 +48,8 @@ function activateFaqs() {
 
 function activateTitles() {
     $('#titles').dataTable({
+        "bJQueryUI": true,
+        "sPaginationType": "full_numbers",
         "bProcessing": true,
         "bServerSide": true,
         "sAjaxSource": base_url + "admin/getTitles",
@@ -61,15 +68,17 @@ function activateTitles() {
 
 function activateBlogs() {
     $('#blogs').dataTable({
+        "bJQueryUI": true,
+        "sPaginationType": "full_numbers",
         "bProcessing": true,
         "bServerSide": true,
         "sAjaxSource": base_url + "admin/getBlogs",
         "aoColumnDefs": [
             {
-                "aTargets": [2], // Column to target
+                "aTargets": [5], // Column to target
                 "mRender": function(data, type, full) {
                     return '<button class="btn btn-danger btn-xs" onclick="deleteBlog(' + full[0] + ');"><i class="fa fa-trash-o"></i></button>\n\
-                            <button class="btn btn-primary btn-xs" onclick="updateBlog(' + full[0] + ', \'' + full[1] + '\');"><i class="fa fa-edit"></i></button>';
+                            <button class="btn btn-primary btn-xs" onclick="updateBlog(' + full[0] + ', \'' + full[1] + '\', \'' + full[2] + '\', \'' + full[3] + '\', \'' + full[4] + '\', \'' + full[5] + '\');"><i class="fa fa-edit"></i></button>';
                 }
             }
         ]
@@ -113,11 +122,15 @@ function activateAddBlogEvents() {
     });
 }
 
-function updateBlog(id, url) {
-    $("#blogModal").modal('show');
-    $("#nbUrl").val(url);
+function updateBlog(id, url, username, type, status, password) {
     $("#nbUsername").val("");
     $("#nbPassword").val("");
+    $("#blogModal").modal('show');
+    $("#nbUrl").val(url);
+    $("#nbUsername").val(username);
+    $("#nbPassword").val(password);
+    $("#nbType").val(type);
+    $("#nbStatus").val(status);
     $("#nbHead").html("Edit Blog");
     $("#nbBtn").hide();
     $("#ebBtn").show();
@@ -130,7 +143,7 @@ function updateBlog(id, url) {
             $("#nbMessage").removeClass().html("");
             $.ajax({
                 url: base_url + 'admin/updateBlog',
-                data: {'id': id, 'url': $("#nbUrl").val(), 'username': $("#nbUsername").val(), 'password': $("#nbPassword").val()},
+                data: {'id': id, 'url': $("#nbUrl").val(), 'username': $("#nbUsername").val(), 'password': $("#nbPassword").val(), 'type': $("#nbType").val(), 'status': $("#nbStatus").val()},
                 type: 'post',
                 cache: false,
                 success: function(data) {
@@ -435,6 +448,8 @@ function updateCategory(id, name) {
 
 function activateUsers() {
     $('#users').dataTable({
+        "bJQueryUI": true,
+        "sPaginationType": "full_numbers",
         "bProcessing": true,
         "bServerSide": true,
         "sAjaxSource": base_url + "admin/getUsers"

@@ -13,7 +13,7 @@ class Register extends MY_Controller {
     }
 
     public function index() {
-        $this->title = "Article Database &raquo; Register";
+        $this->title = "Authority Niche Links &raquo; Register";
         $this->js[] = 'custom/register.js';
 
         $this->form_validation->set_rules('username', 'Username', 'required|trim|min_length[5]|max_length[12]');

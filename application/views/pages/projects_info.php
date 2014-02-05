@@ -7,9 +7,14 @@
                 <h3 id="readTitle"><?php echo $project->title ?></h3>
                 <p>
                     <span id="readCategory"><?php echo $project->category ?></span>
-                    <span class="pull-right"><i><?php echo $project->date ?></i></span>
+                    <span class="pull-right"><i><?php echo $project->date_created ?></i></span>
                 </p>
-                <textarea id="readContent" class="form-control"><?php echo $project->content ?></textarea>
+                <textarea id="readContent" class="form-control" style="min-height: 400px;"><?php echo $project->content ?></textarea>
+                <hr />
+                <p><strong>Posts created from this Project</strong></p>
+                <?php foreach ($urls as $url): ?>
+                    <?php echo "<p><a href='$url->url' target='_blank'>$url->url</a></p>"; ?>
+                <?php endforeach; ?>
                 <hr />
             </div>
             <div class="col-lg-2 col-md-2">
@@ -28,6 +33,10 @@
                         <li><a href="<?php echo base_url() . 'projects/viewTitle/' . $project->id ?>" target="_blank">View Title Only</a></li>
                         <li><a href="<?php echo base_url() . 'projects/viewContent/' . $project->id ?>" target="_blank">View Content Only</a></li>
                         <li><a href="<?php echo base_url() . 'projects/viewSummary/' . $project->id ?>" target="_blank">View Summary</a></li>
+                        <li role="presentation" class="divider"></li>
+                        <li><a href="#" data-toggle="modal" data-target="#genTitleModal">Non Spin to Spin Format</a></li>
+                        <li><a href="#" data-toggle="modal" data-target="#genTitleModal">Spin Format to Non Spin</a></li>
+                        <li><a href="#" data-toggle="modal" data-target="#genTitleModal">Spin Format to Post on WordPress Blogs</a></li>
                     </ul>
                 </div>
             </div>

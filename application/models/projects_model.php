@@ -12,6 +12,9 @@ class Projects_Model extends CI_Model {
     public function addProject($project) {
         try {
             $this->db->insert('projects', $project);
+            $this->db->order_by('date_created', 'desc');
+            $query = $this->db->get('projects', 1);
+            $this->session->set_userdata('addedProjectId', $query->row()->id); 
             echo "OK";
         } catch (Exception $e) {
             echo "ADD PROJECT ERROR: " . $e->message();

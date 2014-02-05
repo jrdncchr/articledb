@@ -21,7 +21,7 @@ class Main extends MY_Controller {
 //    }
 
     public function index() {
-        $this->title = "Article Database &raquo; Main";
+        $this->title = "Authority Niche Links &raquo; Main";
         $this->js[] = "custom/main.js";
         $this->js[] = "custom/main2.js";
         $this->data['user'] = $this->session->userdata('user');
@@ -39,7 +39,7 @@ class Main extends MY_Controller {
     }
 
     public function profile() {
-        $this->title = "Article Database &raquo; Profile";
+        $this->title = "Authority Niche Links &raquo; Profile";
         $this->js[] = "custom/profile.js";
         $this->data['user'] = $this->session->userdata('user');
         $this->_renderL('pages/profile');
@@ -66,6 +66,18 @@ class Main extends MY_Controller {
         } else {
             echo 'Incorrect Old Password!';
         }
+    }
+
+    public function addBlog() {
+        $blog = array(
+            'url' => $_POST['url'],
+            'username' => $_POST['username'],
+            'password' => $_POST['password'],
+            'type' => 'public',
+            'status' => 'pending'
+        );
+        $this->load->model('blogs_model');
+        $this->blogs_model->add($blog);
     }
 
     public function updateTBSInfo() {

@@ -17,7 +17,7 @@ class Admin extends MY_Controller {
     }
 
     public function index() {
-        $this->title = "Article Database &raquo; Administration";
+        $this->title = "Authority Niche Links &raquo; Administration";
         $user = $this->session->userdata('user');
         $this->data['user'] = $user;
         $this->data['categories'] = $this->categories_model->get();
@@ -30,7 +30,9 @@ class Admin extends MY_Controller {
         $blog = array(
             'url' => $_POST['url'],
             'username' => $_POST['username'],
-            'password' => $_POST['password']
+            'password' => $_POST['password'],
+            'type' => 'admin',
+            'status' => 'active'
         );
         $this->blogs_model->add($blog);
     }
@@ -41,7 +43,9 @@ class Admin extends MY_Controller {
             'id' => $_POST['id'],
             'url' => $_POST['url'],
             'username' => $_POST['username'],
-            'password' => $_POST['password']
+            'password' => $_POST['password'],
+            'type' => $_POST['type'],
+            'status' => $_POST['status']
         );
         $this->blogs_model->update($blog);
     }
@@ -402,7 +406,7 @@ class Admin extends MY_Controller {
     }
 
     public function getBlogs() {
-        $aColumns = array('id', 'url', 'id');
+        $aColumns = array('id', 'url', 'username', 'type', 'status', 'password');
 
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = "id";

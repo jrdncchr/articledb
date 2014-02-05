@@ -7,7 +7,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="<?php echo base_url(); ?>">Article Database &raquo;</a>
+            <a class="navbar-brand" href="<?php echo base_url(); ?>">Authority Niche Links &raquo;</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->

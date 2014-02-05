@@ -6,6 +6,8 @@ $(document).ready(function() {
 
 function activateArticles() {
     $('#articles').dataTable({
+        "bJQueryUI": true,
+        "sPaginationType": "full_numbers",
         "bProcessing": true,
         "bServerSide": true,
         "sAjaxSource": base_url + "articles/get",

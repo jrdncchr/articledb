@@ -16,7 +16,7 @@ class Articles extends MY_Controller {
     }
 
     public function index() {
-        $this->title = "Article Database &raquo; Articles";
+        $this->title = "Authority Niche Links &raquo; Articles";
         $this->js[] = "custom/articles.js";
         $this->data['user'] = $this->session->userdata('user');
         $this->load->model('categories_model');

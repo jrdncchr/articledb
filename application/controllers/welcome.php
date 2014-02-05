@@ -11,7 +11,7 @@ class Welcome extends MY_Controller {
     }
 
     public function index() {
-        $this->title = "Article Database &raquo; Home";
+        $this->title = "Authority Niche Links &raquo; Home";
         $this->data['message'] = $this->session->userdata('message');
         $this->session->unset_userdata('message');
         $this->css[] = "custom/home.css";

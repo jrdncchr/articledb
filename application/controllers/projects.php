@@ -21,10 +21,19 @@ class Projects extends MY_Controller {
 
         $this->load->model('blogs_model');
         $randomBlogs = $this->blogs_model->getRandomBlogs($type, $blogCount);
-        $ids = "";
         foreach ($randomBlogs as $blog) {
             $id = $this->blogs_model->postArticle($blog, $post);
-            echo "<url>" . $blog->url ."</url>";
+            $url = $blog->url . "?p=" . $id;
+            
+            $projectId = $this->session->userdata('addedProjectId');
+            $posturl = array(
+                'project_id' => $projectId,
+                'url' => $url
+            );
+            $this->load->model('posturl_model');
+            $this->posturl_model->add($posturl);
+            
+            echo $url . ",";
         }
     }
 
@@ -97,7 +106,8 @@ class Projects extends MY_Controller {
     public function viewSummary($id) {
         $project = $this->projects_model->getProject($id);
         if ($project != null) {
-            $data['output'] = substr($project->content, 0, 200) . "...";
+            $split = explode(".", $project->content);
+            $data['output'] = $split[0] . ". " . $split[1] . ". " . $split[2] . ".";
             $this->load->view('pages/projects_output', $data);
         } else {
             show_404();
@@ -116,6 +126,11 @@ class Projects extends MY_Controller {
             $this->data['project'] = $project;
             $this->data['user'] = $this->session->userdata('user');
             $this->session->set_userdata('selectedProject', $id);
+            
+            $this->load->model('posturl_model');
+            $urls = $this->posturl_model->get($id);
+            $this->data['urls'] = $urls;
+            
             $this->_renderL('pages/projects_info');
         } else {
             show_404();
@@ -133,8 +148,7 @@ class Projects extends MY_Controller {
             'content' => $_POST['content'],
             'author' => $user->username,
             'category' => $_POST['category'],
-            'name' => $_POST['name'],
-            'date' => date('Y-m-d')
+            'name' => $_POST['name']
         );
         $this->projects_model->addProject($project);
     }
