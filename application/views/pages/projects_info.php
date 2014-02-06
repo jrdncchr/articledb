@@ -1,7 +1,12 @@
 <div id="content">
     <div class="container">
         <div class="row">
-            <div class="col-lg-7 col-md-7">
+            <div class="col-lg-8 col-md-8">
+                <div id="projectMessage"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 col-md-8">
                 <h2 id="readName"><?php echo $project->name ?></h2>
                 <hr />
                 <h3 id="readTitle"><?php echo $project->title ?></h3>
@@ -24,7 +29,7 @@
                 <button class="btn btn-danger btn-block" id="deleteBtn"><i class="fa fa-trash-o"></i> <strong>Delete</strong></button>
                 <hr />
                 <div class="btn-group btn-block">
-                    <button type="button" class="btn btn-primary btn-block dropdown-toggle" data-toggle="dropdown">
+                    <button type="button" id="actionBtn" class="btn btn-primary btn-block dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-rocket"></i> <strong>Actions</strong>
                         <span class="caret"></span>
                     </button>
@@ -34,9 +39,9 @@
                         <li><a href="<?php echo base_url() . 'projects/viewContent/' . $project->id ?>" target="_blank">View Content Only</a></li>
                         <li><a href="<?php echo base_url() . 'projects/viewSummary/' . $project->id ?>" target="_blank">View Summary</a></li>
                         <li role="presentation" class="divider"></li>
-                        <li><a href="#" data-toggle="modal" data-target="#genTitleModal">Non Spin to Spin Format</a></li>
-                        <li><a href="#" data-toggle="modal" data-target="#genTitleModal">Spin Format to Non Spin</a></li>
-                        <li><a href="#" data-toggle="modal" data-target="#genTitleModal">Spin Format to Post on WordPress Blogs</a></li>
+                        <li><a style="cursor: pointer;" id="spinLink">Spin using TBS</a></li>
+                        <li><a style="cursor: pointer;" id="nonSpinLink">Non Spin</a></li>
+                        <li><a href="#" data-toggle="modal" data-target="#postModal">Post on WordPress Blogs</a></li>
                     </ul>
                 </div>
             </div>
@@ -72,3 +77,52 @@
         </div>
     </div>
 </div>
+
+<!-- Post Modal -->
+<div class="modal fade" id="postModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel"><i class="fa fa-edit"></i> Post on WordPress Blogs</h4>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-info" id="postMessage"><i class="fa fa-info"></i> Post this project on a random WordPress blog.</div>
+                <div class="row">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label for="output" class="col-sm-3 control-label">How many blogs?</label>
+                            <div class="col-sm-8">
+                                <select id="postNoBlogs" class="form-control">
+                                    <?php for ($i = 1; $i <= 5; $i++) { ?>
+                                        <option value="<?php echo $i ?>"><?php echo $i ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="output" class="col-sm-3 control-label">How many blogs?</label>
+                            <div class="col-sm-3">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" id="postAdmin"> Admin
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" id="postPublic"> Public
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button id="postBtn" type="button" class="btn btn-primary">Post</button>
+                </div>
+            </div>
+        </div>
+    </div>

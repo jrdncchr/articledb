@@ -36,6 +36,21 @@ class Projects extends MY_Controller {
             echo $url . ",";
         }
     }
+    
+    public function nonSpin() {
+        function unspun($s) {
+            if (preg_match_all('#\{(((?>[^{}]+)|(?R))*)\}#', $s, $matches, PREG_OFFSET_CAPTURE)) {
+                for ($i = count($matches[0]) - 1; $i >= 0; --$i) {
+                    $s = substr_replace($s, unspun($matches[1][$i][0]), $matches[0][$i][1], strlen($matches[0][$i][0]));
+                }
+            }
+            $choices = explode('|', $s);
+            return $choices[array_rand($choices)];
+        }
+        
+        $text = $_POST['text'];
+        echo unspun($text);
+    }
 
     public function preview() {
 
