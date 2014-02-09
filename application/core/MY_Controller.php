@@ -10,21 +10,16 @@ class MY_Controller extends CI_Controller {
     protected $css = array();
     protected $fonts = array();
     // Page Info
-    protected $title = FALSE;
-    protected $description = FALSE;
-    protected $keywords = FALSE;
-    protected $author = FALSE;
+    protected $title = "Authority Niche Links";
+    protected $description = "Authority Niche Links";
+    protected $keywords = "Authority Niche Links";
+    protected $author = "Danero";
     // Page data
     protected $data = array();
 
     function __construct() {
         parent::__construct();
         $this->load->helper('url');
-
-        $this->title = $this->config->item('site_title');
-        $this->description = $this->config->item('site_description');
-        $this->keywords = $this->config->item('site_keywords');
-        $this->author = $this->config->item('site_author');
     }
 
     public function _render($view) {

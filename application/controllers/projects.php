@@ -24,7 +24,7 @@ class Projects extends MY_Controller {
         foreach ($randomBlogs as $blog) {
             $id = $this->blogs_model->postArticle($blog, $post);
             $url = $blog->url . "?p=" . $id;
-            
+
             $projectId = $this->session->userdata('addedProjectId');
             $posturl = array(
                 'project_id' => $projectId,
@@ -32,12 +32,13 @@ class Projects extends MY_Controller {
             );
             $this->load->model('posturl_model');
             $this->posturl_model->add($posturl);
-            
+
             echo $url . ",";
         }
     }
-    
+
     public function nonSpin() {
+
         function unspun($s) {
             if (preg_match_all('#\{(((?>[^{}]+)|(?R))*)\}#', $s, $matches, PREG_OFFSET_CAPTURE)) {
                 for ($i = count($matches[0]) - 1; $i >= 0; --$i) {
@@ -47,9 +48,9 @@ class Projects extends MY_Controller {
             $choices = explode('|', $s);
             return $choices[array_rand($choices)];
         }
-        
-        $text = $_POST['text'];
-        echo unspun($text);
+
+        $text = unspun($_POST['text']);
+        echo $text;
     }
 
     public function preview() {
@@ -141,11 +142,11 @@ class Projects extends MY_Controller {
             $this->data['project'] = $project;
             $this->data['user'] = $this->session->userdata('user');
             $this->session->set_userdata('selectedProject', $id);
-            
+
             $this->load->model('posturl_model');
             $urls = $this->posturl_model->get($id);
             $this->data['urls'] = $urls;
-            
+
             $this->_renderL('pages/projects_info');
         } else {
             show_404();

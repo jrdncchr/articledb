@@ -5,17 +5,8 @@
 </div>
 <div class="row">
     <div class="col-lg-11 col-md-11">
+
         <div class="btn-group">
-            <div class="btn-group">
-                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
-                    <i class="fa fa-pencil"></i> <strong>Add Articles</strong>
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu">
-                    <li><a href="#" data-toggle="modal" data-target="#newArticleModal">Add Manually</a></li>
-                    <li><a href="#" data-toggle="modal" data-target="#newArticleMultipleModal">Multiple Add By File Read</a></li>
-                </ul>
-            </div>
             <div class="btn-group">
                 <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                     <i class="fa fa-flash"></i> <strong>Generate</strong>
@@ -27,10 +18,30 @@
                     <li><a href="#" id="showGABPForm" data-toggle="modal" data-target="#genABPModal">Generate Articles By Project</a></li>
                 </ul>
             </div>
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                    <strong>Actions</strong>
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a style="cursor: pointer" data-toggle="modal" data-target="#blogModal">Add a Blog</a></li>
+                    <hr />
+                    <li><a style="cursor: pointer;" id="spinLink">Spin using TBS</a></li>
+                    <li><a style="cursor: pointer;" id="nonSpinLink">Non Spin</a></li>
+                    <li><a href="#" data-toggle="modal" data-target="#postModal">Post on WordPress Blogs</a></li>
+                </ul>
+            </div>
         </div>
-        <button type="button" id="addBlogBtn" class="btn btn-default pull-right" data-toggle="modal" data-target="#addBlogModal">
-            <i class="fa fa-book"></i> <strong>Add a Blog</strong>
-        </button>
+        <div class="btn-group pull-right">
+            <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+                <i class="fa fa-pencil"></i> <strong>Add Articles</strong>
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a href="#" data-toggle="modal" data-target="#newArticleModal">Add Manually</a></li>
+                <li><a href="#" data-toggle="modal" data-target="#newArticleMultipleModal">Multiple Add By File Read</a></li>
+            </ul>
+        </div>
     </div>
 </div>
 <div class="row">
@@ -72,8 +83,6 @@
             </table>
         </div>
     </div>
-
-    <a href="<?php echo base_url() . "projects/showPreview"; ?>"id="showPreview" style="display: none;" target="_blank"></a>
 </div>
 
 <div class="modal fade" id="newArticleMultipleModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -204,7 +213,7 @@
                         <label for="output" class="col-sm-2 control-label">Generated Title(s)</label>
                         <div class="col-sm-10">
                             <textarea class="form-control" id="gtGeneratedTitles"></textarea>
-                            <a href="<?php echo base_url() . 'projects/showPreview'; ?>" target="_blank" id="gtTitlePreview" class="btn btn-default btn-xs pull-right"><i class='fa fa-eye'></i> Preview</a>
+                            <a href="<?php echo base_url() . 'projects/showPreview'; ?>" target="preview" id="gtTitlePreview" class="btn btn-default btn-xs pull-right"><i class='fa fa-eye'></i> Preview</a>
                         </div>
                     </div>
                 </form>
@@ -317,7 +326,7 @@
                                 </label>
                             </div>
                             <div class="btn-group pull-right">
-                                <a href="<?php echo base_url() . 'projects/showPreview'; ?>" target="_blank" id="gaPreviewBtn" class="btn btn-default"><i class='fa fa-eye'></i> Preview</a>
+                                <a href="<?php echo base_url() . 'projects/showPreview'; ?>" target="preview" id="gaPreviewBtn" class="btn btn-default"><i class='fa fa-eye'></i> Preview</a>
                                 <button type="button" id="gaRefreshBtn" class="btn btn-primary"><i class='fa fa-refresh'></i> Generate Again</button>
                             </div>
                             <div class="clearfix"></div>
@@ -483,7 +492,7 @@
                                 </label>
                             </div>
                             <div class="btn-group pull-right">
-                                <a href="<?php echo base_url() . 'projects/showPreview'; ?>" target="_blank" id="gabpPreviewBtn" class="btn btn-default"><i class='fa fa-eye'></i> Preview</a>
+                                <a href="<?php echo base_url() . 'projects/showPreview'; ?>" target="preview" id="gabpPreviewBtn" class="btn btn-default"><i class='fa fa-eye'></i> Preview</a>
                                 <button type="button" id="gabpRefreshBtn" class="btn btn-primary"><i class='fa fa-refresh'></i> Generate Again</button>
                             </div>
                             <div class="clearfix"></div>
@@ -551,7 +560,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="addBlogModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="blogModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -586,6 +595,111 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 <button id="abSubmitBtn" type="button" class="btn btn-success">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Post Modal -->
+<div class="modal fade" id="postModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel"><i class="fa fa-edit"></i> Post on WordPress Blogs</h4>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-info" id="pmMessage"><i class="fa fa-info"></i> Post this project on a random WordPress blog.</div>
+                <div class="row">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label for="output" class="col-sm-3 control-label">How many blogs?</label>
+                            <div class="col-sm-8">
+                                <select id="pmNoBlogs" class="form-control">
+                                    <?php for ($i = 1; $i <= 5; $i++) { ?>
+                                        <option value="<?php echo $i ?>"><?php echo $i ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="output" class="col-sm-3 control-label">How many blogs?</label>
+                            <div class="col-sm-3">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" id="pmAdmin"> Admin
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" id="pmPublic"> Public
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <label for="output" class="col-sm-2 control-label">Name</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="pmName" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="output" class="col-sm-2 control-label">Title(s)</label>
+                        <div class="col-sm-10">
+                            <textarea class="form-control" id="pmTitles"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="output" class="col-sm-2 control-label">Content</label>
+                        <div class="col-sm-10">
+                            <textarea class="form-control" id="pmContents" style="min-height: 150px;"></textarea>
+                        </div>
+                    </div>
+                </form>
+                <div class="modal-footer">
+                    <button id="pmSaveBtn" type="button" class="btn btn-success pull-left">Save to Project</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button id="pmPostBtn" type="button" class="btn btn-primary">Post</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Post Modal -->
+<div class="modal fade" id="spinModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="smHeadTitle"><i class="fa fa-spinner"></i> Spin using TBS</h4>
+            </div>
+            <div class="modal-body">
+                <div class="alert-info" id="smMessage"></div>
+                <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <label for="output" class="col-sm-2 control-label">Title(s)</label>
+                        <div class="col-sm-10">
+                            <textarea class="form-control" id="smTitles"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="output" class="col-sm-2 control-label">Content</label>
+                        <div class="col-sm-10">
+                            <textarea class="form-control" id="smContents" style="min-height: 150px;"></textarea>
+                        </div>
+                    </div>
+                </form>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button id="spinLinkBtn" type="button" class="btn btn-success" style="display: none;">Spin Using TBS</button>
+                    <button id="nonSpinLinkBtn" type="button" class="btn btn-success" style="display: none;">Non Spin</button>
+                </div>
             </div>
         </div>
     </div>
