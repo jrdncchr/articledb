@@ -86,7 +86,7 @@ class Articles extends MY_Controller {
         $this->load->model('article_model');
         $this->article_model->deleteArticle($id);
     }
-
+    
     public function get() {
         $aColumns = array('id', 'title', 'category');
 
@@ -235,5 +235,4 @@ class Articles extends MY_Controller {
 
         echo json_encode($output);
     }
-
 }

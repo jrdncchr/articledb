@@ -15,18 +15,19 @@ class Main extends MY_Controller {
         $this->load->model('article_model');
     }
 
-//    public function test() {
-//        $this->load->model('titleTemplate_model');
-//        $this->titleTemplate_model->testAdd();
-//    }
-
     public function index() {
-        $this->title = "Authority Niche Links &raquo; Main";
-        $this->js[] = "custom/main.js";
-        $this->js[] = "custom/main2.js";
-        $this->data['user'] = $this->session->userdata('user');
+        $this->load->model('user_model');
+        $user = $this->session->userdata('user');
+        $this->data['trackInfo'] = $this->user_model->getTrackerInfo($user);
         $this->load->model('categories_model');
         $this->data['categories'] = $this->categories_model->get();
+        $this->load->model('admin_model');
+        $this->data['content1'] = $this->admin_model->getAdminInput('content1');
+
+        $this->title = "Authority Niche Links &raquo; Main";
+        $this->data['user'] = $user;
+        $this->js[] = "custom/main.js";
+        $this->js[] = "custom/main2.js";
         $this->_renderL('pages/main');
     }
 
@@ -138,42 +139,7 @@ class Main extends MY_Controller {
     }
 
     public function generateArticles() {
-        $data = array(
-            'keyword' => $_POST['keyword'],
-            'category' => $_POST['category'],
-            'noTitles' => $_POST['noTitles'],
-            'noArticlesToMix' => $_POST['noArticlesToMix'],
-            'pMin' => $_POST['pMin'],
-            'pMax' => $_POST['pMax'],
-            'sMin' => $_POST['sMin'],
-            'sMax' => $_POST['sMax']
-        );
-
         $result = array();
-
-        //Generate Titles
-        $generateTitles = $this->article_model->generateTitles($data['keyword'], $data['category'], $data['noTitles']);
-        if (sizeof($generateTitles) > 0) {
-            $titles = "{";
-            foreach ($generateTitles as $title) {
-                $titles .= "$title->title|";
-            }
-            $titles = substr($titles, 0, -1);
-            $titles .= "}";
-
-            $result['titles'] = $titles;
-        } else {
-            $result['titles'] = "No titles found.";
-        }
-
-        //Generate Article
-        $generateArticle = $this->article_model->generateArticles($data);
-        $result['article'] = $generateArticle;
-
-        echo json_encode($result);
-    }
-
-    public function generateArticlesByProject() {
         $user = $this->session->userdata('user');
         $data = array(
             'keyword' => $_POST['keyword'],
@@ -184,30 +150,37 @@ class Main extends MY_Controller {
             'pMax' => $_POST['pMax'],
             'sMin' => $_POST['sMin'],
             'sMax' => $_POST['sMax'],
-            'author' => $user->username
+            'addedCode' => $_POST['addedCode'],
+            'generateCount' => $_POST['generateCount'],
+            'spin' => $_POST['spin']
         );
+        $this->session->set_userdata('project_option', $data);
 
-        $result = array();
+        if ($data['spin'] == 'yes') {
+            if ($user->tbsun == null && $user->tbspw == null) {
+                $result['result'] = "You must setup your TBS details in your profile to enable this feature.";
+                echo json_encode($result);
+                return false;
+            }
+        }
 
         //Generate Titles
-        $generateTitles = $this->article_model->generateTitlesByProject($data['keyword'], $data['category'], $data['noTitles'], $data['author']);
+        $generateTitles = $this->article_model->generateTitles($data['keyword'], $data['category'], $data['noTitles']);
         if (sizeof($generateTitles) > 0) {
             $titles = "{";
             foreach ($generateTitles as $title) {
-                $titles .= $this->unspun($title->title) . "|";
+                $titles .= "$title->title|";
             }
             $titles = substr($titles, 0, -1);
             $titles .= "}";
-
             $result['titles'] = $titles;
         } else {
             $result['titles'] = "No titles found.";
         }
 
         //Generate Article
-        $generateArticle = $this->article_model->generateArticlesByProject($data);
+        $generateArticle = $this->article_model->generateArticles($data, $user);
         $result['article'] = $generateArticle;
-
         echo json_encode($result);
     }
 

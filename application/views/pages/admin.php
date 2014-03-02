@@ -1,139 +1,128 @@
 <div id="content">
     <div class="container">
         <div class="row">
-            <div class="col-lg-11 col-md-11">
+            <div class="col-lg-9 col-md-9">
                 <h2>Administration</h2>
                 <hr />
-                <div class="row">
-                    <div id="tabs">
-                        <ul>
-                            <li><a href="#categoriesTab">Categories</a></li>
-                            <li><a href="#usersTab">Users</a></li>
-                            <li><a href="#blogsTab">Blogs</a></li>
-                            <li><a href="#titleTemplatesTab">Title Templates</a></li>
-                            <li><a href="#faqsTab">Faqs</a></li>
-                        </ul>
-                        <div id="categoriesTab">
-                            <div class="row">
-                                <h3 class="col-sm-5">Categories</h3>
-                                <div class="col-sm-7">
-                                    <button type="button" id="showAddCtgBtn" class="btn btn-success pull-right" data-toggle="modal" data-target="#newCategoryModal"><i class="fa fa-plus"></i> Add</button>
-                                </div>
-                            </div>
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" id="adminTabs">
+                    <li class="active"><a href="#categoriesTab" data-toggle="tab">Categories</a></li>
+                    <li><a href="#usersTab" data-toggle="tab">Users</a></li>
+                    <li><a href="#blogsTab" data-toggle="tab">Blogs</a></li>
+                    <li><a href="#titleTemplatesTab" data-toggle="tab">Title Templates</a></li>
+                    <li><a href="#faqsTab" data-toggle="tab">Faqs</a></li>
+                    <li><a href="#othersTab" data-toggle="tab">Others</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="categoriesTab">
+                        <h3 class="col-sm-12 text-center">Categories <button type="button" class="btn btn-sm btn-success pull-right" data-toggle="modal" data-target="#categoryModal"><i class="fa fa-plus"></i> Add</button></h3>
 
-                            <div class="table-responsive">
-                                <table cellpadding="0" cellspacing="0" border="0" class="display table table-striped" id="categories">
-                                    <thead>
-                                        <tr>
-                                            <th width="10%">ID</th>
-                                            <th width="80%">Name</th>
-                                            <th width="10%">Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td colspan="3" class="dataTables_empty">Loading data from server</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                        <div class="table-responsive">
+                            <table cellpadding="0" cellspacing="0" border="0" class="display table table-striped" id="categories">
+                                <thead>
+                                    <tr>
+                                        <th width="10%">ID</th>
+                                        <th width="80%">Name</th>
+                                        <th width="10%">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="3" class="dataTables_empty">Loading data from server</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-                        <div id="usersTab">
-                            <h3>
-                                Users 
-                            </h3>
-                            <div class="table-responsive">
-                                <table cellpadding="0" cellspacing="0" border="0" class="display table table-striped" id="users">
-                                    <thead>
-                                        <tr>
-                                            <th width="20%">Username</th>
-                                            <th width="50%">Name</th>
-                                            <th width="30%">Email</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td colspan="3" class="dataTables_empty">Loading data from server</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                    </div>
+                    <div class="tab-pane" id="usersTab">
+                        <h3 class="text-center"> Users </h3>
+                        <div class="table-responsive">
+                            <table cellpadding="0" cellspacing="0" border="0" class="display table table-striped" id="users">
+                                <thead>
+                                    <tr>
+                                        <th width="20%">Username</th>
+                                        <th width="50%">Name</th>
+                                        <th width="30%">Email</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="3" class="dataTables_empty">Loading data from server</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-                        <div id="blogsTab">
-                            <div class="row">
-                                <h3 class="col-sm-5">Blogs</h3>
-                                <div class="col-sm-7">
-                                    <button type="button" id="addBlogBtn" class="btn btn-success pull-right" data-toggle="modal" data-target="#blogModal"><i class="fa fa-plus"></i> Add</button>
-                                </div>
-                            </div>
-                            <div class="table-responsive">
-                                <table cellpadding="0" cellspacing="0" border="0" class="display table table-striped" id="blogs">
-                                    <thead>
-                                        <tr>
-                                            <th width="10%">ID</th>
-                                            <th width="40%">URL</th>
-                                            <th width="15%">Username</th>
-                                            <th width="15%">Type</th>
-                                            <th width="15%">Status</th>
-                                            <th width="15%">Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td colspan="3" class="dataTables_empty">Loading data from server</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                    </div>
+                    <div class="tab-pane" id="blogsTab">
+                        <h3 class="col-sm-12 text-center">Blogs <button type="button" id="addBlogBtn" class="btn btn-sm btn-success pull-right" data-toggle="modal" data-target="#blogModal"><i class="fa fa-plus"></i> Add</button></h3>
+                        <div class="table-responsive">
+                            <table cellpadding="0" cellspacing="0" border="0" class="display table table-striped" id="blogs">
+                                <thead>
+                                    <tr>
+                                        <th width="10%">ID</th>
+                                        <th width="40%">URL</th>
+                                        <th width="15%">Username</th>
+                                        <th width="15%">Type</th>
+                                        <th width="15%">Status</th>
+                                        <th width="15%">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="3" class="dataTables_empty">Loading data from server</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-                        <div id="titleTemplatesTab">
-                            <div class="row">
-                                <h3 class="col-sm-5">Title Templates </h3>
-                                <div class="col-sm-7">
-                                    <button type="button" id="addTitleBtn" class="btn btn-success pull-right" data-toggle="modal" data-target="#titleModal"><i class="fa fa-plus"></i> Add</button>
-                                </div>
-                            </div>
-                            <div class="table-responsive">
-                                <table cellpadding="0" cellspacing="0" border="0" class="display table table-striped" id="titles">
-                                    <thead>
-                                        <tr>
-                                            <th width="10%">ID</th>
-                                            <th width="80%">Title</th>
-                                            <th width="10%">Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td colspan="3" class="dataTables_empty">Loading data from server</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                    </div>
+                    <div class="tab-pane" id="titleTemplatesTab">
+                        <h3 class="col-sm-12 text-center">Title Templates <button type="button" id="addTitleBtn" class="btn btn-sm btn-success pull-right" data-toggle="modal" data-target="#titleModal"><i class="fa fa-plus"></i> Add</button></h3>
+                        <div class="table-responsive">
+                            <table cellpadding="0" cellspacing="0" border="0" class="display table table-striped" id="titles">
+                                <thead>
+                                    <tr>
+                                        <th width="10%">ID</th>
+                                        <th width="80%">Title</th>
+                                        <th width="10%">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="3" class="dataTables_empty">Loading data from server</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-                        <div id="faqsTab">
-                            <div class="row">
-                                <h3 class="col-sm-5">FAQs </h3>
-                                <div class="col-sm-7">
-                                    <button type="button" id="addFaqBtn" class="btn btn-success pull-right" data-toggle="modal" data-target="#faqModal"><i class="fa fa-plus"></i> Add</button>
-                                </div>
-                            </div>
-                            <div class="table-responsive">
-                                <table cellpadding="0" cellspacing="0" border="0" class="display table table-striped" id="faqs">
-                                    <thead>
-                                        <tr>
-                                            <th width="10%">ID</th>
-                                            <th width="80%">Question</th>
-                                            <th width="10%">Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td colspan="3" class="dataTables_empty">Loading data from server</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                    </div>
+                    <div class="tab-pane" id="faqsTab">
+                        <h3 class="col-sm-12 text-center">FAQs <button type="button" id="addFaqBtn" class="btn btn-sm btn-success pull-right" data-toggle="modal" data-target="#faqModal"><i class="fa fa-plus"></i> Add</button></h3>
+                        <div class="table-responsive">
+                            <table cellpadding="0" cellspacing="0" border="0" class="display table table-striped" id="faqs">
+                                <thead>
+                                    <tr>
+                                        <th width="60%">ID</th>
+                                        <th width="20%">Question</th>
+                                        <th width="20%">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="3" class="dataTables_empty">Loading data from server</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
+                    </div>
+                    <div class="tab-pane" id="othersTab">
+                        <h3 class="col-sm-12 text-center">Other Configurations </h3>
+                        <form role="form">
+                            <div class="form-group">
+                                <label for="main"><i class="fa fa-code"></i> Main Content (Below the Tracker)</label>
+                                <textarea type="email" class="form-control" id="content1Input" style="min-height: 150px;"><?php echo $content1->input; ?></textarea>
+                                <input type="text" id="content1Name" class="hidden" value="<?php echo $content1->name; ?>" />
+                            </div>
+                            <button type="button" class="btn btn-sm btn-success" id="content1SaveBtn"><i class="fa fa-save"></i> Save</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -142,7 +131,7 @@
 </div>
 
 <!-- Category Modal -->
-<div class="modal fade" id="newCategoryModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="categoryModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">

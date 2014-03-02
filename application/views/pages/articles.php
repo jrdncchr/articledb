@@ -11,9 +11,9 @@
                     <table cellpadding="0" cellspacing="0" border="0" class="display table table-striped" id="articles">
                         <thead>
                             <tr>
-                                <th width="20%">ID</th>
-                                <th width="50%">Title</th>
-                                <th width="30%">Category</th>
+                                <th width="10%">ID</th>
+                                <th width="70%">Title</th>
+                                <th width="20%">Category</th>
                             </tr>
                         </thead>
                         <tbody>

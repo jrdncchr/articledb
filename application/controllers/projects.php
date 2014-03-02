@@ -11,6 +11,13 @@ class Projects extends MY_Controller {
         $this->load->library('session');
     }
 
+    public function getProjectInfo() {
+        $this->load->model('projects_model');
+        $project = $this->projects_model->getProject($_POST['id']);
+        $this->session->set_userdata('selectedProject', $_POST['id']);
+        echo json_encode($project);
+    }
+
     public function post() {
         $post = array(
             'title' => $_POST['title'],
@@ -18,7 +25,7 @@ class Projects extends MY_Controller {
         );
         $blogCount = $_POST['blogCount'];
         $type = $_POST['type'];
-
+        $user = $this->session->userdata('user');
         $this->load->model('blogs_model');
         $randomBlogs = $this->blogs_model->getRandomBlogs($type, $blogCount);
         foreach ($randomBlogs as $blog) {
@@ -28,13 +35,17 @@ class Projects extends MY_Controller {
             $projectId = $this->session->userdata('addedProjectId');
             $posturl = array(
                 'project_id' => $projectId,
-                'url' => $url
+                'url' => $url,
+                'author' => $user->username
             );
             $this->load->model('posturl_model');
             $this->posturl_model->add($posturl);
 
             echo $url . ",";
         }
+        $this->load->model('projects_model');
+        $postCount = $this->projects_model->getPostsCountByProject($projectId);
+        $this->projects_model->updateProjectPostCount($projectId, $postCount);
     }
 
     public function nonSpin() {
@@ -55,10 +66,10 @@ class Projects extends MY_Controller {
 
     public function preview() {
 
-        function unspun($s) {
+        function unspun2($s) {
             if (preg_match_all('#\{(((?>[^{}]+)|(?R))*)\}#', $s, $matches, PREG_OFFSET_CAPTURE)) {
                 for ($i = count($matches[0]) - 1; $i >= 0; --$i) {
-                    $s = substr_replace($s, unspun($matches[1][$i][0]), $matches[0][$i][1], strlen($matches[0][$i][0]));
+                    $s = substr_replace($s, unspun2($matches[1][$i][0]), $matches[0][$i][1], strlen($matches[0][$i][0]));
                 }
             }
             $choices = explode('|', $s);
@@ -67,7 +78,7 @@ class Projects extends MY_Controller {
 
         $text = $_POST['text'];
         session_start();
-        $_SESSION['preview'] = unspun($text);
+        $_SESSION['preview'] = unspun2($text);
         echo "OK";
     }
 
@@ -158,7 +169,6 @@ class Projects extends MY_Controller {
         if (null == $user) {
             redirect(base_url());
         }
-
         $project = array(
             'title' => $_POST['title'],
             'content' => $_POST['content'],
@@ -166,7 +176,12 @@ class Projects extends MY_Controller {
             'category' => $_POST['category'],
             'name' => $_POST['name']
         );
-        $this->projects_model->addProject($project);
+        $id = $this->projects_model->addProject($project);
+        $project_option = $this->session->userdata('project_option');
+        $project_option['project_id'] = $id;
+        $project_option['postType'] = $_POST['postType'];
+        $project_option['postCount'] = $_POST['postCount'];
+        echo $this->projects_model->addProjectOption($project_option);
     }
 
     public function delete() {
@@ -179,6 +194,15 @@ class Projects extends MY_Controller {
         $this->projects_model->deleteProject($id);
     }
 
+    //get by post data
+    public function deleteProject() {
+        $user = $this->session->userdata('user');
+        if (null == $user) {
+            redirect(base_url());
+        }
+        $this->projects_model->deleteProject($_POST['id']);
+    }
+
     public function update() {
         $user = $this->session->userdata('user');
         if (null == $user) {
@@ -188,9 +212,96 @@ class Projects extends MY_Controller {
         $id = $this->session->userdata('selectedProject');
         $project = array(
             'title' => $_POST['title'],
-            'content' => $_POST['content']
+            'content' => $_POST['content'],
+            'name' => $_POST['name']
         );
-        $this->projects_model->updateProject($id, $project);
+        echo $this->projects_model->updateProject($id, $project);
+    }
+
+    public function regenerate() {
+        $id = $_POST['id'];
+        if ($id > 0) {
+            $option = $this->projects_model->getProjectOption($id);
+            $user = $this->session->userdata('user');
+            $result = array();
+            $project = array();
+            $data = array(
+                'keyword' => $option->keyword,
+                'category' => $option->category,
+                'noTitles' => $option->noTitles,
+                'noArticlesToMix' => $option->noArticlesToMix,
+                'pMin' => $option->pMin,
+                'pMax' => $option->pMax,
+                'sMin' => $option->sMin,
+                'sMax' => $option->sMax,
+                'addedCode' => $option->addedCode,
+                'generateCount' => $option->generateCount,
+                'spin' => $option->spin
+            );
+            if ($data['spin'] == 'yes') {
+                if ($user->tbsun == null && $user->tbspw == null) {
+                    $result['result'] = "Please setup your TBS account in your Profile.";
+                    return false;
+                }
+            }
+
+            //Generate Titles
+            $this->load->model('article_model');
+            $generateTitles = $this->article_model->generateTitles($data['keyword'], $data['category'], $data['noTitles']);
+            if (sizeof($generateTitles) > 0) {
+                $titles = "{";
+                foreach ($generateTitles as $title) {
+                    $titles .= "$title->title|";
+                }
+                $titles = substr($titles, 0, -1);
+                $titles .= "}";
+                $project['title'] = $titles;
+
+                //Generate Article
+                $generateArticle = $this->article_model->generateArticles($data, $user);
+                if (strlen($generateArticle) > 10) {
+                    $project['content'] = $generateArticle;
+                    //Update Project
+                    $this->projects_model->updateProject($id, $project);
+
+                    //post
+                    if ($option->postType != "") {
+                        $result['links'] = $this->wordPressPost($id, $project, $option->postCount, $option->postType);
+                    }
+                    $result['result'] = "OK";
+                    echo json_encode($result);
+                } else {
+                    $result['result'] = "Error regenerating article, please try again... ";
+                    echo json_encode($result);
+                }
+            } else {
+                $result['result'] = "No titles found.";
+            }
+        }
+    }
+
+    public function wordPressPost($projectId, $post, $blogCount, $type) {
+        $user = $this->session->userdata('user');
+        $this->load->model('blogs_model');
+        $randomBlogs = $this->blogs_model->getRandomBlogs($type, $blogCount);
+        $links = "";
+        foreach ($randomBlogs as $blog) {
+            $id = $this->blogs_model->postArticle($blog, $post);
+            $url = $blog->url . "?p=" . $id;
+            $posturl = array(
+                'project_id' => $projectId,
+                'url' => $url,
+                'author' => $user->username
+            );
+            $this->load->model('posturl_model');
+            $this->posturl_model->add($posturl);
+
+            $links .= $url . ",";
+        }
+        $this->load->model('projects_model');
+        $postCount = $this->projects_model->getPostsCountByProject($projectId);
+        $this->projects_model->updateProjectPostCount($projectId, $postCount);
+        return $links;
     }
 
     public function getProjectCategories() {
@@ -226,7 +337,7 @@ class Projects extends MY_Controller {
     }
 
     public function get() {
-        $aColumns = array('id', 'name');
+        $aColumns = array('id', 'name', 'postCount', 'id');
 
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = "id";

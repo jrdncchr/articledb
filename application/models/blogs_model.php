@@ -39,21 +39,19 @@ class Blogs_Model extends CI_Model {
     public function postArticle($blog, $post) {
         require_once OTHER . "IXR_Library.php";
         $client = new IXR_Client($blog->url . 'xmlrpc.php');
-        
+
         $USER = $blog->username;
         $PASS = $blog->password;
 
         $content['title'] = $this->unspun($post['title']);
         $content['description'] = $this->unspun($post['content']);
-        
-        if (!$client->query('metaWeblog.newPost','', $USER,$PASS, $content, true)) 
-        {
-            die( 'Error while creating a new post' . $client->getErrorCode() ." : ". $client->getErrorMessage());  
+
+        if (!$client->query('metaWeblog.newPost', '', $USER, $PASS, $content, true)) {
+            die('Error while creating a new post' . $client->getErrorCode() . " : " . $client->getErrorMessage());
         }
-        $ID =  $client->getResponse();
-        
-        if($ID)
-        {
+        $ID = $client->getResponse();
+
+        if ($ID) {
             return $ID;
         }
     }

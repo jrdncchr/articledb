@@ -54,4 +54,18 @@ class User_Model extends CI_Model {
         return "Login failed, incorrect username/password!";
     }
 
+    public function getTrackerInfo($user) {
+        $this->load->model('article_model');
+        $this->load->model('projects_model');
+        $this->load->model('posturl_model');
+        $html = "";
+        $article = $this->article_model->getArticleTrack($user);
+        $html .= $article;
+        $project = $this->projects_model->getProjectTrack($user);
+        $html .= $project;
+        $post = $this->posturl_model->getPostsTrack($user);
+        $html .= $post;
+        return $html;
+    }
+
 }

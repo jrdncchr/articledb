@@ -17,6 +17,9 @@ class Admin extends MY_Controller {
     }
 
     public function index() {
+        $this->load->model('admin_model');
+        $this->data['content1'] = $this->admin_model->getAdminInput('content1');
+        
         $this->title = "Authority Niche Links &raquo; Administration";
         $user = $this->session->userdata('user');
         $this->data['user'] = $user;
@@ -107,6 +110,11 @@ class Admin extends MY_Controller {
     public function deleteTitleTemplate() {
         $this->load->model('titletemplate_model');
         $this->titletemplate_model->delete($_POST['id']);
+    }
+    
+    public function updateAdminInput() {
+        $this->load->model('admin_model');
+        echo $this->admin_model->updateAdminInput($_POST['name'], $_POST['input']);
     }
 
     /*

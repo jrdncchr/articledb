@@ -12,15 +12,15 @@ define('IMG', 'resources/images/');
 define('FONT', 'resources/font-awesome/');
 define('OTHER', 'resources/others/');
 
-//define('DB_USER', 'root');
-//define('DB_PASSWORD', '');
-//define('DB_DATABASE', 'articledb');
-//define('DB_HOSTNAME', 'localhost');
-
-define('DB_USER', 'realasia_admin');
-define('DB_PASSWORD', 'admin143');
-define('DB_DATABASE', 'realasia_articledb');
+define('DB_USER', 'root');
+define('DB_PASSWORD', '');
+define('DB_DATABASE', 'articledb');
 define('DB_HOSTNAME', 'localhost');
+
+//define('DB_USER', 'realasia_admin');
+//define('DB_PASSWORD', 'admin143');
+//define('DB_DATABASE', 'realasia_articledb');
+//define('DB_HOSTNAME', 'localhost');
 
 /*
 |--------------------------------------------------------------------------

@@ -1,10 +1,10 @@
 $(document).ready(function() {
-    $("#tabs").tabs();
     activateCategories();
     activateUsers();
     activateTitles();
     activateFaqs();
     activateBlogs();
+    activateOthersEvent();
 });
 function activateCategories() {
     $('#categories').dataTable({
@@ -33,7 +33,11 @@ function activateFaqs() {
         "bProcessing": true,
         "bServerSide": true,
         "sAjaxSource": base_url + "admin/getFaqs",
+        "bAutoWidth": false,
         "aoColumnDefs": [
+            {sWidth: '10%', "aTargets": [0]},
+            {sWidth: '80%', "aTargets": [1]},
+            {sWidth: '10%', "aTargets": [2]},
             {
                 "aTargets": [2], // Column to target
                 "mRender": function(data, type, full) {
@@ -53,7 +57,11 @@ function activateTitles() {
         "bProcessing": true,
         "bServerSide": true,
         "sAjaxSource": base_url + "admin/getTitles",
+        "bAutoWidth": false,
         "aoColumnDefs": [
+            {sWidth: '10%', "aTargets": [0]},
+            {sWidth: '80%', "aTargets": [1]},
+            {sWidth: '10%', "aTargets": [2]},
             {
                 "aTargets": [2], // Column to target
                 "mRender": function(data, type, full) {
@@ -381,7 +389,7 @@ function activateCategoriesEvents() {
                     if (data === "OK") {
                         var oTable = $('#categories').dataTable();
                         oTable.fnReloadAjax();
-                        $("#newCategoryModal").modal('hide');
+                        $("#categoryModal").modal('hide');
                         $("#ncName").val("");
                         toastr.success('Adding Category Successful!');
                     }
@@ -414,7 +422,7 @@ function deleteCategory(id) {
 }
 
 function updateCategory(id, name) {
-    $("#newCategoryModal").modal('show');
+    $("#categoryModal").modal('show');
     $("#ncName").val(name);
     $("#ncTitle").html("Edit Category");
     $("#ncBtn").hide();
@@ -433,7 +441,7 @@ function updateCategory(id, name) {
                     if (data === "OK") {
                         var oTable = $('#categories').dataTable();
                         oTable.fnReloadAjax();
-                        $("#newCategoryModal").modal('hide');
+                        $("#categoryModal").modal('hide');
                         $("#ncName").val("");
                         toastr.success('Updating Category Successful!');
                     }
@@ -453,6 +461,24 @@ function activateUsers() {
         "bProcessing": true,
         "bServerSide": true,
         "sAjaxSource": base_url + "admin/getUsers"
+    });
+}
+
+function activateOthersEvent() {
+    $('#content1SaveBtn').click(function() {
+        $.ajax({
+            url: base_url + 'admin/updateAdminInput',
+            data: {name: $('#content1Name').val(), input: $('#content1Input').val()},
+            cache: false,
+            type: 'post',
+            success: function(data) {
+                if(data === "OK") {
+                    toastr.success('Update Successful!');
+                } else {
+                    alert(data);
+                }
+            }
+        });
     });
 }
 
